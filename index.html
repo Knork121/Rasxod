@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MILE</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #171717;
+  --muted: #777;
+  --line: #e5e5e5;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 22px 14px 30px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+main { max-width: 560px; margin: auto; }
+header { padding: 12px 4px 24px; }
+h1 {
+  margin: 0;
+  font-size: 35px;
+  letter-spacing: 5px;
+  font-weight: 800;
+}
+.subtitle { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+h2 {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+label {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  margin: 13px 0 7px;
+}
+input, select {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  color: #111;
+  font-size: 16px;
+  outline: none;
+}
+input:focus, select:focus { border-color: #555; }
+.segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+button {
+  min-height: 46px;
+  padding: 12px;
+  border: 1px solid #171717;
+  border-radius: 11px;
+  background: white;
+  color: #171717;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+button.active, .primary {
+  background: #171717;
+  color: white;
+}
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hidden { display: none !important; }
+.result {
+  background: #171717;
+  color: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.result-label { color: #c5c5c5; font-size: 13px; }
+.total {
+  font-size: clamp(36px, 10vw, 48px);
+  font-weight: 750;
+  letter-spacing: -1.5px;
+  margin: 5px 0 15px;
+  overflow-wrap: anywhere;
+}
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid #414141;
+  font-size: 14px;
+}
+.result-row strong { text-align: right; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.actions button { width: 100%; }
+.note { color: var(--muted); font-size: 12px; line-height: 1.5; }
+footer {
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+  padding: 12px 4px;
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>MILE</h1>
+    <div class="subtitle">РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ СЂР°СЃС…РѕРґР° С‚РѕРїР»РёРІР°</div>
+  </header>
+
+  <section class="card">
+    <h2>01 / РСЃС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ</h2>
+    <label for="norm">РќРѕСЂРјР° СЂР°СЃС…РѕРґР°, Р» / 100 РєРј</label>
+    <input id="norm" type="number" min="0" step="0.001" value="9.8">
+
+    <label>Р РµР¶РёРј СЂР°СЃС‡С‘С‚Р°</label>
+    <div class="segment">
+      <button id="oneBtn" class="active" type="button">РћРґРЅР° С‡Р°СЃС‚СЊ</button>
+      <button id="twoBtn" type="button">Р”РІРµ С‡Р°СЃС‚Рё</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>02 / РџСЂРѕР±РµРі Рё РЅР°РґР±Р°РІРєРё</h2>
+    <div id="part1">
+      <label for="km1">РџСЂРѕР±РµРі, РєРј</label>
+      <input id="km1" type="number" min="0" step="0.1" value="500">
+      <label for="allow1">РќР°РґР±Р°РІРєР°</label>
+      <select id="allow1">
+        <option value="0">0% вЂ” Р±РµР· РЅР°РґР±Р°РІРѕРє</option>
+        <option value="15">15% вЂ” РіРѕСЂРѕРґ</option>
+        <option value="6">6% вЂ” РєР»РёРјР°С‚</option>
+        <option value="21" selected>15% + 6% вЂ” РіРѕСЂРѕРґ Рё РєР»РёРјР°С‚</option>
+        <option value="custom">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°</option>
+      </select>
+      <div id="customBox1" class="hidden">
+        <label for="custom1">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°, %</label>
+        <input id="custom1" type="number" min="0" step="0.1" value="0">
+      </div>
+    </div>
+
+    <div id="part2" class="hidden">
+      <div style="border-top:1px solid #eee;margin:18px 0"></div>
+      <h2>Р§Р°СЃС‚СЊ 2</h2>
+      <label for="km2">РџСЂРѕР±РµРі, РєРј</label>
+      <input id="km2" type="number" min="0" step="0.1" value="400">
+      <label for="allow2">РќР°РґР±Р°РІРєР°</label>
+      <select id="allow2">
+        <option value="0">0% вЂ” Р±РµР· РЅР°РґР±Р°РІРѕРє</option>
+        <option value="15">15% вЂ” РіРѕСЂРѕРґ</option>
+        <option value="6">6% вЂ” РєР»РёРјР°С‚</option>
+        <option value="21" selected>15% + 6% вЂ” РіРѕСЂРѕРґ Рё РєР»РёРјР°С‚</option>
+        <option value="custom">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°</option>
+      </select>
+      <div id="customBox2" class="hidden">
+        <label for="custom2">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°, %</label>
+        <input id="custom2" type="number" min="0" step="0.1" value="0">
+      </div>
+    </div>
+    <p class="note">Р”Р»СЏ РїСЂРѕР±РµРіР° РїРѕ РњРљРђР” РІС‹Р±РµСЂРёС‚Рµ 0%. Р”Р»СЏ РѕСЃС‚Р°Р»СЊРЅРѕРіРѕ РјР°СЂС€СЂСѓС‚Р° СѓРєР°Р¶РёС‚Рµ РїСЂРёРјРµРЅРёРјС‹Рµ РЅР°РґР±Р°РІРєРё.</p>
+  </section>
+
+  <section class="result" aria-live="polite">
+    <div class="result-label">РРўРћР“Рћ / Р РђРЎРҐРћР” РўРћРџР›РР’Рђ</div>
+    <div class="total"><span id="total">57,2</span> Р»</div>
+    <div class="result-row">
+      <span>Р§Р°СЃС‚СЊ 1</span><strong id="out1">9,8 Р»</strong>
+    </div>
+    <div class="result-row" id="row2">
+      <span>Р§Р°СЃС‚СЊ 2</span><strong id="out2">47,4 Р»</strong>
+    </div>
+    <div class="result-row">
+      <span>РћР±С‰РёР№ РїСЂРѕР±РµРі</span><strong id="outKm">500 РєРј</strong>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button class="primary" id="copyBtn" type="button">РљРѕРїРёСЂРѕРІР°С‚СЊ СЂР°СЃС‡С‘С‚</button>
+    <button id="resetBtn" type="button">РЎР±СЂРѕСЃРёС‚СЊ</button>
+  </div>
+  <p id="status" class="note" role="status"></p>
+  <footer>В«РўРѕС‡РЅРѕСЃС‚СЊ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ РїСЂРѕСЃС‚С‹С… РІРµС‰РµР№.В»</footer>
+</main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let twoParts = false;
+
+  const number = id => {
+    const value = Number($(id).value);
+    return Number.isFinite(value) && value >= 0 ? value : 0;
+  };
+
+  const fmt = (value, digits = 1) =>
+    value.toLocaleString('ru-RU', {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits
+    });
+
+  function allowance(part) {
+    const selected = $('allow' + part).value;
+    return selected === 'custom'
+      ? number('custom' + part)
+      : Number(selected);
+  }
+
+  function partFuel(km, norm, percent) {
+    return km * norm / 100 * (1 + percent / 100);
+  }
+
+  function update() {
+    const norm = number('norm');
+    const km1 = number('km1');
+    const km2 = twoParts ? number('km2') : 0;
+    const p1 = allowance(1);
+    const p2 = twoParts ? allowance(2) : 0;
+
+    const fuel1 = partFuel(km1, norm, p1);
+    const fuel2 = partFuel(km2, norm, p2);
+    const total = fuel1 + fuel2;
+
+    $('total').textContent = fmt(total);
+    $('out1').textContent = fmt(fuel1) + ' Р»';
+    $('out2').textContent = fmt(fuel2) + ' Р»';
+    $('outKm').textContent = fmt(km1 + km2) + ' РєРј';
+    $('row2').classList.toggle('hidden', !twoParts);
+    $('part2').classList.toggle('hidden', !twoParts);
+
+    $('customBox1').classList.toggle(
+      'hidden', $('allow1').value !== 'custom'
+    );
+    $('customBox2').classList.toggle(
+      'hidden', $('allow2').value !== 'custom'
+    );
+  }
+
+  function setMode(value) {
+    twoParts = value;
+    $('oneBtn').classList.toggle('active', !value);
+    $('twoBtn').classList.toggle('active', value);
+    update();
+  }
+
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+  });
+
+  $('oneBtn').addEventListener('click', () => setMode(false));
+  $('twoBtn').addEventListener('click', () => setMode(true));
+
+  $('resetBtn').addEventListener('click', () => {
+    $('norm').value = '9.8';
+    $('km1').value = '500';
+    $('km2').value = '400';
+    $('allow1').value = '21';
+    $('allow2').value = '21';
+    $('custom1').value = '0';
+    $('custom2').value = '0';
+    $('status').textContent = '';
+    setMode(false);
+  });
+
+  $('copyBtn').addEventListener('click', async () => {
+    const norm = number('norm');
+    const km1 = number('km1');
+    const km2 = twoParts ? number('km2') : 0;
+    const p1 = allowance(1);
+    const p2 = twoParts ? allowance(2) : 0;
+    const f1 = partFuel(km1, norm, p1);
+    const f2 = partFuel(km2, norm, p2);
+
+    let text = `MILE вЂ” СЂР°СЃС‡С‘С‚ СЂР°СЃС…РѕРґР° С‚РѕРїР»РёРІР°\n`;
+    text += `РќРѕСЂРјР°: ${fmt(norm, 3)} Р»/100 РєРј\n`;
+    text += `Р§Р°СЃС‚СЊ 1: ${fmt(km1)} РєРј Г— ${fmt(norm, 3)} / 100`;
+    text += ` Г— (1 + ${fmt(p1)} / 100) = ${fmt(f1)} Р»\n`;
+
+    if (twoParts) {
+      text += `Р§Р°СЃС‚СЊ 2: ${fmt(km2)} РєРј Г— ${fmt(norm, 3)} / 100`;
+      text += ` Г— (1 + ${fmt(p2)} / 100) = ${fmt(f2)} Р»\n`;
+    }
+
+    text += `РћР±С‰РёР№ РїСЂРѕР±РµРі: ${fmt(km1 + km2)} РєРј\n`;
+    text += `РРўРћР“Рћ: ${fmt(f1 + f2)} Р»`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      $('status').textContent = 'Р Р°СЃС‡С‘С‚ СЃРєРѕРїРёСЂРѕРІР°РЅ.';
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      const ok = document.execCommand('copy');
+      area.remove();
+      $('status').textContent = ok
+        ? 'Р Р°СЃС‡С‘С‚ СЃРєРѕРїРёСЂРѕРІР°РЅ.'
+        : 'РќРµ СѓРґР°Р»РѕСЃСЊ СЃРєРѕРїРёСЂРѕРІР°С‚СЊ. Р’С‹РґРµР»РёС‚Рµ СЂРµР·СѓР»СЊС‚Р°С‚ РІСЂСѓС‡РЅСѓСЋ.';
+    }
+  });
+
+  setMode(false);
+})();
+</script>
+</body>
+</html>
