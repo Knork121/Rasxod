@@ -1,374 +1,245 @@
+
 <!DOCTYPE html>
-
 <html lang="ru">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>MILE</title>
-
+<title>РњРР›Р¬</title>
 <style>
-
-:root {
-
-  color-scheme: light;
-
-  --bg: #f5f5f5;
-
-  --card: #ffffff;
-
-  --text: #171717;
-
-  --muted: #777;
-
-  --line: #e5e5e5;
-
-}
-
-* { box-sizing: border-box; }
-
-body {
-
-  margin: 0;
-
-  padding: 22px 14px 30px;
-
-  background: var(--bg);
-
-  color: var(--text);
-
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
-}
-
-main { max-width: 560px; margin: auto; }
-
-header { padding: 12px 4px 24px; }
-
-h1 {
-
-  margin: 0;
-
-  font-size: 35px;
-
-  letter-spacing: 5px;
-
-  font-weight: 800;
-
-}
-
-.subtitle { color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-.card {
-
-  background: var(--card);
-
-  border: 1px solid var(--line);
-
-  border-radius: 18px;
-
-  padding: 18px;
-
-  margin-bottom: 14px;
-
-}
-
-h2 {
-
-  margin: 0 0 16px;
-
-  font-size: 16px;
-
-}
-
-label {
-
-  display: block;
-
-  font-size: 13px;
-
-  color: #555;
-
-  margin: 13px 0 7px;
-
-}
-
-input, select {
-
-  width: 100%;
-
-  min-height: 46px;
-
-  padding: 11px 12px;
-
-  border: 1px solid #ddd;
-
-  border-radius: 10px;
-
-  background: white;
-
-  color: #111;
-
-  font-size: 16px;
-
-  outline: none;
-
-}
-
-input:focus, select:focus { border-color: #555; }
-
-.segment {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 8px;
-
-}
-
-button {
-
-  min-height: 46px;
-
-  padding: 12px;
-
-  border: 1px solid #171717;
-
-  border-radius: 11px;
-
-  background: white;
-
-  color: #171717;
-
-  font-size: 14px;
-
-  font-weight: 650;
-
-  cursor: pointer;
-
-}
-
-button.active, .primary {
-
-  background: #171717;
-
-  color: white;
-
-}
-
-.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.hidden { display: none !important; }
-
-.result {
-
-  background: #171717;
-
-  color: white;
-
-  border-radius: 18px;
-
-  padding: 20px;
-
-  margin-bottom: 14px;
-
-}
-
-.result-label { color: #c5c5c5; font-size: 13px; }
-
-.total {
-
-  font-size: clamp(36px, 10vw, 48px);
-
-  font-weight: 750;
-
-  letter-spacing: -1.5px;
-
-  margin: 5px 0 15px;
-
-  overflow-wrap: anywhere;
-
-}
-
-.result-row {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 12px;
-
-  padding: 10px 0;
-
-  border-top: 1px solid #414141;
-
-  font-size: 14px;
-
-}
-
-.result-row strong { text-align: right; }
-
-.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-.actions button { width: 100%; }
-
-.note { color: var(--muted); font-size: 12px; line-height: 1.5; }
-
-footer {
-
-  text-align: center;
-
-  color: #777;
-
-  font-size: 12px;
-
-  padding: 12px 4px;
-
-}
-
+:root{color-scheme:light;--bg:#f3f3f3;--card:#fff;--fg:#171717;--muted:#777;--line:#ddd;--field:#fff}
+body.dark{color-scheme:dark;--bg:#111;--card:#1c1c1e;--fg:#f5f5f5;--muted:#aaa;--line:#39393c;--field:#29292b}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 13px 28px;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+main{max-width:600px;margin:auto}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 3px 22px}
+h1{font-size:32px;letter-spacing:5px;margin:0}
+h2{font-size:16px;margin:0 0 15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:13px}
+label{display:block;font-size:13px;color:var(--muted);margin:13px 0 7px}
+input,select,textarea{width:100%;min-height:45px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--fg);padding:10px;font-size:16px}
+button{border:1px solid var(--line);border-radius:11px;padding:12px;background:var(--card);color:var(--fg);font-weight:650;font-size:14px;min-height:43px;cursor:pointer}
+.primary{background:var(--fg);color:var(--bg)}
+.pills,.grid,.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pills button.active{background:var(--fg);color:var(--bg)}
+.info{background:var(--bg);border-radius:11px;padding:12px;margin-top:12px;font-size:14px;line-height:1.8}
+.fueltype{font-size:20px;font-weight:750}
+.big{background:var(--fg);color:var(--bg);border-radius:17px;padding:20px;margin:13px 0}
+.muted{opacity:.7;font-size:13px}
+.total{font-size:39px;font-weight:800;margin:5px 0 14px;overflow-wrap:anywhere}
+.line{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #8885;padding:10px 0;font-size:14px}
+.line strong{text-align:right}
+.error{background:#ffe5e5;color:#a40000;border:1px solid #e44;border-radius:12px;padding:12px;font-weight:800;margin-top:12px}
+.ok{background:#e2f5e6;color:#17682b;border-radius:12px;padding:12px;margin-top:12px}
+body.dark .error{background:#4b1717;color:#ffb8b8}
+body.dark .ok{background:#163b22;color:#b6f5c3}
+.note{font-size:12px;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
 </style>
-
 </head>
-
 <body>
-
 <main>
-
-  <header>
-
-    <h1>MILE</h1>
-
-    <div class="subtitle">Калькулятор расхода топлива</div>
-
-  </header>
-
-  <section class="card">
-
-    <h2>01 / Исходные данные</h2>
-
-    <label for="norm">Норма расхода, л / 100 км</label>
-
-    <input id="norm" type="number" min="0" step="0.001" value="9.8">
-
-    <label>Режим расчёта</label>
-
-    <div class="segment">
-
-      <button id="oneBtn" class="active" type="button">Одна часть</button>
-
-      <button id="twoBtn" type="button">Две части</button>
-
-    </div>
-
-  </section>
-
-  <section class="card">
-
-    <h2>02 / Пробег и надбавки</h2>
-
-    <div id="part1">
-
-      <label for="km1">Пробег, км</label>
-
-      <input id="km1" type="number" min="0" step="0.1" value="500">
-
-      <label for="allow1">Надбавка</label>
-
-      <select id="allow1">
-
-        <option value="0">0% — без надбавок</option>
-
-        <option value="15">15% — город</option>
-
-        <option value="6">6% — климат</option>
-
-        <option value="21" selected>15% + 6% — город и климат</option>
-
-        <option value="custom">Своя надбавка</option>
-
-      </select>
-
-      <div id="customBox1" class="hidden">
-
-        <label for="custom1">Своя надбавка, %</label>
-
-        <input id="custom1" type="number" min="0" step="0.1" value="0">
-
-      </div>
-
-    </div>
-
-    <div id="part2" class="hidden">
-
-      <div style="border-top:1px solid #eee;margin:18px 0"></div>
-
-      <h2>Часть 2</h2>
-
-      <label for="km2">Пробег, км</label>
-
-      <input id="km2" type="number" min="0" step="0.1" value="400
-        <script>
-        let text = `MILE — расчёт расхода топлива\n`;
-
-    text += `Норма: ${fmt(norm, 3)} л/100 км\n`;
-
-    text += `Часть 1: ${fmt(km1)} км × ${fmt(norm, 3)} / 100`;
-
-    text += ` × (1 + ${fmt(p1)} / 100) = ${fmt(f1)} л\n`;
-
-    if (twoParts) {
-
-      text += `Часть 2: ${fmt(km2)} км × ${fmt(norm, 3)} / 100`;
-
-      text += ` × (1 + ${fmt(p2)} / 100) = ${fmt(f2)} л\n`;
-
-    }
-
-    text += `Общий пробег: ${fmt(km1 + km2)} км\n`;
-
-    text += `ИТОГО: ${fmt(f1 + f2)} л`;
-
-    try {
-
-      await navigator.clipboard.writeText(text);
-
-      $('status').textContent = 'Расчёт скопирован.';
-
-    } catch {
-
-      const area = document.createElement('textarea');
-
-      area.value = text;
-
-      document.body.appendChild(area);
-
-      area.select();
-
-      const ok = document.execCommand('copy');
-
-      area.remove();
-
-      $('status').textContent = ok
-
-        ? 'Расчёт скопирован.'
-
-        : 'Не удалось скопировать. Выделите результат вручную.';
-
-    }
-
-  });
-
-  setMode(false);
-
+<header>
+<div><h1>РњРР›Р¬</h1><div class="muted">Р Р°СЃС‡С‘С‚ СЂР°СЃС…РѕРґР° С‚РѕРїР»РёРІР°</div></div>
+<button id="theme">вѕ РўРµРјР°</button>
+</header>
+<section class="card">
+<h2>01 / РђРІС‚РѕРјРѕР±РёР»СЊ</h2>
+<label for="car">РњР°СЂРєР° Р°РІС‚РѕРјРѕР±РёР»СЏ</label>
+<select id="car">
+<option value="0">РњРѕСЃРєРІРёС‡ 3</option>
+<option value="1">SENAT 900</option>
+<option value="2">Haval Jolion</option>
+<option value="3">Hyundai Sonata</option>
+<option value="4">Р›СѓРёРґРѕСЂ-225033</option>
+<option value="5">РђРІСЂРѕСЂР° - 311302</option>
+<option value="6">РџРђР— - 32053 - 50</option>
+<option value="7">РџРђР— - 320530 - 02</option>
+<option value="8">РљРђР’Р— 4238 - 62</option>
+<option value="9">РљРђР’Р— 4238 - D1</option>
+<option value="10">РџРђР— - 4234 - 04</option>
+<option value="11">Volkswagen M</option>
+<option value="12">Р“РђР— A65 R32</option>
+<option value="13">ACM - 535251</option>
+<option value="14">Sollers Atlant</option>
+<option value="15">Ford Transit</option>
+</select>
+<div class="info">
+<div>РўРёРї С‚РѕРїР»РёРІР°: <span id="fuel" class="fueltype">РђР-92</span></div>
+<div>Р’РјРµСЃС‚РёРјРѕСЃС‚СЊ Р±Р°РєР°: <strong id="capacity">50 Р»</strong></div>
+<div>РќРѕСЂРјР° СЂР°СЃС…РѕРґР°: <strong id="normView">0,098 Р»/РєРј</strong></div>
+</div>
+<div id="manualBox" class="hidden">
+<label for="manualNorm">РќРѕСЂРјР° СЂР°СЃС…РѕРґР° (РЅР°РїСЂРёРјРµСЂ, 0,098)</label>
+<input id="manualNorm" type="text" inputmode="decimal" value="0,098">
+<p class="note">Р”Р»СЏ SENAT 900 РЅРѕСЂРјР° РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР° вЂ” РІРІРµРґРёС‚Рµ РµС‘ РІСЂСѓС‡РЅСѓСЋ.</p>
+</div>
+</section>
+<section class="card">
+<h2>02 / РўРѕРїР»РёРІРЅС‹Р№ Р±Р°Р»Р°РЅСЃ</h2>
+<div class="grid">
+<div><label for="start">РќР°С‡Р°Р»СЊРЅС‹Р№ РѕСЃС‚Р°С‚РѕРє, Р»</label><input id="start" type="number" min="0" step="0.1" value="20"></div>
+<div><label for="tankAdded">Р—Р°РїСЂР°РІР»РµРЅРѕ РІСЃРµРіРѕ, Р»</label><input id="tankAdded" type="number" min="0" step="0.1" value="0"></div>
+</div>
+<label for="fillList">Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ Р·Р°РїСЂР°РІРєРё, Р» вЂ” РїРѕ РѕРґРЅРѕР№ РЅР° СЃС‚СЂРѕРєСѓ</label>
+<textarea id="fillList" rows="2" placeholder="РќР°РїСЂРёРјРµСЂ:&#10;20&#10;15,5"></textarea>
+<p class="note">РќРµ РґСѓР±Р»РёСЂСѓР№С‚Рµ Р·Р°РїСЂР°РІРєРё: Р·РЅР°С‡РµРЅРёСЏ РІ РѕР±РѕРёС… РїРѕР»СЏС… СЃРєР»Р°РґС‹РІР°СЋС‚СЃСЏ.</p>
+</section>
+<section class="card">
+<h2>03 / РњР°СЂС€СЂСѓС‚</h2>
+<div class="pills">
+<button id="noMkad" class="active" type="button">Р‘РµР· РњРљРђР”Р°</button>
+<button id="withMkad" type="button">РЎ РњРљРђР”РѕРј</button>
+</div>
+<div id="mkadBox" class="hidden">
+<label for="kmMkad">РџСЂРѕР±РµРі РїРѕ РњРљРђР”Сѓ, РєРј вЂ” Р±РµР· РЅР°РґР±Р°РІРѕРє</label>
+<input id="kmMkad" type="number" min="0" step="0.1" value="0">
+</div>
+<label for="kmOther">РџСЂРѕР±РµРі РІРЅРµ РњРљРђР”Р° / РѕР±С‰РёР№ РїСЂРѕР±РµРі, РєРј</label>
+<input id="kmOther" type="number" min="0" step="0.1" value="100">
+<label for="allowance">РќР°РґР±Р°РІРєРё РґР»СЏ РїСЂРѕР±РµРіР° РІРЅРµ РњРљРђР”Р°</label>
+<select id="allowance">
+<option value="0">0% вЂ” Р±РµР· РЅР°РґР±Р°РІРѕРє</option>
+<option value="15">15% вЂ” РіРѕСЂРѕРґ</option>
+<option value="6">6% вЂ” РєР»РёРјР°С‚</option>
+<option value="21" selected>15% РіРѕСЂРѕРґ + 6% РєР»РёРјР°С‚</option>
+<option value="custom">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°</option>
+</select>
+<div id="customBox" class="hidden">
+<label for="custom">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°, %</label>
+<input id="custom" type="number" min="0" step="0.1" value="0">
+</div>
+</section>
+<section class="big" aria-live="polite">
+<div class="muted">Р РђРЎР§РЃРўРќР«Р™ Р РђРЎРҐРћР”</div>
+<div class="total"><span id="consumption">9,8</span> Р»</div>
+<div class="line"><span>РћР±С‰РёР№ РїСЂРѕР±РµРі</span><strong id="totalKm">100 РєРј</strong></div>
+<div class="line"><span>РќР°С‡Р°Р»СЊРЅС‹Р№ РѕСЃС‚Р°С‚РѕРє</span><strong id="startOut">20 Р»</strong></div>
+<div class="line"><span>Р—Р°РїСЂР°РІР»РµРЅРѕ РІСЃРµРіРѕ</span><strong id="addedOut">0 Р»</strong></div>
+<div class="line"><span>РљРѕРЅРµС‡РЅС‹Р№ РѕСЃС‚Р°С‚РѕРє</span><strong id="endOut">10,2 Р»</strong></div>
+<div id="tankWarning"></div>
+</section>
+<section class="card">
+<h2>04 / Р¤РѕСЂРјСѓР»Р° СЂР°СЃС‡С‘С‚Р°</h2>
+<div id="formula" style="font-size:14px;line-height:1.9;overflow-wrap:anywhere"></div>
+<div class="actions" style="margin-top:14px">
+<button class="primary" id="copy">РљРѕРїРёСЂРѕРІР°С‚СЊ СЂР°СЃС‡С‘С‚</button>
+<button id="reset">РЎР±СЂРѕСЃРёС‚СЊ РјР°СЂС€СЂСѓС‚</button>
+</div>
+<p id="status" class="note"></p>
+</section>
+<p class="note" style="text-align:center">В«РўРѕС‡РЅРѕСЃС‚СЊ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ РїСЂРѕСЃС‚С‹С… РІРµС‰РµР№.В»</p>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const cars=[
+['РњРѕСЃРєРІРёС‡ 3',50,'РђР-92',.098],
+['SENAT 900',62,'РђР-95',null],
+['Haval Jolion',55,'РђР-92',.092],
+['Hyundai Sonata',60,'РђР-92',.087],
+['Р›СѓРёРґРѕСЂ-225033',80,'РђР-92',.16],
+['РђРІСЂРѕСЂР° - 311302',80,'Р”Рў',.127],
+['РџРђР— - 32053 - 50',105,'РђР-92',.32],
+['РџРђР— - 320530 - 02',105,'РђР-92',.339],
+['РљРђР’Р— 4238 - 62',170,'Р”Рў',.36],
+['РљРђР’Р— 4238 - D1',170,'Р”Рў',.373],
+['РџРђР— - 4234 - 04',95,'Р”Рў',.224],
+['Volkswagen M',80,'Р”Рў',.084],
+['Р“РђР— A65 R32',80,'Р”Рў',.154],
+['ACM - 535251',80,'Р”Рў',.15],
+['Sollers Atlant',80,'Р”Рў',.121],
+['Ford Transit',80,'Р”Рў',.145]
+];
+let mkad=false;
+const n=id=>Math.max(0,Number($(id).value)||0);
+const num=id=>Math.max(0,Number(String($(id).value).replace(',','.'))||0);
+const fmt=(x,d=1)=>x.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
+const norm=()=>cars[+$('car').value][3]??num('manualNorm');
+const allowance=()=>$('allowance').value==='custom'?n('custom'):Number($('allowance').value);
+const fills=()=>$('fillList').value.split(/\n|;/).map(s=>Number(s.trim().replace(',','.'))).filter(x=>Number.isFinite(x)&&x>0).reduce((a,b)=>a+b,0);
+function update(){
+ const car=cars[+$('car').value], rate=norm(), p=allowance();
+ $('fuel').textContent=car[2];
+ $('capacity').textContent=car[1]+' Р»';
+ $('normView').textContent=rate?fmt(rate,3)+' Р»/РєРј':'РќРµ Р·Р°РґР°РЅР°';
+ $('manualBox').classList.toggle('hidden',car[3]!==null);
+ $('mkadBox').classList.toggle('hidden',!mkad);
+ $('noMkad').classList.toggle('active',!mkad);
+ $('withMkad').classList.toggle('active',mkad);
+ $('customBox').classList.toggle('hidden',$('allowance').value!=='custom');
+ const kmM=mkad?n('kmMkad'):0, kmO=n('kmOther');
+ const fuelM=kmM*rate, baseO=kmO*rate, fuelO=baseO*(1+p/100);
+ const extra=fuelO-baseO, fuel=fuelM+fuelO;
+ const added=n('tankAdded')+fills(), start=n('start'), end=start+added-fuel;
+ $('consumption').textContent=fmt(fuel);
+ $('totalKm').textContent=fmt(kmM+kmO)+' РєРј';
+ $('startOut').textContent=fmt(start)+' Р»';
+ $('addedOut').textContent=fmt(added)+' Р»';
+ $('endOut').textContent=fmt(end)+' Р»';
+ const warning=$('tankWarning');
+ warning.innerHTML='';
+ if(end>car[1]+0.05){
+  warning.innerHTML=`<div class="error">вљ  РЎР’Р•Р РҐР‘РђРљ! РћСЃС‚Р°С‚РѕРє ${fmt(end)} Р» РїСЂРµРІС‹С€Р°РµС‚ РІРјРµСЃС‚РёРјРѕСЃС‚СЊ Р±Р°РєР° (${car[1]} Р»). РџСЂРѕРІРµСЂСЊС‚Рµ РЅР°С‡Р°Р»СЊРЅС‹Р№ РѕСЃС‚Р°С‚РѕРє, Р·Р°РїСЂР°РІРєРё Рё СЂР°СЃС…РѕРґ.</div>`;
+ }else if(end<-.05){
+  warning.innerHTML='<div class="error">вљ  РћРўР РР¦РђРўР•Р›Р¬РќР«Р™ РћРЎРўРђРўРћРљ! Р Р°СЃС…РѕРґ РїСЂРµРІС‹С€Р°РµС‚ РґРѕСЃС‚СѓРїРЅРѕРµ С‚РѕРїР»РёРІРѕ. РџСЂРѕРІРµСЂСЊС‚Рµ РґР°РЅРЅС‹Рµ.</div>';
+ }else{
+  warning.innerHTML='<div class="ok">вњ“ РћСЃС‚Р°С‚РѕРє РІ РїСЂРµРґРµР»Р°С… РІРјРµСЃС‚РёРјРѕСЃС‚Рё Р±Р°РєР°.</div>';
+ }
+ let f='';
+ if(mkad) f+=`РњРљРђР”: ${fmt(kmM)} Г— ${fmt(rate,3)} = ${fmt(fuelM)} Р» (0%).<br>`;
+ f+=`Р’РЅРµ РњРљРђР”Р°: ${fmt(kmO)} Г— ${fmt(rate,3)}`;
+ if(p>0){
+  const label=$('allowance').value==='custom'
+   ?`СЃРІРѕСЏ РЅР°РґР±Р°РІРєР° ${fmt(p)}%`
+   :p===21?'15% РіРѕСЂРѕРґ + 6% РєР»РёРјР°С‚'
+   :p===15?'15% РіРѕСЂРѕРґ'
+   :p===6?'6% РєР»РёРјР°С‚':`${fmt(p)}%`;
+  f+=` + (${label}) = ${fmt(fuelO)} Р».`;
+ }else f+=` = ${fmt(fuelO)} Р» (0%).`;
+ f+=`<br>Р Р°СЃС…РѕРґ РІСЃРµРіРѕ: ${fmt(fuel)} Р».`;
+ f+=`<br>РљРѕРЅРµС‡РЅС‹Р№ Р±Р°Рє: ${fmt(start)} + ${fmt(added)} в€’ ${fmt(fuel)} = ${fmt(end)} Р».`;
+ $('formula').innerHTML=f;
+}
+$('car').addEventListener('change',()=>{
+ const c=cars[+$('car').value];
+ if(c[3]!==null) $('manualNorm').value=String(c[3]).replace('.',',');
+ update();
+});
+document.querySelectorAll('input,select,textarea').forEach(e=>{
+ e.addEventListener('input',update);e.addEventListener('change',update);
+});
+$('noMkad').onclick=()=>{mkad=false;update()};
+$('withMkad').onclick=()=>{mkad=true;update()};
+$('theme').onclick=()=>{
+ document.body.classList.toggle('dark');
+ $('theme').textContent=document.body.classList.contains('dark')?'вЂ РўРµРјР°':'вѕ РўРµРјР°';
+};
+$('reset').onclick=()=>{
+ $('start').value=0;$('tankAdded').value=0;$('fillList').value='';
+ $('kmMkad').value=0;$('kmOther').value=0;
+ $('allowance').value='21';$('custom').value=0;
+ mkad=false;update();$('status').textContent='РњР°СЂС€СЂСѓС‚ СЃР±СЂРѕС€РµРЅ.';
+};
+$('copy').onclick=async()=>{
+ const car=cars[+$('car').value];
+ const text='РњРР›Р¬ вЂ” '+car[0]+'\nРўРѕРїР»РёРІРѕ: '+car[2]+'\nРќРѕСЂРјР°: '+String(norm()).replace('.',',')+' Р»/РєРј\n'
+ +$('formula').innerText+'\nРќР°С‡Р°Р»СЊРЅС‹Р№ Р±Р°Рє: '+$('startOut').textContent
+ +'\nР—Р°РїСЂР°РІР»РµРЅРѕ: '+$('addedOut').textContent
+ +'\nР Р°СЃС…РѕРґ: '+$('consumption').textContent+' Р»'
+ +'\nРљРѕРЅРµС‡РЅС‹Р№ Р±Р°Рє: '+$('endOut').textContent
+ +'\n'+$('tankWarning').innerText;
+ try{
+  await navigator.clipboard.writeText(text);
+  $('status').textContent='Р Р°СЃС‡С‘С‚ СЃРєРѕРїРёСЂРѕРІР°РЅ.';
+ }catch(e){
+  const t=document.createElement('textarea');t.value=text;
+  document.body.appendChild(t);t.select();
+  const ok=document.execCommand('copy');t.remove();
+  $('status').textContent=ok?'Р Р°СЃС‡С‘С‚ СЃРєРѕРїРёСЂРѕРІР°РЅ.':'РќРµ СѓРґР°Р»РѕСЃСЊ СЃРєРѕРїРёСЂРѕРІР°С‚СЊ.';
+ }
+};
+update();
 })();
-
 </script>
-
 </body>
-
-</html>">
-    </script>
+</html>
