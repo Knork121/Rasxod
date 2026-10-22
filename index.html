@@ -1,389 +1,514 @@
+Вот полный код — копируй целиком:
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>МИЛЬ</title>
 <style>
-:root{color-scheme:light;--bg:#f3f3f3;--card:#fff;--fg:#171717;--muted:#777;--line:#ddd;--field:#fff}
-body.dark{color-scheme:dark;--bg:#111;--card:#1c1c1e;--fg:#f5f5f5;--muted:#aaa;--line:#39393c;--field:#29292b}
-*{box-sizing:border-box}
-body{margin:0;padding:18px 13px 28px;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,sans-serif}
-main{max-width:600px;margin:auto}
-header{display:flex;align-items:center;justify-content:space-between;padding:8px 3px 22px}
-h1{font-size:32px;letter-spacing:5px;margin:0}
-h2{font-size:16px;margin:0 0 15px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:13px}
-label{display:block;font-size:13px;color:var(--muted);margin:13px 0 7px}
-input,select,textarea{width:100%;min-height:45px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--fg);padding:10px;font-size:16px}
-button{border:1px solid var(--line);border-radius:11px;padding:12px;background:var(--card);color:var(--fg);font-weight:650;font-size:14px;min-height:43px;cursor:pointer}
-.primary{background:var(--fg);color:var(--bg)}
-.pills,.grid,.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.pills button.active{background:var(--fg);color:var(--bg)}
-.info{background:var(--bg);border-radius:11px;padding:12px;margin-top:12px;font-size:14px;line-height:1.8}
-.fueltype{font-size:20px;font-weight:750}
-.big{background:var(--fg);color:var(--bg);border-radius:17px;padding:20px;margin:13px 0}
-.muted{opacity:.7;font-size:13px}
-.total{font-size:39px;font-weight:800;margin:5px 0 14px;overflow-wrap:anywhere}
-.line{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #8885;padding:10px 0;font-size:14px}
-.line strong{text-align:right}
-.error{background:#ffe5e5;color:#a40000;border:1px solid #e44;border-radius:12px;padding:12px;font-weight:800;margin-top:12px}
-.ok{background:#e2f5e6;color:#17682b;border-radius:12px;padding:12px;margin-top:12px}
-body.dark .error{background:#4b1717;color:#ffb8b8}
-body.dark .ok{background:#163b22;color:#b6f5c3}
-.note{font-size:12px;color:var(--muted);line-height:1.5}
-.hidden{display:none!important}
-.save-status{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+:root {
+  color-scheme: light;
+  --bg: #f0f0f2;
+  --card: #ffffff;
+  --fg: #111;
+  --muted: #666;
+  --line: #e0e0e0;
+  --accent: #111;
+  --ok: #1a7f37;
+  --err: #c41e3a;
+}
+body.dark {
+  color-scheme: dark;
+  --bg: #0d0d0f;
+  --card: #1a1a1c;
+  --fg: #f2f2f2;
+  --muted: #999;
+  --line: #2e2e30;
+  --accent: #f2f2f2;
+  --ok: #3dd68c;
+  --err: #ff6b6b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 16px 14px 40px;
+  line-height: 1.4;
+}
+main { max-width: 480px; margin: 0 auto; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 4px 2px;
+}
+h1 { font-size: 28px; letter-spacing: 4px; font-weight: 700; }
+.muted { color: var(--muted); font-size: 13px; }
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+  border: 1px solid var(--line);
+}
+h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+input, select, textarea {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 0 14px;
+  font-size: 17px;
+  margin-bottom: 14px;
+}
+textarea { height: auto; min-height: 70px; padding: 12px 14px; resize: vertical; }
+select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+button {
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--line);
+}
+button.primary {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+}
+button.full { width: 100%; margin-top: 6px; }
+.pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.pills button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.info {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.info div { margin: 3px 0; }
+.fueltype { font-weight: 700; font-size: 16px; }
+.result {
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.result .label { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
+.result .big { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
+.line {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid rgba(128,128,128,0.25);
+  font-size: 14px;
+}
+.line strong { font-weight: 600; }
+.warn {
+  background: #fff0f0;
+  color: var(--err);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.5;
+}
+body.dark .warn { background: #3a1515; }
+.ok {
+  background: #e8f8ee;
+  color: var(--ok);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+body.dark .ok { background: #0f2a1a; }
+.note { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+.hidden { display: none !important; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.status { text-align: center; font-size: 13px; color: var(--muted); margin-top: 10px; min-height: 20px; }
+.footer { text-align: center; margin-top: 24px; font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
 <main>
 <header>
-<div><h1>МИЛЬ</h1><div class="muted">Расчёт расхода топлива</div></div>
-<button id="theme">☾ Тема</button>
+  <div>
+    <h1>МИЛЬ</h1>
+    <div class="muted">Расход топлива</div>
+  </div>
+  <button id="theme" style="width:48px;padding:0">☾</button>
 </header>
 
+<!-- 1. Машина -->
 <section class="card">
-<h2>01 / Автомобиль</h2>
-<label for="car">Марка автомобиля</label>
-<select id="car">
-<option value="0">Москвич 3</option>
-<option value="1">SENAT 900</option>
-<option value="2">Haval Jolion</option>
-<option value="3">Hyundai Sonata</option>
-<option value="4">Луидор-225033</option>
-<option value="5">Аврора - 311302</option>
-<option value="6">ПАЗ - 32053 - 50</option>
-<option value="7">ПАЗ - 320530 - 02</option>
-<option value="8">КАВЗ 4238 - 62</option>
-<option value="9">КАВЗ 4238 - D1</option>
-<option value="10">ПАЗ - 4234 - 04</option>
-<option value="11">Volkswagen M</option>
-<option value="12">ГАЗ A65 R32</option>
-<option value="13">ACM - 535251</option>
-<option value="14">Sollers Atlant</option>
-<option value="15">Ford Transit</option>
-</select>
-<div class="info">
-<div>Тип топлива: <span id="fuel" class="fueltype">АИ-92</span></div>
-<div>Вместимость бака: <strong id="capacity">50 л</strong></div>
-<div>Норма расхода: <strong id="normView">0,098 л/км</strong></div>
-</div>
-<div id="manualBox" class="hidden">
-<label for="manualNorm">Норма расхода (например, 0,098)</label>
-<input id="manualNorm" type="text" inputmode="decimal" value="0,098">
-<p class="note">Для SENAT 900 норма не установлена — введите её вручную.</p>
-</div>
+  <h2>Машина</h2>
+  <select id="car">
+    <option value="0">Москвич 3</option>
+    <option value="1">SENAT 900</option>
+    <option value="2">Haval Jolion</option>
+    <option value="3">Hyundai Sonata</option>
+    <option value="4">Луидор-225033</option>
+    <option value="5">Аврора - 311302</option>
+    <option value="6">ПАЗ - 32053 - 50</option>
+    <option value="7">ПАЗ - 320530 - 02</option>
+    <option value="8">КАВЗ 4238 - 62</option>
+    <option value="9">КАВЗ 4238 - D1</option>
+    <option value="10">ПАЗ - 4234 - 04</option>
+    <option value="11">Volkswagen M</option>
+    <option value="12">ГАЗ A65 R32</option>
+    <option value="13">ACM - 535251</option>
+    <option value="14">Sollers Atlant</option>
+    <option value="15">Ford Transit</option>
+  </select>
+  <div class="info">
+    <div>Топливо: <span id="fuel" class="fueltype">АИ-92</span></div>
+    <div>Бак: <strong id="capacity">50 л</strong> · Норма: <strong id="normView">0,098 л/км</strong></div>
+  </div>
+  <div id="manualBox" class="hidden">
+    <label>Норма расхода (л/км)</label>
+    <input id="manualNorm" type="text" inputmode="decimal" value="0,098">
+  </div>
 </section>
 
+<!-- 2. Текущее состояние (сохраняется) -->
 <section class="card">
-<h2>02 / Текущее состояние</h2>
-<div class="grid">
-<div>
-<label for="start">Остаток топлива, л</label>
-<input id="start" type="number" min="0" step="0.1" value="20">
-</div>
-<div>
-<label for="odometer">Текущий пробег (одометр), км</label>
-<input id="odometer" type="number" min="0" step="1" value="0">
-</div>
-</div>
-<label for="tankAdded">Заправлено всего, л</label>
-<input id="tankAdded" type="number" min="0" step="0.1" value="0">
-<label for="fillList">Дополнительные заправки, л — по одной на строку</label>
-<textarea id="fillList" rows="2" placeholder="Например:&#10;20&#10;15,5"></textarea>
-<p class="note">Не дублируйте заправки: значения в обоих полях складываются.</p>
+  <h2>Сейчас в машине</h2>
+  <div class="row">
+    <div>
+      <label>Остаток топлива, л</label>
+      <input id="start" type="number" min="0" step="0.1" value="20">
+    </div>
+    <div>
+      <label>Пробег (одометр)</label>
+      <input id="odometer" type="number" min="0" step="1" value="0">
+    </div>
+  </div>
+  <p class="note">Эти значения сохраняются и восстанавливаются при следующем заходе</p>
 </section>
 
+<!-- 3. Поездка -->
 <section class="card">
-<h2>03 / Маршрут</h2>
-<div class="pills">
-<button id="noMkad" class="active" type="button">Без МКАДа</button>
-<button id="withMkad" type="button">С МКАДом</button>
-</div>
-<div id="mkadBox" class="hidden">
-<label for="kmMkad">Пробег по МКАДу, км — без надбавок</label>
-<input id="kmMkad" type="number" min="0" step="0.1" value="0">
-</div>
-<label for="kmOther">Пробег вне МКАДа / общий пробег, км</label>
-<input id="kmOther" type="number" min="0" step="0.1" value="100">
-<label for="allowance">Надбавки для пробега вне МКАДа</label>
-<select id="allowance">
-<option value="0">0% — без надбавок</option>
-<option value="15">15% — город</option>
-<option value="6">6% — климат</option>
-<option value="21" selected>15% город + 6% климат</option>
-<option value="custom">Своя надбавка</option>
-</select>
-<div id="customBox" class="hidden">
-<label for="custom">Своя надбавка, %</label>
-<input id="custom" type="number" min="0" step="0.1" value="0">
-</div>
+  <h2>Поездка</h2>
+
+  <label>Сколько проехал, км</label>
+  <input id="kmOther" type="number" min="0" step="0.1" value="0" placeholder="0">
+
+  <div class="pills">
+    <button type="button" id="noMkad" class="active">Без МКАДа</button>
+    <button type="button" id="withMkad">С МКАДом</button>
+  </div>
+
+  <div id="mkadBox" class="hidden">
+    <label>Из них по МКАДу, км</label>
+    <input id="kmMkad" type="number" min="0" step="0.1" value="0">
+  </div>
+
+  <label>Надбавки</label>
+  <select id="allowance">
+    <option value="0">Без надбавок</option>
+    <option value="15">15% — город</option>
+    <option value="6">6% — климат</option>
+    <option value="21" selected>15% город + 6% климат</option>
+    <option value="custom">Своя надбавка</option>
+  </select>
+  <div id="customBox" class="hidden">
+    <label>Своя надбавка, %</label>
+    <input id="custom" type="number" min="0" step="0.1" value="0">
+  </div>
+
+  <label>Заправил, л</label>
+  <input id="tankAdded" type="number" min="0" step="0.1" value="0" placeholder="0">
+  <label>Или несколько заправок (по одной в строке)</label>
+  <textarea id="fillList" rows="2" placeholder="20&#10;15,5"></textarea>
 </section>
 
-<section class="big" aria-live="polite">
-<div class="muted">РАСЧЁТНЫЙ РАСХОД</div>
-<div class="total"><span id="consumption">9,8</span> л</div>
-<div class="line"><span>Общий пробег поездки</span><strong id="totalKm">100 км</strong></div>
-<div class="line"><span>Пробег после поездки</span><strong id="newOdo">100 км</strong></div>
-<div class="line"><span>Начальный остаток</span><strong id="startOut">20 л</strong></div>
-<div class="line"><span>Заправлено всего</span><strong id="addedOut">0 л</strong></div>
-<div class="line"><span>Конечный остаток</span><strong id="endOut">10,2 л</strong></div>
-<div id="tankWarning"></div>
+<!-- Результат -->
+<section class="result">
+  <div class="label">РАСХОД ЗА ПОЕЗДКУ</div>
+  <div class="big"><span id="consumption">0</span> л</div>
+
+  <div class="line"><span>Пробег поездки</span><strong id="totalKm">0 км</strong></div>
+  <div class="line"><span>Новый пробег</span><strong id="newOdo">0 км</strong></div>
+  <div class="line"><span>Было топлива</span><strong id="startOut">20 л</strong></div>
+  <div class="line"><span>Заправлено</span><strong id="addedOut">0 л</strong></div>
+  <div class="line"><span>Станет топлива</span><strong id="endOut">20 л</strong></div>
+
+  <div id="tankWarning"></div>
 </section>
 
+<!-- Кнопки -->
 <section class="card">
-<h2>04 / Формула расчёта</h2>
-<div id="formula" style="font-size:14px;line-height:1.9;overflow-wrap:anywhere"></div>
-<div class="actions" style="margin-top:14px">
-<button class="primary" id="copy">Копировать расчёт</button>
-<button id="applyTrip">Применить поездку</button>
-</div>
-<div class="actions" style="margin-top:8px">
-<button id="save">Сохранить состояние</button>
-<button id="resetAll">Сбросить всё</button>
-</div>
-<p id="status" class="note"></p>
-<p class="save-status" id="saveInfo"></p>
+  <button class="primary full" id="applyTrip">Применить поездку</button>
+  <div class="actions">
+    <button id="copy">Копировать</button>
+    <button id="resetAll">Сбросить</button>
+  </div>
+  <p class="status" id="status"></p>
+  <p class="status" id="saveInfo"></p>
 </section>
 
-<p class="note" style="text-align:center">«Точность начинается с простых вещей.»</p>
+<p class="footer">Данные хранятся только на этом устройстве</p>
 </main>
 
 <script>
-(()=>{
-const $=id=>document.getElementById(id);
-const STORAGE_KEY = 'mil_fuel_state_v1';
+(() => {
+  const $ = id => document.getElementById(id);
+  const STORAGE_KEY = 'mil_v2';
 
-const cars=[
-['Москвич 3',50,'АИ-92',.098],
-['SENAT 900',62,'АИ-95',null],
-['Haval Jolion',55,'АИ-92',.092],
-['Hyundai Sonata',60,'АИ-92',.087],
-['Луидор-225033',80,'АИ-92',.16],
-['Аврора - 311302',80,'ДТ',.127],
-['ПАЗ - 32053 - 50',105,'АИ-92',.32],
-['ПАЗ - 320530 - 02',105,'АИ-92',.339],
-['КАВЗ 4238 - 62',170,'ДТ',.36],
-['КАВЗ 4238 - D1',170,'ДТ',.373],
-['ПАЗ - 4234 - 04',95,'ДТ',.224],
-['Volkswagen M',80,'ДТ',.084],
-['ГАЗ A65 R32',80,'ДТ',.154],
-['ACM - 535251',80,'ДТ',.15],
-['Sollers Atlant',80,'ДТ',.121],
-['Ford Transit',80,'ДТ',.145]
-];
+  const cars = [
+    ['Москвич 3', 50, 'АИ-92', 0.098],
+    ['SENAT 900', 62, 'АИ-95', null],
+    ['Haval Jolion', 55, 'АИ-92', 0.092],
+    ['Hyundai Sonata', 60, 'АИ-92', 0.087],
+    ['Луидор-225033', 80, 'АИ-92', 0.16],
+    ['Аврора - 311302', 80, 'ДТ', 0.127],
+    ['ПАЗ - 32053 - 50', 105, 'АИ-92', 0.32],
+    ['ПАЗ - 320530 - 02', 105, 'АИ-92', 0.339],
+    ['КАВЗ 4238 - 62', 170, 'ДТ', 0.36],
+    ['КАВЗ 4238 - D1', 170, 'ДТ', 0.373],
+    ['ПАЗ - 4234 - 04', 95, 'ДТ', 0.224],
+    ['Volkswagen M', 80, 'ДТ', 0.084],
+    ['ГАЗ A65 R32', 80, 'ДТ', 0.154],
+    ['ACM - 535251', 80, 'ДТ', 0.15],
+    ['Sollers Atlant', 80, 'ДТ', 0.121],
+    ['Ford Transit', 80, 'ДТ', 0.145]
+  ];
 
-let mkad=false;
+  let mkad = false;
 
-const n=id=>Math.max(0,Number($(id).value)||0);
-const num=id=>Math.max(0,Number(String($(id).value).replace(',','.'))||0);
-const fmt=(x,d=1)=>x.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
-const norm=()=>cars[+$('car').value][3]??num('manualNorm');
-const allowance=()=>$('allowance').value==='custom'?n('custom'):Number($('allowance').value);
-const fills=()=>$('fillList').value.split(/\n|;/).map(s=>Number(s.trim().replace(',','.'))).filter(x=>Number.isFinite(x)&&x>0).reduce((a,b)=>a+b,0);
+  const n = id => Math.max(0, Number($(id).value) || 0);
+  const num = id => Math.max(0, Number(String($(id).value).replace(',', '.')) || 0);
+  const fmt = (x, d = 1) => x.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const norm = () => cars[+$('car').value][3] ?? num('manualNorm');
+  const allowance = () => $('allowance').value === 'custom' ? n('custom') : Number($('allowance').value);
+  const fills = () => $('fillList').value.split(/\n|;/)
+    .map(s => Number(s.trim().replace(',', '.')))
+    .filter(x => Number.isFinite(x) && x > 0)
+    .reduce((a, b) => a + b, 0);
 
-function saveState(){
-  const state = {
-    car: $('car').value,
-    start: $('start').value,
-    odometer: $('odometer').value,
-    tankAdded: $('tankAdded').value,
-    fillList: $('fillList').value,
-    kmMkad: $('kmMkad').value,
-    kmOther: $('kmOther').value,
-    allowance: $('allowance').value,
-    custom: $('custom').value,
-    manualNorm: $('manualNorm').value,
-    mkad: mkad,
-    dark: document.body.classList.contains('dark'),
-    savedAt: new Date().toISOString()
+  function saveState() {
+    const state = {
+      car: $('car').value,
+      start: $('start').value,
+      odometer: $('odometer').value,
+      tankAdded: $('tankAdded').value,
+      fillList: $('fillList').value,
+      kmMkad: $('kmMkad').value,
+      kmOther: $('kmOther').value,
+      allowance: $('allowance').value,
+      custom: $('custom').value,
+      manualNorm: $('manualNorm').value,
+      mkad,
+      dark: document.body.classList.contains('dark'),
+      savedAt: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const d = new Date();
+      $('saveInfo').textContent = 'Сохранено ' + d.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    } catch (e) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const s = JSON.parse(raw);
+      if (s.car !== undefined) $('car').value = s.car;
+      if (s.start !== undefined) $('start').value = s.start;
+      if (s.odometer !== undefined) $('odometer').value = s.odometer;
+      if (s.tankAdded !== undefined) $('tankAdded').value = s.tankAdded;
+      if (s.fillList !== undefined) $('fillList').value = s.fillList;
+      if (s.kmMkad !== undefined) $('kmMkad').value = s.kmMkad;
+      if (s.kmOther !== undefined) $('kmOther').value = s.kmOther;
+      if (s.allowance !== undefined) $('allowance').value = s.allowance;
+      if (s.custom !== undefined) $('custom').value = s.custom;
+      if (s.manualNorm !== undefined) $('manualNorm').value = s.manualNorm;
+      if (s.mkad !== undefined) mkad = !!s.mkad;
+      if (s.dark) {
+        document.body.classList.add('dark');
+        $('theme').textContent = '☀';
+      }
+      if (s.savedAt) {
+        const d = new Date(s.savedAt);
+        $('saveInfo').textContent = 'Последнее сохранение: ' + d.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      }
+    } catch (e) {}
+  }
+
+  function update() {
+    const car = cars[+$('car').value];
+    const rate = norm();
+    const p = allowance();
+
+    $('fuel').textContent = car[2];
+    $('capacity').textContent = car[1] + ' л';
+    $('normView').textContent = rate ? fmt(rate, 3) + ' л/км' : 'не задана';
+    $('manualBox').classList.toggle('hidden', car[3] !== null);
+    $('mkadBox').classList.toggle('hidden', !mkad);
+    $('noMkad').classList.toggle('active', !mkad);
+    $('withMkad').classList.toggle('active', mkad);
+    $('customBox').classList.toggle('hidden', $('allowance').value !== 'custom');
+
+    const kmM = mkad ? n('kmMkad') : 0;
+    const kmO = n('kmOther');
+    const fuelM = kmM * rate;
+    const baseO = kmO * rate;
+    const fuelO = baseO * (1 + p / 100);
+    const fuel = fuelM + fuelO;
+
+    const added = n('tankAdded') + fills();
+    const start = n('start');
+    let end = start + added - fuel;
+    const capacity = car[1];
+    const excess = end - capacity;
+
+    const odo = n('odometer');
+    const newOdo = odo + kmM + kmO;
+
+    $('consumption').textContent = fmt(fuel);
+    $('totalKm').textContent = fmt(kmM + kmO) + ' км';
+    $('newOdo').textContent = fmt(newOdo, 0) + ' км';
+    $('startOut').textContent = fmt(start) + ' л';
+    $('addedOut').textContent = fmt(added) + ' л';
+
+    if (excess > 0.05) {
+      $('endOut').textContent = fmt(capacity) + ' л (полный)';
+    } else {
+      $('endOut').textContent = fmt(Math.max(0, end)) + ' л';
+    }
+
+    const warning = $('tankWarning');
+    if (excess > 0.05) {
+      warning.innerHTML = `<div class="warn">Сверхбак: ${fmt(excess)} л<br>Доложите путевщику</div>`;
+    } else if (end < -0.05) {
+      warning.innerHTML = `<div class="warn">Не хватает топлива: ${fmt(Math.abs(end))} л</div>`;
+    } else {
+      warning.innerHTML = `<div class="ok">Остаток в норме</div>`;
+    }
+
+    saveState();
+  }
+
+  function applyTrip() {
+    const car = cars[+$('car').value];
+    const rate = norm();
+    const p = allowance();
+    const kmM = mkad ? n('kmMkad') : 0;
+    const kmO = n('kmOther');
+    const fuel = (kmM * rate) + (kmO * rate * (1 + p / 100));
+    const added = n('tankAdded') + fills();
+    const start = n('start');
+    let end = start + added - fuel;
+    const capacity = car[1];
+    const excess = end - capacity;
+
+    if (excess > 0.05) {
+      end = capacity;
+    }
+
+    $('start').value = Math.max(0, Math.round(end * 10) / 10);
+    $('odometer').value = Math.round(n('odometer') + kmM + kmO);
+
+    $('kmOther').value = 0;
+    $('kmMkad').value = 0;
+    $('tankAdded').value = 0;
+    $('fillList').value = '';
+
+    update();
+
+    if (excess > 0.05) {
+      $('status').textContent = `Поездка применена. Сверхбак ${fmt(excess)} л — доложите путевщику.`;
+    } else {
+      $('status').textContent = 'Поездка применена. Состояние обновлено.';
+    }
+    setTimeout(() => $('status').textContent = '', 4000);
+  }
+
+  $('car').addEventListener('change', () => {
+    const c = cars[+$('car').value];
+    if (c[3] !== null) $('manualNorm').value = String(c[3]).replace('.', ',');
+    update();
+  });
+
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+  });
+
+  $('noMkad').onclick = () => { mkad = false; update(); };
+  $('withMkad').onclick = () => { mkad = true; update(); };
+
+  $('theme').onclick = () => {
+    document.body.classList.toggle('dark');
+    $('theme').textContent = document.body.classList.contains('dark') ? '☀' : '☾';
+    saveState();
   };
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    const d = new Date();
-    $('saveInfo').textContent = 'Сохранено: ' + d.toLocaleString('ru-RU');
-  }catch(e){
-    $('saveInfo').textContent = 'Не удалось сохранить';
-  }
-}
 
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return false;
-    const s = JSON.parse(raw);
-    if(s.car !== undefined) $('car').value = s.car;
-    if(s.start !== undefined) $('start').value = s.start;
-    if(s.odometer !== undefined) $('odometer').value = s.odometer;
-    if(s.tankAdded !== undefined) $('tankAdded').value = s.tankAdded;
-    if(s.fillList !== undefined) $('fillList').value = s.fillList;
-    if(s.kmMkad !== undefined) $('kmMkad').value = s.kmMkad;
-    if(s.kmOther !== undefined) $('kmOther').value = s.kmOther;
-    if(s.allowance !== undefined) $('allowance').value = s.allowance;
-    if(s.custom !== undefined) $('custom').value = s.custom;
-    if(s.manualNorm !== undefined) $('manualNorm').value = s.manualNorm;
-    if(s.mkad !== undefined) mkad = !!s.mkad;
-    if(s.dark){
-      document.body.classList.add('dark');
-      $('theme').textContent = '☀ Тема';
+  $('applyTrip').onclick = applyTrip;
+
+  $('copy').onclick = async () => {
+    const car = cars[+$('car').value];
+    const text = [
+      'МИЛЬ — ' + car[0],
+      'Топливо: ' + car[2],
+      'Норма: ' + String(norm()).replace('.', ',') + ' л/км',
+      '',
+      'Расход: ' + $('consumption').textContent + ' л',
+      'Пробег поездки: ' + $('totalKm').textContent,
+      'Новый пробег: ' + $('newOdo').textContent,
+      'Было: ' + $('startOut').textContent,
+      'Заправлено: ' + $('addedOut').textContent,
+      'Станет: ' + $('endOut').textContent,
+      $('tankWarning').innerText
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(text);
+      $('status').textContent = 'Скопировано';
+    } catch {
+      $('status').textContent = 'Не удалось скопировать';
     }
-    if(s.savedAt){
-      const d = new Date(s.savedAt);
-      $('saveInfo').textContent = 'Последнее сохранение: ' + d.toLocaleString('ru-RU');
-    }
-    return true;
-  }catch(e){
-    return false;
-  }
-}
+    setTimeout(() => $('status').textContent = '', 2000);
+  };
 
-function update(){
-  const car=cars[+$('car').value], rate=norm(), p=allowance();
-  $('fuel').textContent=car[2];
-  $('capacity').textContent=car[1]+' л';
-  $('normView').textContent=rate?fmt(rate,3)+' л/км':'Не задана';
-  $('manualBox').classList.toggle('hidden',car[3]!==null);
-  $('mkadBox').classList.toggle('hidden',!mkad);
-  $('noMkad').classList.toggle('active',!mkad);
-  $('withMkad').classList.toggle('active',mkad);
-  $('customBox').classList.toggle('hidden',$('allowance').value!=='custom');
+  $('resetAll').onclick = () => {
+    if (!confirm('Сбросить все данные?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  };
 
-  const kmM=mkad?n('kmMkad'):0, kmO=n('kmOther');
-  const fuelM=kmM*rate, baseO=kmO*rate, fuelO=baseO*(1+p/100);
-  const fuel=fuelM+fuelO;
-  const added=n('tankAdded')+fills(), start=n('start'), end=start+added-fuel;
-  const odo = n('odometer');
-  const newOdo = odo + kmM + kmO;
-
-  $('consumption').textContent=fmt(fuel);
-  $('totalKm').textContent=fmt(kmM+kmO)+' км';
-  $('newOdo').textContent=fmt(newOdo,0)+' км';
-  $('startOut').textContent=fmt(start)+' л';
-  $('addedOut').textContent=fmt(added)+' л';
-  $('endOut').textContent=fmt(end)+' л';
-
-  const warning=$('tankWarning');
-  warning.innerHTML='';
-  if(end>car[1]+0.05){
-    warning.innerHTML=`<div class="error">⚠ СВЕРХБАК! Остаток ${fmt(end)} л превышает вместимость бака (${car[1]} л). Проверьте начальный остаток, заправки и расход.</div>`;
-  }else if(end<-.05){
-    warning.innerHTML='<div class="error">⚠ ОТРИЦАТЕЛЬНЫЙ ОСТАТОК! Расход превышает доступное топливо. Проверьте данные.</div>';
-  }else{
-    warning.innerHTML='<div class="ok">✓ Остаток в пределах вместимости бака.</div>';
-  }
-
-  let f='';
-  if(mkad) f+=`МКАД: ${fmt(kmM)} × ${fmt(rate,3)} = ${fmt(fuelM)} л (0%).<br>`;
-  f+=`Вне МКАДа: ${fmt(kmO)} × ${fmt(rate,3)}`;
-  if(p>0){
-    const label=$('allowance').value==='custom'
-      ?`своя надбавка ${fmt(p)}%`
-      :p===21?'15% город + 6% климат'
-      :p===15?'15% город'
-      :p===6?'6% климат':`${fmt(p)}%`;
-    f+=` + (${label}) = ${fmt(fuelO)} л.`;
-  }else f+=` = ${fmt(fuelO)} л (0%).`;
-  f+=`<br>Расход всего: ${fmt(fuel)} л.`;
-  f+=`<br>Конечный бак: ${fmt(start)} + ${fmt(added)} − ${fmt(fuel)} = ${fmt(end)} л.`;
-  f+=`<br>Пробег: ${fmt(odo,0)} + ${fmt(kmM+kmO)} = ${fmt(newOdo,0)} км.`;
-  $('formula').innerHTML=f;
-
-  saveState();
-}
-
-function applyTrip(){
-  const car=cars[+$('car').value], rate=norm(), p=allowance();
-  const kmM=mkad?n('kmMkad'):0, kmO=n('kmOther');
-  const fuelM=kmM*rate, baseO=kmO*rate, fuelO=baseO*(1+p/100);
-  const fuel=fuelM+fuelO;
-  const added=n('tankAdded')+fills(), start=n('start'), end=start+added-fuel;
-  const odo = n('odometer');
-  const newOdo = odo + kmM + kmO;
-
-  $('start').value = Math.max(0, Math.round(end*10)/10);
-  $('odometer').value = Math.round(newOdo);
-  $('tankAdded').value = 0;
-  $('fillList').value = '';
-  $('kmMkad').value = 0;
-  $('kmOther').value = 0;
-
+  loadState();
   update();
-  $('status').textContent = 'Поездка применена. Остаток и пробег обновлены.';
-  setTimeout(()=>$('status').textContent='', 3000);
-}
-
-$('car').addEventListener('change',()=>{
-  const c=cars[+$('car').value];
-  if(c[3]!==null) $('manualNorm').value=String(c[3]).replace('.',',');
-  update();
-});
-
-document.querySelectorAll('input,select,textarea').forEach(e=>{
-  e.addEventListener('input',update);
-  e.addEventListener('change',update);
-});
-
-$('noMkad').onclick=()=>{mkad=false;update()};
-$('withMkad').onclick=()=>{mkad=true;update()};
-
-$('theme').onclick=()=>{
-  document.body.classList.toggle('dark');
-  $('theme').textContent=document.body.classList.contains('dark')?'☀ Тема':'☾ Тема';
-  saveState();
-};
-
-$('copy').onclick=async()=>{
-  const car=cars[+$('car').value];
-  const text='МИЛЬ — '+car[0]+'\nТопливо: '+car[2]+'\nНорма: '+String(norm()).replace('.',',')+' л/км\n'
-    +$('formula').innerText+'\nНачальный бак: '+$('startOut').textContent
-    +'\nЗаправлено: '+$('addedOut').textContent
-    +'\nРасход: '+$('consumption').textContent+' л'
-    +'\nКонечный бак: '+$('endOut').textContent
-    +'\n'+$('tankWarning').innerText;
-  try{
-    await navigator.clipboard.writeText(text);
-    $('status').textContent='Расчёт скопирован.';
-  }catch(e){
-    const t=document.createElement('textarea');t.value=text;
-    document.body.appendChild(t);t.select();
-    const ok=document.execCommand('copy');t.remove();
-    $('status').textContent=ok?'Расчёт скопирован.':'Не удалось скопировать.';
-  }
-};
-
-$('applyTrip').onclick = applyTrip;
-
-$('save').onclick = ()=>{
-  saveState();
-  $('status').textContent = 'Состояние сохранено.';
-  setTimeout(()=>$('status').textContent='', 2500);
-};
-
-$('resetAll').onclick = ()=>{
-  if(!confirm('Сбросить все сохранённые данные и поля?')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  $('start').value = 20;
-  $('odometer').value = 0;
-  $('tankAdded').value = 0;
-  $('fillList').value = '';
-  $('kmMkad').value = 0;
-  $('kmOther').value = 100;
-  $('allowance').value = '21';
-  $('custom').value = 0;
-  $('manualNorm').value = '0,098';
-  $('car').value = 0;
-  mkad = false;
-  document.body.classList.remove('dark');
-  $('theme').textContent = '☾ Тема';
-  $('saveInfo').textContent = '';
-  update();
-  $('status').textContent = 'Все данные сброшены.';
-};
-
-loadState();
-update();
 })();
 </script>
 </body>
- </html> 
+</html>
+```
