@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>РњРР›Р¬</title>
+<title>МИЛЬ</title>
 <style>
 :root{color-scheme:light;--bg:#f3f3f3;--card:#fff;--fg:#171717;--muted:#777;--line:#ddd;--field:#fff}
 body.dark{color-scheme:dark;--bg:#111;--card:#1c1c1e;--fg:#f5f5f5;--muted:#aaa;--line:#39393c;--field:#29292b}
@@ -39,116 +38,116 @@ body.dark .ok{background:#163b22;color:#b6f5c3}
 <body>
 <main>
 <header>
-<div><h1>РњРР›Р¬</h1><div class="muted">Р Р°СЃС‡С‘С‚ СЂР°СЃС…РѕРґР° С‚РѕРїР»РёРІР°</div></div>
-<button id="theme">вѕ РўРµРјР°</button>
+<div><h1>МИЛЬ</h1><div class="muted">Расчёт расхода топлива</div></div>
+<button id="theme">☾ Тема</button>
 </header>
 <section class="card">
-<h2>01 / РђРІС‚РѕРјРѕР±РёР»СЊ</h2>
-<label for="car">РњР°СЂРєР° Р°РІС‚РѕРјРѕР±РёР»СЏ</label>
+<h2>01 / Автомобиль</h2>
+<label for="car">Марка автомобиля</label>
 <select id="car">
-<option value="0">РњРѕСЃРєРІРёС‡ 3</option>
+<option value="0">Москвич 3</option>
 <option value="1">SENAT 900</option>
 <option value="2">Haval Jolion</option>
 <option value="3">Hyundai Sonata</option>
-<option value="4">Р›СѓРёРґРѕСЂ-225033</option>
-<option value="5">РђРІСЂРѕСЂР° - 311302</option>
-<option value="6">РџРђР— - 32053 - 50</option>
-<option value="7">РџРђР— - 320530 - 02</option>
-<option value="8">РљРђР’Р— 4238 - 62</option>
-<option value="9">РљРђР’Р— 4238 - D1</option>
-<option value="10">РџРђР— - 4234 - 04</option>
+<option value="4">Луидор-225033</option>
+<option value="5">Аврора - 311302</option>
+<option value="6">ПАЗ - 32053 - 50</option>
+<option value="7">ПАЗ - 320530 - 02</option>
+<option value="8">КАВЗ 4238 - 62</option>
+<option value="9">КАВЗ 4238 - D1</option>
+<option value="10">ПАЗ - 4234 - 04</option>
 <option value="11">Volkswagen M</option>
-<option value="12">Р“РђР— A65 R32</option>
+<option value="12">ГАЗ A65 R32</option>
 <option value="13">ACM - 535251</option>
 <option value="14">Sollers Atlant</option>
 <option value="15">Ford Transit</option>
 </select>
 <div class="info">
-<div>РўРёРї С‚РѕРїР»РёРІР°: <span id="fuel" class="fueltype">РђР-92</span></div>
-<div>Р’РјРµСЃС‚РёРјРѕСЃС‚СЊ Р±Р°РєР°: <strong id="capacity">50 Р»</strong></div>
-<div>РќРѕСЂРјР° СЂР°СЃС…РѕРґР°: <strong id="normView">0,098 Р»/РєРј</strong></div>
+<div>Тип топлива: <span id="fuel" class="fueltype">АИ-92</span></div>
+<div>Вместимость бака: <strong id="capacity">50 л</strong></div>
+<div>Норма расхода: <strong id="normView">0,098 л/км</strong></div>
 </div>
 <div id="manualBox" class="hidden">
-<label for="manualNorm">РќРѕСЂРјР° СЂР°СЃС…РѕРґР° (РЅР°РїСЂРёРјРµСЂ, 0,098)</label>
+<label for="manualNorm">Норма расхода (например, 0,098)</label>
 <input id="manualNorm" type="text" inputmode="decimal" value="0,098">
-<p class="note">Р”Р»СЏ SENAT 900 РЅРѕСЂРјР° РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР° вЂ” РІРІРµРґРёС‚Рµ РµС‘ РІСЂСѓС‡РЅСѓСЋ.</p>
+<p class="note">Для SENAT 900 норма не установлена — введите её вручную.</p>
 </div>
 </section>
 <section class="card">
-<h2>02 / РўРѕРїР»РёРІРЅС‹Р№ Р±Р°Р»Р°РЅСЃ</h2>
+<h2>02 / Топливный баланс</h2>
 <div class="grid">
-<div><label for="start">РќР°С‡Р°Р»СЊРЅС‹Р№ РѕСЃС‚Р°С‚РѕРє, Р»</label><input id="start" type="number" min="0" step="0.1" value="20"></div>
-<div><label for="tankAdded">Р—Р°РїСЂР°РІР»РµРЅРѕ РІСЃРµРіРѕ, Р»</label><input id="tankAdded" type="number" min="0" step="0.1" value="0"></div>
+<div><label for="start">Начальный остаток, л</label><input id="start" type="number" min="0" step="0.1" value="20"></div>
+<div><label for="tankAdded">Заправлено всего, л</label><input id="tankAdded" type="number" min="0" step="0.1" value="0"></div>
 </div>
-<label for="fillList">Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ Р·Р°РїСЂР°РІРєРё, Р» вЂ” РїРѕ РѕРґРЅРѕР№ РЅР° СЃС‚СЂРѕРєСѓ</label>
-<textarea id="fillList" rows="2" placeholder="РќР°РїСЂРёРјРµСЂ:&#10;20&#10;15,5"></textarea>
-<p class="note">РќРµ РґСѓР±Р»РёСЂСѓР№С‚Рµ Р·Р°РїСЂР°РІРєРё: Р·РЅР°С‡РµРЅРёСЏ РІ РѕР±РѕРёС… РїРѕР»СЏС… СЃРєР»Р°РґС‹РІР°СЋС‚СЃСЏ.</p>
+<label for="fillList">Дополнительные заправки, л — по одной на строку</label>
+<textarea id="fillList" rows="2" placeholder="Например:&#10;20&#10;15,5"></textarea>
+<p class="note">Не дублируйте заправки: значения в обоих полях складываются.</p>
 </section>
 <section class="card">
-<h2>03 / РњР°СЂС€СЂСѓС‚</h2>
+<h2>03 / Маршрут</h2>
 <div class="pills">
-<button id="noMkad" class="active" type="button">Р‘РµР· РњРљРђР”Р°</button>
-<button id="withMkad" type="button">РЎ РњРљРђР”РѕРј</button>
+<button id="noMkad" class="active" type="button">Без МКАДа</button>
+<button id="withMkad" type="button">С МКАДом</button>
 </div>
 <div id="mkadBox" class="hidden">
-<label for="kmMkad">РџСЂРѕР±РµРі РїРѕ РњРљРђР”Сѓ, РєРј вЂ” Р±РµР· РЅР°РґР±Р°РІРѕРє</label>
+<label for="kmMkad">Пробег по МКАДу, км — без надбавок</label>
 <input id="kmMkad" type="number" min="0" step="0.1" value="0">
 </div>
-<label for="kmOther">РџСЂРѕР±РµРі РІРЅРµ РњРљРђР”Р° / РѕР±С‰РёР№ РїСЂРѕР±РµРі, РєРј</label>
+<label for="kmOther">Пробег вне МКАДа / общий пробег, км</label>
 <input id="kmOther" type="number" min="0" step="0.1" value="100">
-<label for="allowance">РќР°РґР±Р°РІРєРё РґР»СЏ РїСЂРѕР±РµРіР° РІРЅРµ РњРљРђР”Р°</label>
+<label for="allowance">Надбавки для пробега вне МКАДа</label>
 <select id="allowance">
-<option value="0">0% вЂ” Р±РµР· РЅР°РґР±Р°РІРѕРє</option>
-<option value="15">15% вЂ” РіРѕСЂРѕРґ</option>
-<option value="6">6% вЂ” РєР»РёРјР°С‚</option>
-<option value="21" selected>15% РіРѕСЂРѕРґ + 6% РєР»РёРјР°С‚</option>
-<option value="custom">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°</option>
+<option value="0">0% — без надбавок</option>
+<option value="15">15% — город</option>
+<option value="6">6% — климат</option>
+<option value="21" selected>15% город + 6% климат</option>
+<option value="custom">Своя надбавка</option>
 </select>
 <div id="customBox" class="hidden">
-<label for="custom">РЎРІРѕСЏ РЅР°РґР±Р°РІРєР°, %</label>
+<label for="custom">Своя надбавка, %</label>
 <input id="custom" type="number" min="0" step="0.1" value="0">
 </div>
 </section>
 <section class="big" aria-live="polite">
-<div class="muted">Р РђРЎР§РЃРўРќР«Р™ Р РђРЎРҐРћР”</div>
-<div class="total"><span id="consumption">9,8</span> Р»</div>
-<div class="line"><span>РћР±С‰РёР№ РїСЂРѕР±РµРі</span><strong id="totalKm">100 РєРј</strong></div>
-<div class="line"><span>РќР°С‡Р°Р»СЊРЅС‹Р№ РѕСЃС‚Р°С‚РѕРє</span><strong id="startOut">20 Р»</strong></div>
-<div class="line"><span>Р—Р°РїСЂР°РІР»РµРЅРѕ РІСЃРµРіРѕ</span><strong id="addedOut">0 Р»</strong></div>
-<div class="line"><span>РљРѕРЅРµС‡РЅС‹Р№ РѕСЃС‚Р°С‚РѕРє</span><strong id="endOut">10,2 Р»</strong></div>
+<div class="muted">РАСЧЁТНЫЙ РАСХОД</div>
+<div class="total"><span id="consumption">9,8</span> л</div>
+<div class="line"><span>Общий пробег</span><strong id="totalKm">100 км</strong></div>
+<div class="line"><span>Начальный остаток</span><strong id="startOut">20 л</strong></div>
+<div class="line"><span>Заправлено всего</span><strong id="addedOut">0 л</strong></div>
+<div class="line"><span>Конечный остаток</span><strong id="endOut">10,2 л</strong></div>
 <div id="tankWarning"></div>
 </section>
 <section class="card">
-<h2>04 / Р¤РѕСЂРјСѓР»Р° СЂР°СЃС‡С‘С‚Р°</h2>
+<h2>04 / Формула расчёта</h2>
 <div id="formula" style="font-size:14px;line-height:1.9;overflow-wrap:anywhere"></div>
 <div class="actions" style="margin-top:14px">
-<button class="primary" id="copy">РљРѕРїРёСЂРѕРІР°С‚СЊ СЂР°СЃС‡С‘С‚</button>
-<button id="reset">РЎР±СЂРѕСЃРёС‚СЊ РјР°СЂС€СЂСѓС‚</button>
+<button class="primary" id="copy">Копировать расчёт</button>
+<button id="reset">Сбросить маршрут</button>
 </div>
 <p id="status" class="note"></p>
 </section>
-<p class="note" style="text-align:center">В«РўРѕС‡РЅРѕСЃС‚СЊ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ РїСЂРѕСЃС‚С‹С… РІРµС‰РµР№.В»</p>
+<p class="note" style="text-align:center">«Точность начинается с простых вещей.»</p>
 </main>
 <script>
 (()=>{
 const $=id=>document.getElementById(id);
 const cars=[
-['РњРѕСЃРєРІРёС‡ 3',50,'РђР-92',.098],
-['SENAT 900',62,'РђР-95',null],
-['Haval Jolion',55,'РђР-92',.092],
-['Hyundai Sonata',60,'РђР-92',.087],
-['Р›СѓРёРґРѕСЂ-225033',80,'РђР-92',.16],
-['РђРІСЂРѕСЂР° - 311302',80,'Р”Рў',.127],
-['РџРђР— - 32053 - 50',105,'РђР-92',.32],
-['РџРђР— - 320530 - 02',105,'РђР-92',.339],
-['РљРђР’Р— 4238 - 62',170,'Р”Рў',.36],
-['РљРђР’Р— 4238 - D1',170,'Р”Рў',.373],
-['РџРђР— - 4234 - 04',95,'Р”Рў',.224],
-['Volkswagen M',80,'Р”Рў',.084],
-['Р“РђР— A65 R32',80,'Р”Рў',.154],
-['ACM - 535251',80,'Р”Рў',.15],
-['Sollers Atlant',80,'Р”Рў',.121],
-['Ford Transit',80,'Р”Рў',.145]
+['Москвич 3',50,'АИ-92',.098],
+['SENAT 900',62,'АИ-95',null],
+['Haval Jolion',55,'АИ-92',.092],
+['Hyundai Sonata',60,'АИ-92',.087],
+['Луидор-225033',80,'АИ-92',.16],
+['Аврора - 311302',80,'ДТ',.127],
+['ПАЗ - 32053 - 50',105,'АИ-92',.32],
+['ПАЗ - 320530 - 02',105,'АИ-92',.339],
+['КАВЗ 4238 - 62',170,'ДТ',.36],
+['КАВЗ 4238 - D1',170,'ДТ',.373],
+['ПАЗ - 4234 - 04',95,'ДТ',.224],
+['Volkswagen M',80,'ДТ',.084],
+['ГАЗ A65 R32',80,'ДТ',.154],
+['ACM - 535251',80,'ДТ',.15],
+['Sollers Atlant',80,'ДТ',.121],
+['Ford Transit',80,'ДТ',.145]
 ];
 let mkad=false;
 const n=id=>Math.max(0,Number($(id).value)||0);
@@ -160,8 +159,8 @@ const fills=()=>$('fillList').value.split(/\n|;/).map(s=>Number(s.trim().replace
 function update(){
  const car=cars[+$('car').value], rate=norm(), p=allowance();
  $('fuel').textContent=car[2];
- $('capacity').textContent=car[1]+' Р»';
- $('normView').textContent=rate?fmt(rate,3)+' Р»/РєРј':'РќРµ Р·Р°РґР°РЅР°';
+ $('capacity').textContent=car[1]+' л';
+ $('normView').textContent=rate?fmt(rate,3)+' л/км':'Не задана';
  $('manualBox').classList.toggle('hidden',car[3]!==null);
  $('mkadBox').classList.toggle('hidden',!mkad);
  $('noMkad').classList.toggle('active',!mkad);
@@ -172,32 +171,32 @@ function update(){
  const extra=fuelO-baseO, fuel=fuelM+fuelO;
  const added=n('tankAdded')+fills(), start=n('start'), end=start+added-fuel;
  $('consumption').textContent=fmt(fuel);
- $('totalKm').textContent=fmt(kmM+kmO)+' РєРј';
- $('startOut').textContent=fmt(start)+' Р»';
- $('addedOut').textContent=fmt(added)+' Р»';
- $('endOut').textContent=fmt(end)+' Р»';
+ $('totalKm').textContent=fmt(kmM+kmO)+' км';
+ $('startOut').textContent=fmt(start)+' л';
+ $('addedOut').textContent=fmt(added)+' л';
+ $('endOut').textContent=fmt(end)+' л';
  const warning=$('tankWarning');
  warning.innerHTML='';
  if(end>car[1]+0.05){
-  warning.innerHTML=`<div class="error">вљ  РЎР’Р•Р РҐР‘РђРљ! РћСЃС‚Р°С‚РѕРє ${fmt(end)} Р» РїСЂРµРІС‹С€Р°РµС‚ РІРјРµСЃС‚РёРјРѕСЃС‚СЊ Р±Р°РєР° (${car[1]} Р»). РџСЂРѕРІРµСЂСЊС‚Рµ РЅР°С‡Р°Р»СЊРЅС‹Р№ РѕСЃС‚Р°С‚РѕРє, Р·Р°РїСЂР°РІРєРё Рё СЂР°СЃС…РѕРґ.</div>`;
+  warning.innerHTML=`<div class="error">⚠ СВЕРХБАК! Остаток ${fmt(end)} л превышает вместимость бака (${car[1]} л). Проверьте начальный остаток, заправки и расход.</div>`;
  }else if(end<-.05){
-  warning.innerHTML='<div class="error">вљ  РћРўР РР¦РђРўР•Р›Р¬РќР«Р™ РћРЎРўРђРўРћРљ! Р Р°СЃС…РѕРґ РїСЂРµРІС‹С€Р°РµС‚ РґРѕСЃС‚СѓРїРЅРѕРµ С‚РѕРїР»РёРІРѕ. РџСЂРѕРІРµСЂСЊС‚Рµ РґР°РЅРЅС‹Рµ.</div>';
+  warning.innerHTML='<div class="error">⚠ ОТРИЦАТЕЛЬНЫЙ ОСТАТОК! Расход превышает доступное топливо. Проверьте данные.</div>';
  }else{
-  warning.innerHTML='<div class="ok">вњ“ РћСЃС‚Р°С‚РѕРє РІ РїСЂРµРґРµР»Р°С… РІРјРµСЃС‚РёРјРѕСЃС‚Рё Р±Р°РєР°.</div>';
+  warning.innerHTML='<div class="ok">✓ Остаток в пределах вместимости бака.</div>';
  }
  let f='';
- if(mkad) f+=`РњРљРђР”: ${fmt(kmM)} Г— ${fmt(rate,3)} = ${fmt(fuelM)} Р» (0%).<br>`;
- f+=`Р’РЅРµ РњРљРђР”Р°: ${fmt(kmO)} Г— ${fmt(rate,3)}`;
+ if(mkad) f+=`МКАД: ${fmt(kmM)} × ${fmt(rate,3)} = ${fmt(fuelM)} л (0%).<br>`;
+ f+=`Вне МКАДа: ${fmt(kmO)} × ${fmt(rate,3)}`;
  if(p>0){
   const label=$('allowance').value==='custom'
-   ?`СЃРІРѕСЏ РЅР°РґР±Р°РІРєР° ${fmt(p)}%`
-   :p===21?'15% РіРѕСЂРѕРґ + 6% РєР»РёРјР°С‚'
-   :p===15?'15% РіРѕСЂРѕРґ'
-   :p===6?'6% РєР»РёРјР°С‚':`${fmt(p)}%`;
-  f+=` + (${label}) = ${fmt(fuelO)} Р».`;
- }else f+=` = ${fmt(fuelO)} Р» (0%).`;
- f+=`<br>Р Р°СЃС…РѕРґ РІСЃРµРіРѕ: ${fmt(fuel)} Р».`;
- f+=`<br>РљРѕРЅРµС‡РЅС‹Р№ Р±Р°Рє: ${fmt(start)} + ${fmt(added)} в€’ ${fmt(fuel)} = ${fmt(end)} Р».`;
+   ?`своя надбавка ${fmt(p)}%`
+   :p===21?'15% город + 6% климат'
+   :p===15?'15% город'
+   :p===6?'6% климат':`${fmt(p)}%`;
+  f+=` + (${label}) = ${fmt(fuelO)} л.`;
+ }else f+=` = ${fmt(fuelO)} л (0%).`;
+ f+=`<br>Расход всего: ${fmt(fuel)} л.`;
+ f+=`<br>Конечный бак: ${fmt(start)} + ${fmt(added)} − ${fmt(fuel)} = ${fmt(end)} л.`;
  $('formula').innerHTML=f;
 }
 $('car').addEventListener('change',()=>{
@@ -212,30 +211,30 @@ $('noMkad').onclick=()=>{mkad=false;update()};
 $('withMkad').onclick=()=>{mkad=true;update()};
 $('theme').onclick=()=>{
  document.body.classList.toggle('dark');
- $('theme').textContent=document.body.classList.contains('dark')?'вЂ РўРµРјР°':'вѕ РўРµРјР°';
+ $('theme').textContent=document.body.classList.contains('dark')?'☀ Тема':'☾ Тема';
 };
 $('reset').onclick=()=>{
  $('start').value=0;$('tankAdded').value=0;$('fillList').value='';
  $('kmMkad').value=0;$('kmOther').value=0;
  $('allowance').value='21';$('custom').value=0;
- mkad=false;update();$('status').textContent='РњР°СЂС€СЂСѓС‚ СЃР±СЂРѕС€РµРЅ.';
+ mkad=false;update();$('status').textContent='Маршрут сброшен.';
 };
 $('copy').onclick=async()=>{
  const car=cars[+$('car').value];
- const text='РњРР›Р¬ вЂ” '+car[0]+'\nРўРѕРїР»РёРІРѕ: '+car[2]+'\nРќРѕСЂРјР°: '+String(norm()).replace('.',',')+' Р»/РєРј\n'
- +$('formula').innerText+'\nРќР°С‡Р°Р»СЊРЅС‹Р№ Р±Р°Рє: '+$('startOut').textContent
- +'\nР—Р°РїСЂР°РІР»РµРЅРѕ: '+$('addedOut').textContent
- +'\nР Р°СЃС…РѕРґ: '+$('consumption').textContent+' Р»'
- +'\nРљРѕРЅРµС‡РЅС‹Р№ Р±Р°Рє: '+$('endOut').textContent
+ const text='МИЛЬ — '+car[0]+'\nТопливо: '+car[2]+'\nНорма: '+String(norm()).replace('.',',')+' л/км\n'
+ +$('formula').innerText+'\nНачальный бак: '+$('startOut').textContent
+ +'\nЗаправлено: '+$('addedOut').textContent
+ +'\nРасход: '+$('consumption').textContent+' л'
+ +'\nКонечный бак: '+$('endOut').textContent
  +'\n'+$('tankWarning').innerText;
  try{
   await navigator.clipboard.writeText(text);
-  $('status').textContent='Р Р°СЃС‡С‘С‚ СЃРєРѕРїРёСЂРѕРІР°РЅ.';
+  $('status').textContent='Расчёт скопирован.';
  }catch(e){
   const t=document.createElement('textarea');t.value=text;
   document.body.appendChild(t);t.select();
   const ok=document.execCommand('copy');t.remove();
-  $('status').textContent=ok?'Р Р°СЃС‡С‘С‚ СЃРєРѕРїРёСЂРѕРІР°РЅ.':'РќРµ СѓРґР°Р»РѕСЃСЊ СЃРєРѕРїРёСЂРѕРІР°С‚СЊ.';
+  $('status').textContent=ok?'Расчёт скопирован.':'Не удалось скопировать.';
  }
 };
 update();
