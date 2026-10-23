@@ -43,6 +43,7 @@ body {
   padding: 20px 16px 48px;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 main { max-width: 440px; margin: 0 auto; }
 header {
@@ -99,11 +100,10 @@ body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
 }
 textarea { height: auto; min-height: 80px; padding: 14px 16px; resize: vertical; }
 select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23999' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  padding-right: 40px;
+  -webkit-appearance: menulist;
+  appearance: menulist;
+  background-image: none;
+  padding-right: 16px;
 }
 input:disabled, select:disabled { opacity: 0.65; cursor: not-allowed; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -262,7 +262,7 @@ button#theme {
   <div class="row">
     <div>
       <label>Остаток топлива, л</label>
-      <input id="fuelNow" type="number" min="0" step="0.1" value="20">
+      <input id="fuelNow" type="number" min="0" step="0.1" value="0">
     </div>
     <div>
       <label>Пробег (одометр)</label>
@@ -276,7 +276,7 @@ button#theme {
     </div>
     <div class="summary-item">
       <div class="lbl">В баке</div>
-      <div class="val" id="sumFuel">20 л</div>
+      <div class="val" id="sumFuel">0 л</div>
     </div>
   </div>
   <p class="note">Значения сохраняются в браузере</p>
@@ -333,9 +333,9 @@ button#theme {
   <div class="big"><span id="consumption">0</span> л</div>
   <div class="line"><span>Пробег поездки</span><strong id="totalKm">0 км</strong></div>
   <div class="line"><span>Конечный пробег</span><strong id="newOdo">0 км</strong></div>
-  <div class="line"><span>Было топлива</span><strong id="startOut">20 л</strong></div>
+  <div class="line"><span>Было топлива</span><strong id="startOut">0 л</strong></div>
   <div class="line"><span>Заправлено</span><strong id="addedOut">0 л</strong></div>
-  <div class="line"><span>Станет топлива</span><strong id="endOut">20 л</strong></div>
+  <div class="line"><span>Станет топлива</span><strong id="endOut">0 л</strong></div>
   <div class="formula" id="formulaBlock">—</div>
   <div id="tankWarning"></div>
 </section>
@@ -607,6 +607,42 @@ button#theme {
     setTimeout(() => $('status').textContent = '', 4000);
   }
 
+  function resetAll() {
+    if (!confirm('Сбросить все данные?\nМашина и ГРЗ снова станут доступны для изменения.')) return;
+
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+
+    setLocked(false);
+
+    $('car').value = '0';
+    $('grz').value = '';
+    $('fuelNow').value = '0';
+    $('odoStart').value = '0';
+    $('kmTotal').value = '0';
+    $('odoEnd').value = '';
+    $('kmMkad').value = '0';
+    $('kmOther').value = '0';
+    $('tankAdded').value = '0';
+    $('fillList').value = '';
+    $('allowance').value = '21';
+    $('custom').value = '0';
+    $('manualNorm').value = '0,098';
+
+    document.body.classList.remove('dark');
+    $('theme').textContent = '☾';
+    $('saveInfo').textContent = '';
+    $('status').textContent = 'Все данные сброшены';
+
+    update();
+
+    setTimeout(() => {
+      $('car').disabled = false;
+      $('grz').disabled = false;
+      $('car').blur();
+      $('status').textContent = '';
+    }, 100);
+  }
+
   $('kmTotal').addEventListener('input', () => { syncFromKmTotal(); update(); });
   $('odoEnd').addEventListener('input', () => { syncFromOdoEnd(); update(); });
   $('kmMkad').addEventListener('input', () => { syncFromMkad(); update(); });
@@ -664,11 +700,9 @@ button#theme {
     } catch { $('status').textContent = 'Не удалось скопировать'; }
     setTimeout(() => $('status').textContent = '', 2000);
   };
-  $('resetAll').onclick = () => {
-    if (!confirm('Сбросить все данные? Машина и ГРЗ снова станут доступны для изменения.')) return;
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    location.reload();
-  };
+
+  $('resetAll').onclick = resetAll;
+
   window.addEventListener('beforeunload', () => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState())); } catch (e) {}
   });
