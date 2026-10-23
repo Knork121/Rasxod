@@ -301,7 +301,7 @@ button#theme {
       <input id="kmMkad" type="number" min="0" step="0.1" value="0" placeholder="0">
     </div>
     <div>
-      <label>Без МКАДа, км</label>
+      <label>Без МКАڈا, км</label>
       <input id="kmOther" type="number" min="0" step="0.1" value="0" placeholder="0">
     </div>
   </div>
@@ -388,6 +388,12 @@ button#theme {
     .map(s => Number(s.trim().replace(',', '.')))
     .filter(x => Number.isFinite(x) && x > 0)
     .reduce((a, b) => a + b, 0);
+
+  // Функция округления в высшую сторону до 1 знака после запятой (при необходимости)
+  // Для путевых листов стандарт обычно Math.round (или можно заменить на Math.ceil(val * 10) / 10 при строгом округлении вверх)
+  const roundFuel = val => Math.round(val * 10) / 10;
+  // Если нужно строго всегда в большую сторону (например, при 0.51 -> 0.6):
+  // const roundFuelUp = val => Math.ceil(val * 10) / 10;
 
   function setLocked(state) {
     locked = state;
@@ -532,9 +538,11 @@ button#theme {
       check.className = 'check-line bad-text';
     }
 
-    const fuelM = kmM * rate;
-    const fuelO = kmO * rate * (1 + p / 100);
-    const fuel = fuelM + fuelO;
+    // Считаем с округлением каждого этапа в высшую сторону до десятых (0.56 -> 0.6)
+    const fuelM = Math.ceil((kmM * rate) * 10) / 10;
+    const fuelO = Math.ceil((kmO * rate * (1 + p / 100)) * 10) / 10;
+    const fuel = Math.ceil((fuelM + fuelO) * 10) / 10;
+
     const added = n('tankAdded') + fills();
     const start = fuelNow;
     let end = start + added - fuel;
@@ -545,7 +553,7 @@ button#theme {
     $('newOdo').textContent = fmt(newOdo, 0) + ' км';
     $('startOut').textContent = fmt(start) + ' л';
     $('addedOut').textContent = fmt(added) + ' л';
-    $('endOut').textContent = excess > 0.05 ? fmt(capacity) + ' л (полный)' : fmt(Math.max(0, end)) + ' л';
+    $('endOut').textContent = excess > 0.05 ? fmt(capacity) + ' л (полный)' : fmt(Math.max(0, roundFuel(end))) + ' л';
 
     let pText = '';
     if (p === 21) pText = '6% климат + 15% город';
@@ -586,12 +594,17 @@ button#theme {
     }
     const car = cars[+$('car').value], rate = norm(), p = allowance();
     const kmTrip = n('kmTotal'), kmM = n('kmMkad'), kmO = n('kmOther');
-    const fuel = (kmM * rate) + (kmO * rate * (1 + p / 100));
+    
+    // Точно такой же алгоритм округления в большую сторону для каждого этапа
+    const fuelM = Math.ceil((kmM * rate) * 10) / 10;
+    const fuelO = Math.ceil((kmO * rate * (1 + p / 100)) * 10) / 10;
+    const fuel = Math.ceil((fuelM + fuelO) * 10) / 10;
+
     const added = n('tankAdded') + fills();
     let end = n('fuelNow') + added - fuel;
     const capacity = car[1], excess = end - capacity;
     if (excess > 0.05) end = capacity;
-    end = Math.max(0, Math.round(end * 10) / 10);
+    end = Math.max(0, Math.ceil(end * 10) / 10);
 
     $('fuelNow').value = end;
     $('odoStart').value = Math.round(n('odoStart') + kmTrip);
