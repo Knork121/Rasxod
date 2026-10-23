@@ -211,6 +211,23 @@ button#theme {
 }
 .check-line.ok-text { color: var(--ok); }
 .check-line.bad-text { color: var(--err); }
+/* История поездок */
+.history-item {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  font-size: 13.5px;
+  border: 1px solid var(--line);
+}
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
 </style>
 </head>
 <body>
@@ -262,11 +279,11 @@ button#theme {
   <div class="row">
     <div>
       <label>Остаток топлива, л</label>
-      <input id="fuelNow" type="number" min="0" step="0.1" value="0">
+      <input id="fuelNow" type="text" inputmode="decimal" value="0" placeholder="">
     </div>
     <div>
       <label>Пробег (одометр)</label>
-      <input id="odoStart" type="number" min="0" step="1" value="0">
+      <input id="odoStart" type="text" inputmode="numeric" value="0" placeholder="">
     </div>
   </div>
   <div class="summary">
@@ -287,22 +304,22 @@ button#theme {
   <div class="row">
     <div>
       <label>Сколько проехал, км</label>
-      <input id="kmTotal" type="number" min="0" step="0.1" value="0" placeholder="0">
+      <input id="kmTotal" type="text" inputmode="decimal" value="" placeholder="">
     </div>
     <div>
       <label>Конечный пробег</label>
-      <input id="odoEnd" type="number" min="0" step="1" value="" placeholder="—">
+      <input id="odoEnd" type="text" inputmode="numeric" value="" placeholder="—">
     </div>
   </div>
   <p class="note" style="margin-top:-4px;margin-bottom:14px">Меняешь км — обновляется конечный пробег, и наоборот.</p>
   <div class="row">
     <div>
       <label>По МКАДу, км</label>
-      <input id="kmMkad" type="number" min="0" step="0.1" value="0" placeholder="0">
+      <input id="kmMkad" type="text" inputmode="decimal" value="" placeholder="">
     </div>
     <div>
-      <label>Без МКАڈا, км</label>
-      <input id="kmOther" type="number" min="0" step="0.1" value="0" placeholder="0">
+      <label>Без МКАДа, км</label>
+      <input id="kmOther" type="text" inputmode="decimal" value="" placeholder="">
     </div>
   </div>
   <p class="check-line" id="kmCheck">МКАД + без МКАДа = 0 км</p>
@@ -320,10 +337,10 @@ button#theme {
   </select>
   <div id="customBox" class="hidden">
     <label>Своя надбавка, %</label>
-    <input id="custom" type="number" min="0" step="0.1" value="0">
+    <input id="custom" type="text" inputmode="decimal" value="" placeholder="">
   </div>
   <label>Заправил, л</label>
-  <input id="tankAdded" type="number" min="0" step="0.1" value="0" placeholder="0">
+  <input id="tankAdded" type="text" inputmode="decimal" value="" placeholder="">
   <label>Или несколько заправок (по одной в строке)</label>
   <textarea id="fillList" rows="2" placeholder="20&#10;15,5"></textarea>
 </section>
@@ -352,13 +369,25 @@ button#theme {
   <p class="status" id="status"></p>
   <p class="status" id="saveInfo"></p>
 </section>
+
+<!-- Блок истории поездок -->
+<section class="card" id="historyCard">
+  <h2>История поездок</h2>
+  <div id="historyList">
+    <p class="muted" style="text-align:center; padding: 10px 0;">Сохраненных поездок пока нет</p>
+  </div>
+  <div class="actions" style="margin-top: 14px;" id="historyActions">
+    <button id="clearHistory" class="full" style="font-size: 14px; height: 44px;">Очистить историю</button>
+  </div>
+</section>
+
 <p class="footer">Данные хранятся только на этом устройстве</p>
 </main>
 
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  const STORAGE_KEY = 'mil_v4';
+  const STORAGE_KEY = 'mil_v5';
   const cars = [
     ['Москвич 3', 50, 'АИ-92', 0.098],
     ['SENAT 900', 62, 'АИ-95', null],
@@ -378,22 +407,24 @@ button#theme {
     ['Ford Transit', 80, 'ДТ', 0.145]
   ];
   let locked = false, saveTimer = null, syncing = false;
+  let historyData = [];
 
-  const n = id => Math.max(0, Number($(id).value) || 0);
-  const num = id => Math.max(0, Number(String($(id).value).replace(',', '.')) || 0);
+  const valNum = id => {
+    const raw = String($(id).value).trim().replace(',', '.');
+    if (raw === '' || raw === '-') return 0;
+    const n = Number(raw);
+    return Number.isFinite(n) ? Math.max(0, n) : 0;
+  };
+  
   const fmt = (x, d = 1) => x.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
-  const norm = () => cars[+$('car').value][3] ?? num('manualNorm');
-  const allowance = () => $('allowance').value === 'custom' ? n('custom') : Number($('allowance').value);
+  const norm = () => cars[+$('car').value][3] ?? valNum('manualNorm');
+  const allowance = () => $('allowance').value === 'custom' ? valNum('custom') : Number($('allowance').value);
   const fills = () => $('fillList').value.split(/\n|;/)
     .map(s => Number(s.trim().replace(',', '.')))
     .filter(x => Number.isFinite(x) && x > 0)
     .reduce((a, b) => a + b, 0);
 
-  // Функция округления в высшую сторону до 1 знака после запятой (при необходимости)
-  // Для путевых листов стандарт обычно Math.round (или можно заменить на Math.ceil(val * 10) / 10 при строгом округлении вверх)
   const roundFuel = val => Math.round(val * 10) / 10;
-  // Если нужно строго всегда в большую сторону (например, при 0.51 -> 0.6):
-  // const roundFuelUp = val => Math.ceil(val * 10) / 10;
 
   function setLocked(state) {
     locked = state;
@@ -405,6 +436,46 @@ button#theme {
       : 'При первом заходе выберите машину и введите ГРЗ. После сохранения изменить можно только через «Сбросить».';
   }
 
+  function renderHistory() {
+    const container = $('historyList');
+    if (!historyData || historyData.length === 0) {
+      container.innerHTML = '<p class="muted" style="text-align:center; padding: 10px 0;">Сохраненных поездок пока нет</p>';
+      $('historyActions').style.display = 'none';
+      return;
+    }
+    $('historyActions').style.display = 'block';
+    container.innerHTML = historyData.map((item, index) => `
+      <div class="history-item">
+        <div class="history-header">
+          <span>📅 ${item.date}</span>
+          <span>${item.car} (${item.grz})</span>
+        </div>
+        <div><strong>Расход:</strong> ${item.consumption} л · <strong>Пробег:</strong> ${item.totalKm}</div>
+        <div class="muted" style="margin-top: 4px; font-size: 12px; white-space: pre-line;">${item.formula}</div>
+      </div>
+    `).join('');
+  }
+
+  function addHistoryRecord() {
+    const car = cars[+$('car').value];
+    const grz = $('grz').value.trim().toUpperCase() || '—';
+    const now = new Date();
+    const dateStr = now.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    
+    const record = {
+      date: dateStr,
+      car: car[0],
+      grz: grz,
+      consumption: $('consumption').textContent,
+      totalKm: $('totalKm').textContent,
+      formula: $('formulaBlock').innerText
+    };
+    
+    historyData.unshift(record);
+    if (historyData.length > 20) historyData.pop(); // Ограничим 20 записями
+    renderHistory();
+  }
+
   function collectState() {
     return {
       car: $('car').value, grz: $('grz').value.trim().toUpperCase(), locked,
@@ -414,6 +485,7 @@ button#theme {
       tankAdded: $('tankAdded').value, fillList: $('fillList').value,
       allowance: $('allowance').value, custom: $('custom').value,
       manualNorm: $('manualNorm').value,
+      history: historyData,
       dark: document.body.classList.contains('dark'),
       savedAt: new Date().toISOString()
     };
@@ -456,6 +528,7 @@ button#theme {
       if (s.allowance !== undefined) $('allowance').value = s.allowance;
       if (s.custom !== undefined) $('custom').value = s.custom;
       if (s.manualNorm !== undefined) $('manualNorm').value = s.manualNorm;
+      if (Array.isArray(s.history)) { historyData = s.history; renderHistory(); }
       if (s.locked) setLocked(true);
       if (s.dark) { document.body.classList.add('dark'); $('theme').textContent = '☀'; }
       if (s.savedAt) {
@@ -471,23 +544,28 @@ button#theme {
   function syncFromKmTotal() {
     if (syncing) return;
     syncing = true;
-    const total = n('kmTotal'), start = n('odoStart');
+    const total = valNum('kmTotal'), start = valNum('odoStart');
     $('odoEnd').value = total > 0 ? Math.round(start + total) : '';
-    if (n('kmMkad') > total) $('kmMkad').value = total;
-    $('kmOther').value = Math.max(0, Math.round((n('kmTotal') - n('kmMkad')) * 10) / 10);
+    if (valNum('kmMkad') > total) $('kmMkad').value = total;
+    const rem = total - valNum('kmMkad');
+    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
     syncing = false;
   }
 
   function syncFromOdoEnd() {
     if (syncing) return;
     syncing = true;
-    const start = n('odoStart'), endRaw = $('odoEnd').value.trim();
+    const start = valNum('odoStart'), endRaw = $('odoEnd').value.trim();
     if (endRaw !== '') {
-      const end = Math.max(0, Number(endRaw) || 0);
+      const end = Math.max(0, Number(endRaw.replace(',', '.')) || 0);
       const total = Math.max(0, Math.round((end - start) * 10) / 10);
-      $('kmTotal').value = total;
-      if (n('kmMkad') > total) $('kmMkad').value = total;
-      $('kmOther').value = Math.max(0, Math.round((total - n('kmMkad')) * 10) / 10);
+      $('kmTotal').value = total > 0 ? total : '';
+      if (valNum('kmMkad') > total) $('kmMkad').value = total;
+      const rem = total - valNum('kmMkad');
+      $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+    } else {
+      $('kmTotal').value = '';
+      $('kmOther').value = '';
     }
     syncing = false;
   }
@@ -495,20 +573,22 @@ button#theme {
   function syncFromMkad() {
     if (syncing) return;
     syncing = true;
-    const total = n('kmTotal');
-    let mkad = n('kmMkad');
+    const total = valNum('kmTotal');
+    let mkad = valNum('kmMkad');
     if (mkad > total) { mkad = total; $('kmMkad').value = mkad; }
-    $('kmOther').value = Math.max(0, Math.round((total - mkad) * 10) / 10);
+    const rem = total - mkad;
+    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
     syncing = false;
   }
 
   function syncFromOther() {
     if (syncing) return;
     syncing = true;
-    const total = n('kmTotal');
-    let other = n('kmOther');
+    const total = valNum('kmTotal');
+    let other = valNum('kmOther');
     if (other > total) { other = total; $('kmOther').value = other; }
-    $('kmMkad').value = Math.max(0, Math.round((total - other) * 10) / 10);
+    const rem = total - other;
+    $('kmMkad').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
     syncing = false;
   }
 
@@ -520,11 +600,11 @@ button#theme {
     $('manualBox').classList.toggle('hidden', car[3] !== null);
     $('customBox').classList.toggle('hidden', $('allowance').value !== 'custom');
 
-    const fuelNow = n('fuelNow'), odoNow = n('odoStart');
+    const fuelNow = valNum('fuelNow'), odoNow = valNum('odoStart');
     $('sumOdo').textContent = fmt(odoNow, 0) + ' км';
     $('sumFuel').textContent = fmt(fuelNow) + ' л';
 
-    const kmTrip = n('kmTotal'), kmM = n('kmMkad'), kmO = n('kmOther');
+    const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
     const sumParts = Math.round((kmM + kmO) * 10) / 10;
     const check = $('kmCheck');
     if (kmTrip === 0 && sumParts === 0) {
@@ -538,12 +618,11 @@ button#theme {
       check.className = 'check-line bad-text';
     }
 
-    // Считаем с округлением каждого этапа в высшую сторону до десятых (0.56 -> 0.6)
     const fuelM = Math.ceil((kmM * rate) * 10) / 10;
     const fuelO = Math.ceil((kmO * rate * (1 + p / 100)) * 10) / 10;
     const fuel = Math.ceil((fuelM + fuelO) * 10) / 10;
 
-    const added = n('tankAdded') + fills();
+    const added = valNum('tankAdded') + fills();
     const start = fuelNow;
     let end = start + added - fuel;
     const capacity = car[1], excess = end - capacity, newOdo = odoNow + kmTrip;
@@ -593,24 +672,26 @@ button#theme {
       setLocked(true);
     }
     const car = cars[+$('car').value], rate = norm(), p = allowance();
-    const kmTrip = n('kmTotal'), kmM = n('kmMkad'), kmO = n('kmOther');
+    const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
     
-    // Точно такой же алгоритм округления в большую сторону для каждого этапа
     const fuelM = Math.ceil((kmM * rate) * 10) / 10;
     const fuelO = Math.ceil((kmO * rate * (1 + p / 100)) * 10) / 10;
     const fuel = Math.ceil((fuelM + fuelO) * 10) / 10;
 
-    const added = n('tankAdded') + fills();
-    let end = n('fuelNow') + added - fuel;
+    const added = valNum('tankAdded') + fills();
+    let end = valNum('fuelNow') + added - fuel;
     const capacity = car[1], excess = end - capacity;
     if (excess > 0.05) end = capacity;
     end = Math.max(0, Math.ceil(end * 10) / 10);
 
+    // Добавляем запись в историю перед сбросом полей поездки
+    addHistoryRecord();
+
     $('fuelNow').value = end;
-    $('odoStart').value = Math.round(n('odoStart') + kmTrip);
-    $('kmTotal').value = 0; $('odoEnd').value = '';
-    $('kmMkad').value = 0; $('kmOther').value = 0;
-    $('tankAdded').value = 0; $('fillList').value = '';
+    $('odoStart').value = Math.round(valNum('odoStart') + kmTrip);
+    $('kmTotal').value = ''; $('odoEnd').value = '';
+    $('kmMkad').value = ''; $('kmOther').value = '';
+    $('tankAdded').value = ''; $('fillList').value = '';
 
     update();
     saveState(true);
@@ -626,19 +707,21 @@ button#theme {
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 
     setLocked(false);
+    historyData = [];
+    renderHistory();
 
     $('car').value = '0';
     $('grz').value = '';
     $('fuelNow').value = '0';
     $('odoStart').value = '0';
-    $('kmTotal').value = '0';
+    $('kmTotal').value = '';
     $('odoEnd').value = '';
-    $('kmMkad').value = '0';
-    $('kmOther').value = '0';
-    $('tankAdded').value = '0';
+    $('kmMkad').value = '';
+    $('kmOther').value = '';
+    $('tankAdded').value = '';
     $('fillList').value = '';
     $('allowance').value = '21';
-    $('custom').value = '0';
+    $('custom').value = '';
     $('manualNorm').value = '0,098';
 
     document.body.classList.remove('dark');
@@ -666,6 +749,7 @@ button#theme {
     if (c[3] !== null) $('manualNorm').value = String(c[3]).replace('.', ',');
     update();
   });
+  
   document.querySelectorAll('input, select, textarea').forEach(el => {
     if (['kmTotal', 'odoEnd', 'kmMkad', 'kmOther', 'odoStart'].includes(el.id)) return;
     el.addEventListener('input', update);
@@ -677,7 +761,9 @@ button#theme {
     $('theme').textContent = document.body.classList.contains('dark') ? '☀' : '☾';
     saveState(false);
   };
+  
   $('applyTrip').onclick = applyTrip;
+  
   $('saveBtn').onclick = () => {
     if (!$('grz').value.trim()) {
       $('status').textContent = 'Введите ГРЗ';
@@ -689,17 +775,31 @@ button#theme {
     $('status').textContent = 'Сохранено в браузере';
     setTimeout(() => $('status').textContent = '', 2000);
   };
+
+  $('clearHistory').onclick = () => {
+    if (!confirm('Очистить историю поездок?')) return;
+    historyData = [];
+    renderHistory();
+    saveState(false);
+  };
+
   $('copy').onclick = async () => {
     const car = cars[+$('car').value];
     const grz = $('grz').value.trim().toUpperCase() || '—';
+    const now = new Date();
+    const dateTimeStr = now.toLocaleString('ru-RU', {
+      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+
     const text = [
       'МИЛЬ — ' + car[0] + ' (' + grz + ')',
+      'Дата и время: ' + dateTimeStr,
       'Топливо: ' + car[2],
       'Норма: ' + String(norm()).replace('.', ',') + ' л/км', '',
       'Расход: ' + $('consumption').textContent + ' л',
       'Пробег поездки: ' + $('totalKm').textContent,
-      '  из них МКАД: ' + fmt(n('kmMkad')) + ' км',
-      '  без МКАД: ' + fmt(n('kmOther')) + ' км',
+      '  из них МКАД: ' + fmt(valNum('kmMkad')) + ' км',
+      '  без МКАД: ' + fmt(valNum('kmOther')) + ' км',
       'Конечный пробег: ' + $('newOdo').textContent,
       'Было: ' + $('startOut').textContent,
       'Заправлено: ' + $('addedOut').textContent,
@@ -709,7 +809,7 @@ button#theme {
     ].join('\n');
     try {
       await navigator.clipboard.writeText(text);
-      $('status').textContent = 'Скопировано';
+      $('status').textContent = 'Скопировано с датой и временем';
     } catch { $('status').textContent = 'Не удалось скопировать'; }
     setTimeout(() => $('status').textContent = '', 2000);
   };
