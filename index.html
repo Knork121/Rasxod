@@ -383,7 +383,6 @@ button#theme {
 
 <p class="footer">Данные хранятся только на этом устройстве</p>
 </main>
-
 <script>
 (() => {
   const $ = id => document.getElementById(id);
@@ -472,7 +471,7 @@ button#theme {
     };
     
     historyData.unshift(record);
-    if (historyData.length > 20) historyData.pop(); // Ограничим 20 записями
+    if (historyData.length > 20) historyData.pop();
     renderHistory();
   }
 
@@ -618,9 +617,10 @@ button#theme {
       check.className = 'check-line bad-text';
     }
 
-    const fuelM = Math.ceil((kmM * rate) * 10) / 10;
-    const fuelO = Math.ceil((kmO * rate * (1 + p / 100)) * 10) / 10;
-    const fuel = Math.ceil((fuelM + fuelO) * 10) / 10;
+    // ИЗМЕНЕНО: теперь стандартное математическое округление через roundFuel вместо Math.ceil
+    const fuelM = roundFuel(kmM * rate);
+    const fuelO = roundFuel(kmO * rate * (1 + p / 100));
+    const fuel = roundFuel(fuelM + fuelO);
 
     const added = valNum('tankAdded') + fills();
     const start = fuelNow;
@@ -674,17 +674,17 @@ button#theme {
     const car = cars[+$('car').value], rate = norm(), p = allowance();
     const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
     
-    const fuelM = Math.ceil((kmM * rate) * 10) / 10;
-    const fuelO = Math.ceil((kmO * rate * (1 + p / 100)) * 10) / 10;
-    const fuel = Math.ceil((fuelM + fuelO) * 10) / 10;
+    // ИЗМЕНЕНО: стандартное округление
+    const fuelM = roundFuel(kmM * rate);
+    const fuelO = roundFuel(kmO * rate * (1 + p / 100));
+    const fuel = roundFuel(fuelM + fuelO);
 
     const added = valNum('tankAdded') + fills();
     let end = valNum('fuelNow') + added - fuel;
     const capacity = car[1], excess = end - capacity;
     if (excess > 0.05) end = capacity;
-    end = Math.max(0, Math.ceil(end * 10) / 10);
+    end = Math.max(0, roundFuel(end));
 
-    // Добавляем запись в историю перед сбросом полей поездки
     addHistoryRecord();
 
     $('fuelNow').value = end;
@@ -824,5 +824,7 @@ button#theme {
   update();
 })();
 </script>
+
+      
 </body>
 </html>
