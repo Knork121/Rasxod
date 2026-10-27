@@ -3,246 +3,411 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>МИЛЬ</title>
+<meta name="theme-color" content="#0c0c0e">
+<title>MILE</title>
 <style>
 :root {
   color-scheme: light;
-  --bg: #eef0f4;
+  --bg: #eef1f6;
   --card: #ffffff;
-  --fg: #0f0f12;
-  --muted: #6b6f7a;
-  --line: #e2e4ea;
-  --accent: #111118;
-  --ok: #0d7a3a;
-  --ok-bg: #e6f6ec;
-  --err: #c41e3a;
-  --err-bg: #fdecee;
-  --shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
-  --radius: 18px;
-  --radius-sm: 14px;
+  --fg: #0e0e12;
+  --muted: #6a7080;
+  --line: #e0e4ec;
+  --accent: #0e0e12;
+  --accent-soft: #1c1c22;
+  --ok: #0b8a48;
+  --ok-bg: #e4f6ec;
+  --err: #c22938;
+  --err-bg: #fce7e9;
+  --warn-bg: #fff8e6;
+  --warn-border: #f0d78c;
+  --warn-text: #6b5500;
+  --shadow: 0 6px 24px rgba(14, 14, 18, 0.07);
+  --shadow-sm: 0 2px 8px rgba(14, 14, 18, 0.05);
+  --radius: 22px;
+  --small-radius: 14px;
+  --transition: 0.2s ease;
 }
 body.dark {
   color-scheme: dark;
-  --bg: #0c0c0e;
-  --card: #18181b;
-  --fg: #f4f4f5;
-  --muted: #8b8b93;
-  --line: #2a2a2e;
-  --accent: #f4f4f5;
+  --bg: #09090b;
+  --card: #141418;
+  --fg: #f3f3f5;
+  --muted: #8c8c98;
+  --line: #28282f;
+  --accent: #f3f3f5;
+  --accent-soft: #e6e6ea;
   --ok: #3dd68c;
-  --ok-bg: #0f2a1c;
-  --err: #ff6b6b;
-  --err-bg: #2a1215;
-  --shadow: 0 1px 3px rgba(0,0,0,.2), 0 4px 20px rgba(0,0,0,.25);
+  --ok-bg: #0e2218;
+  --err: #ff6b76;
+  --err-bg: #281214;
+  --warn-bg: #2a2410;
+  --warn-border: #5c4a14;
+  --warn-text: #e8c86a;
+  --shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  padding: 20px 16px 48px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  padding: 20px 16px 44px;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
-  -webkit-tap-highlight-color: transparent;
+  min-height: 100dvh;
 }
-main { max-width: 440px; margin: 0 auto; }
+main { max-width: 460px; margin: 0 auto; }
+.beta-banner {
+  background: var(--warn-bg);
+  border: 1.5px solid var(--warn-border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  color: var(--warn-text);
+  font-size: 12.5px;
+  line-height: 1.5;
+  box-shadow: var(--shadow-sm);
+}
+.beta-banner strong { font-weight: 700; }
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 22px;
-  padding: 2px 0;
+  padding: 0 2px;
 }
-h1 { font-size: 30px; letter-spacing: 5px; font-weight: 800; line-height: 1; }
-.muted { color: var(--muted); font-size: 13px; margin-top: 4px; }
+h1 {
+  font-size: 34px;
+  letter-spacing: 8px;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--fg) 20%, var(--muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+body.dark h1 {
+  background: linear-gradient(135deg, #fff 10%, #9a9aa4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
 .card {
   background: var(--card);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 20px;
   margin-bottom: 14px;
-  border: 1px solid var(--line);
   box-shadow: var(--shadow);
 }
 h2 {
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.3px;
   color: var(--muted);
-  margin-bottom: 16px;
   font-weight: 700;
+  margin-bottom: 16px;
 }
 label {
   display: block;
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 7px;
-  font-weight: 500;
+  font-weight: 550;
+  margin-bottom: 6px;
 }
 input, select, textarea {
+  display: block;
   width: 100%;
-  height: 52px;
+  min-width: 0;
+  min-height: 50px;
   border: 1.5px solid var(--line);
-  border-radius: var(--radius-sm);
+  border-radius: var(--small-radius);
   background: var(--bg);
   color: var(--fg);
-  padding: 0 16px;
-  font-size: 17px;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 16px;
   margin-bottom: 14px;
-  transition: border-color .15s, box-shadow .15s;
   outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 input:focus, select:focus, textarea:focus {
   border-color: var(--fg);
-  box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+  box-shadow: 0 0 0 3.5px rgba(14, 14, 18, 0.08);
 }
-body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
-  box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+body.dark input:focus, body.dark select:focus {
+  box-shadow: 0 0 0 3.5px rgba(243, 243, 245, 0.1);
 }
-textarea { height: auto; min-height: 80px; padding: 14px 16px; resize: vertical; }
-select {
-  -webkit-appearance: menulist;
-  appearance: menulist;
-  background-image: none;
-  padding-right: 16px;
-}
-input:disabled, select:disabled { opacity: 0.65; cursor: not-allowed; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 button {
-  height: 54px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 16px;
-  font-weight: 650;
-  cursor: pointer;
+  min-height: 50px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--small-radius);
   background: var(--card);
   color: var(--fg);
-  border: 1.5px solid var(--line);
-  transition: transform .12s, opacity .12s, background .15s;
+  font-size: 15px;
+  font-weight: 650;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter var(--transition), opacity var(--transition);
   -webkit-tap-highlight-color: transparent;
 }
-button:active { transform: scale(0.97); }
+button:active { transform: scale(0.98); }
 button.primary {
   background: var(--accent);
   color: var(--bg);
-  border: none;
-  height: 58px;
-  font-size: 17px;
+  border-color: var(--accent);
+  min-height: 54px;
   font-weight: 700;
-  letter-spacing: 0.2px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+  letter-spacing: 0.3px;
 }
-body.dark button.primary { box-shadow: 0 4px 18px rgba(0,0,0,.4); }
+button.primary:hover { filter: brightness(1.1); }
 button.full { width: 100%; }
-button#theme {
-  width: 52px; height: 52px; border-radius: 50%;
-  font-size: 20px; padding: 0; flex-shrink: 0;
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }
+button#theme {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  color: var(--fg);
+}
+button#theme svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { min-width: 0; }
 .info {
   background: var(--bg);
-  border-radius: var(--radius-sm);
+  border-radius: var(--small-radius);
   padding: 14px 16px;
+  margin-top: 2px;
+  border: 1px solid var(--line);
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
   font-size: 14px;
-  margin-bottom: 4px;
 }
-.info div { margin: 4px 0; }
-.fueltype { font-weight: 700; font-size: 16px; }
-.summary {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 4px;
-}
-.summary-item {
+.info-row span { color: var(--muted); }
+.info-row strong { text-align: right; font-weight: 700; }
+.fixed-select {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 50px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--small-radius);
   background: var(--bg);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-}
-.summary-item .lbl { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.summary-item .val { font-size: 22px; font-weight: 750; letter-spacing: -0.3px; }
-.result {
-  background: var(--accent);
-  color: var(--bg);
-  border-radius: var(--radius);
-  padding: 24px 22px;
+  color: var(--muted);
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 16px;
   margin-bottom: 14px;
-  box-shadow: var(--shadow);
-}
-.result .label {
-  font-size: 12px; opacity: 0.65; margin-bottom: 6px;
-  letter-spacing: 0.8px; font-weight: 600;
-}
-.result .big {
-  font-size: 42px; font-weight: 800; margin-bottom: 18px;
-  letter-spacing: -1px; line-height: 1;
-}
-.line {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 0; border-top: 1px solid rgba(128,128,128,0.22); font-size: 15px;
-}
-.line strong { font-weight: 650; }
-.formula {
-  margin-top: 14px; padding-top: 14px;
-  border-top: 1px solid rgba(128,128,128,0.22);
-  font-size: 13.5px; line-height: 1.65; opacity: 0.92; word-break: break-word;
-}
-.warn {
-  background: var(--err-bg); color: var(--err);
-  border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px;
-  font-weight: 650; font-size: 14px; line-height: 1.5;
-}
-.ok {
-  background: var(--ok-bg); color: var(--ok);
-  border-radius: var(--radius-sm); padding: 13px 16px; margin-top: 14px;
-  font-size: 14px; font-weight: 600;
-}
-.note { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
-.hidden { display: none !important; }
-.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.actions button { height: 52px; }
-.status { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; min-height: 20px; }
-.footer { text-align: center; margin-top: 28px; font-size: 12px; color: var(--muted); }
-.lock-badge {
-  display: inline-block; font-size: 11px; background: var(--bg); color: var(--muted);
-  padding: 3px 9px; border-radius: 8px; margin-left: 6px; vertical-align: middle;
-  font-weight: 600; letter-spacing: 0.3px;
+  font-weight: 550;
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none;
 }
 .check-line {
-  font-size: 13px; color: var(--muted); margin-top: -4px; margin-bottom: 4px; font-weight: 500;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: -2px 0 14px;
+  font-weight: 500;
 }
 .check-line.ok-text { color: var(--ok); }
 .check-line.bad-text { color: var(--err); }
-/* История поездок */
-.history-item {
-  background: var(--bg);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  font-size: 13.5px;
-  border: 1px solid var(--line);
+.result {
+  background: linear-gradient(155deg, var(--accent) 0%, var(--accent-soft) 100%);
+  color: var(--bg);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
 }
-.history-header {
+body.dark .result {
+  background: linear-gradient(155deg, #f3f3f5 0%, #d4d4da 100%);
+  color: #09090b;
+}
+.result-title {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  opacity: 0.7;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.big {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -1.4px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.result-line {
   display: flex;
   justify-content: space-between;
-  color: var(--muted);
-  font-size: 12px;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  font-size: 13.5px;
+}
+.result-line span { opacity: 0.78; max-width: 58%; }
+.result-line strong { text-align: right; font-weight: 700; }
+.formula {
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  padding-top: 14px;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+  opacity: 0.92;
+  white-space: pre-line;
+}
+.warn, .ok {
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 650;
+}
+.warn { background: var(--err-bg); color: var(--err); }
+.ok { background: var(--ok-bg); color: var(--ok); }
+.history-item {
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+.history-item:last-child { border-bottom: none; padding-bottom: 0; }
+.history-item:first-child { padding-top: 0; }
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
   margin-bottom: 4px;
-  font-weight: 600;
+}
+.history-car {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--fg);
+}
+.history-meta {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.history-grz {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  padding: 3px 0;
+}
+.history-row span { color: var(--muted); }
+.history-row strong { font-weight: 650; text-align: right; }
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.65;
+  margin: 26px 8px 0;
+  opacity: 0.92;
+}
+.status {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12.5px;
+  min-height: 20px;
+  margin-top: 12px;
+  font-weight: 500;
+}
+.hidden { display: none !important; }
+.custom-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+.refuel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.refuel-grid input {
+  min-height: 44px;
+  padding: 8px 6px;
+  margin-bottom: 0;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 10px;
+}
+.guide-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.guide-card p { margin: 0 0 8px; }
+.guide-card p:last-child { margin-bottom: 0; }
+.footer-note {
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  opacity: 0.85;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 360px) {
+  body { padding: 14px 12px 32px; }
+  .card { padding: 16px; }
+  .grid2, .custom-fields { gap: 10px; }
+  .result { padding: 18px; }
+  .big { font-size: 36px; }
+  h1 { font-size: 28px; letter-spacing: 5px; }
 }
 </style>
 </head>
 <body>
 <main>
+
 <header>
-  <div>
-    <h1>МИЛЬ</h1>
-    <div class="muted">Расход топлива</div>
-  </div>
-  <button id="theme" title="Тема">☾</button>
+  <div><h1>MILE</h1></div>
+  <button id="theme" type="button" aria-label="Сменить тему">
+    <svg id="themeIcon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 14.3A9 9 0 1 1 9.7 3a7 7 0 1 0 11.3 11.3z"/>
+    </svg>
+  </button>
 </header>
 
-<section class="card" id="carSection">
-  <h2>Машина <span id="lockBadge" class="lock-badge hidden">зафиксировано</span></h2>
-  <label>Марка / модель</label>
+<section class="card">
+  <h2>Марка и модель</h2>
+  <label for="car">Выбор автомобиля</label>
   <select id="car">
     <option value="0">Москвич 3</option>
     <option value="1">SENAT 900</option>
@@ -260,133 +425,181 @@ button#theme {
     <option value="13">ACM - 535251</option>
     <option value="14">Sollers Atlant</option>
     <option value="15">Ford Transit</option>
+    <option value="custom">Другая марка</option>
   </select>
-  <label>ГРЗ</label>
+
+  <div id="customCarBox" class="hidden">
+    <label for="customCarName">Название / марка</label>
+    <input id="customCarName" type="text" placeholder="Например, УАЗ Патриот" maxlength="40" autocomplete="off">
+    <div class="custom-fields">
+      <div class="field">
+        <label for="customFuel">Топливо</label>
+        <select id="customFuel">
+          <option value="АИ-92">АИ-92</option>
+          <option value="АИ-95">АИ-95</option>
+          <option value="ДТ">ДТ</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="customCapacity">Бак, л</label>
+        <input id="customCapacity" type="text" inputmode="decimal" placeholder="80" value="80">
+      </div>
+    </div>
+  </div>
+
+  <div id="manualNormBox" class="hidden">
+    <label for="manualNorm">Норма расхода, л/км</label>
+    <input id="manualNorm" type="text" inputmode="decimal" value="0,100" placeholder="0,100">
+  </div>
+
+  <label for="grz">ГРЗ</label>
   <input id="grz" type="text" placeholder="А123ВС777" maxlength="12" autocomplete="off" style="text-transform:uppercase">
-  <div class="info">
-    <div>Топливо: <span id="fuel" class="fueltype">АИ-92</span></div>
-    <div>Бак: <strong id="capacity">50 л</strong> · Норма: <strong id="normView">0,098 л/км</strong></div>
+
+  <div class="info" id="carInfo">
+    <div class="info-row"><span>Норма</span><strong id="normView">0,098 л/км</strong></div>
+    <div class="info-row"><span>Топливо</span><strong id="fuel">АИ-92</strong></div>
+    <div class="info-row"><span>Бак</span><strong id="capacity">50 л</strong></div>
   </div>
-  <div id="manualBox" class="hidden">
-    <label>Норма расхода (л/км)</label>
-    <input id="manualNorm" type="text" inputmode="decimal" value="0,098">
-  </div>
-  <p class="note" id="carNote">При первом заходе выберите машину и введите ГРЗ. После сохранения изменить можно только через «Сбросить».</p>
 </section>
 
 <section class="card">
-  <h2>Сейчас в машине</h2>
-  <div class="row">
-    <div>
-      <label>Остаток топлива, л</label>
-      <input id="fuelNow" type="text" inputmode="decimal" placeholder="0">
-    </div>
-    <div>
-      <label>Пробег (одометр)</label>
-      <input id="odoStart" type="text" inputmode="numeric" placeholder="0">
-    </div>
-  </div>
-  <div class="summary">
-    <div class="summary-item">
-      <div class="lbl">Пробег</div>
-      <div class="val" id="sumOdo">0 км</div>
-    </div>
-    <div class="summary-item">
-      <div class="lbl">В баке</div>
-      <div class="val" id="sumFuel">0 л</div>
-    </div>
-  </div>
-  <p class="note">Значения сохраняются в браузере</p>
+  <h2>Перед выездом</h2>
+  <label for="odoStart">Начальный пробег перед выездом, км</label>
+  <input id="odoStart" type="text" inputmode="numeric" placeholder="Например, 125430">
+  <label for="fuelNow">Наличие в баках перед выездом, л</label>
+  <input id="fuelNow" type="text" inputmode="decimal" placeholder="0">
 </section>
 
 <section class="card">
-  <h2>Пробег поездки</h2>
-  <div class="row">
-    <div>
-      <label>Сколько проехал, км</label>
-      <input id="kmTotal" type="text" inputmode="decimal" value="" placeholder="">
+  <h2>Пробег за весь путевой лист</h2>
+  <label for="kmTotal">Пробег за путевой лист, км</label>
+  <input id="kmTotal" type="text" inputmode="decimal" placeholder="Введите общий пробег">
+  <label for="odoEnd">Конечный пробег, км</label>
+  <input id="odoEnd" type="text" inputmode="numeric" placeholder="Рассчитывается автоматически">
+  <div class="grid2">
+    <div class="field">
+      <label for="kmMkad">По МКАДу, км</label>
+      <input id="kmMkad" type="text" inputmode="decimal" placeholder="0">
+      <label>Надбавка</label>
+      <div class="fixed-select">0%</div>
     </div>
-    <div>
-      <label>Конечный пробег</label>
-      <input id="odoEnd" type="text" inputmode="numeric" value="" placeholder="—">
+    <div class="field">
+      <label for="kmOther">Без МКАДа, км</label>
+      <input id="kmOther" type="text" inputmode="decimal" placeholder="0">
+      <label for="allowance">Надбавка</label>
+      <select id="allowance">
+        <option value="0">0%</option>
+        <option value="15">15% — город</option>
+        <option value="6">6% — климат</option>
+        <option value="21" selected>15% + 6%</option>
+        <option value="custom">Свой процент</option>
+      </select>
     </div>
   </div>
-  <p class="note" style="margin-top:-4px;margin-bottom:14px">Меняешь км — обновляется конечный пробег, и наоборот.</p>
-  <div class="row">
-    <div>
-      <label>По МКАДу, км</label>
-      <input id="kmMkad" type="text" inputmode="decimal" value="" placeholder="">
-    </div>
-    <div>
-      <label>Без МКАДа, км</label>
-      <input id="kmOther" type="text" inputmode="decimal" value="" placeholder="">
-    </div>
+  <div id="customBox" class="hidden">
+    <label for="custom">Своя надбавка, %</label>
+    <input id="custom" type="text" inputmode="decimal" placeholder="Введите процент">
   </div>
   <p class="check-line" id="kmCheck">МКАД + без МКАДа = 0 км</p>
 </section>
 
 <section class="card">
-  <h2>Поездка</h2>
-  <label>Коэффициент расхода</label>
-  <select id="allowance">
-    <option value="0">0% — без надбавок</option>
-    <option value="15">15% — город</option>
-    <option value="6">6% — климат</option>
-    <option value="21" selected>6% + 15% (климат + город)</option>
-    <option value="custom">Свой %</option>
-  </select>
-  <div id="customBox" class="hidden">
-    <label>Своя надбавка, %</label>
-    <input id="custom" type="text" inputmode="decimal" value="" placeholder="">
+  <h2>Заправка</h2>
+  <label>Получено, л</label>
+  <div class="refuel-grid" id="refuelGrid"></div>
+  <div class="info" style="margin-top:4px">
+    <div class="info-row"><span>Всего получено</span><strong id="tankAddedView">0,0 л</strong></div>
   </div>
-  <label>Заправил, л</label>
-  <input id="tankAdded" type="text" inputmode="decimal" value="" placeholder="">
-  <label>Или несколько заправок (по одной в строке)</label>
-  <textarea id="fillList" rows="2" placeholder="20&#10;15,5"></textarea>
+  <input id="tankAdded" type="hidden" value="0">
 </section>
 
 <section class="result">
-  <div class="label">РАСХОД ЗА ПОЕЗДКУ</div>
-  <div class="big"><span id="consumption">0</span> л</div>
-  <div class="line"><span>Пробег поездки</span><strong id="totalKm">0 км</strong></div>
-  <div class="line"><span>Конечный пробег</span><strong id="newOdo">0 км</strong></div>
-  <div class="line"><span>Было топлива</span><strong id="startOut">0 л</strong></div>
-  <div class="line"><span>Заправлено</span><strong id="addedOut">0 л</strong></div>
-  <div class="line"><span>Станет топлива</span><strong id="endOut">0 л</strong></div>
-  <div class="formula" id="formulaBlock">—</div>
+  <div class="result-title">Итог за поездку</div>
+  <div class="big"><span id="consumption">0,0</span> л</div>
+  <div class="result-line"><span>Начальный пробег</span><strong id="startOdoOut">0 км</strong></div>
+  <div class="result-line"><span>Конечный пробег</span><strong id="newOdo">0 км</strong></div>
+  <div class="result-line"><span>Наличие в баках перед выездом</span><strong id="startOut">0,0 л</strong></div>
+  <div class="result-line"><span>Получено</span><strong id="addedOut">0,0 л</strong></div>
+  <div class="result-line"><span>Наличие при постановке на стоянку</span><strong id="endOut">0,0 л</strong></div>
+  <div class="result-line"><span>Израсходовано</span><strong id="usedOut">0,0 л</strong></div>
+  <div class="result-line"><span>Положено по норме</span><strong id="normOut">0,0 л</strong></div>
+  <div class="formula" id="formulaBlock">Формула появится после ввода данных.</div>
   <div id="tankWarning"></div>
 </section>
 
+<div class="guide-card hidden" id="plusHint">
+  <p>Если по расчёту бак неполный, а по факту полный — бьёт плюс. Уточните у путевщика, можно ли писать такой остаток.</p>
+</div>
+
 <section class="card">
-  <button class="primary full" id="applyTrip">Применить поездку</button>
-  <div class="actions">
-    <button id="saveBtn">Сохранить</button>
-    <button id="resetAll">Сбросить</button>
-  </div>
-  <div class="actions" style="margin-top:10px">
-    <button id="copy" class="full" style="grid-column:1/-1">Копировать итог</button>
-  </div>
-  <p class="status" id="status"></p>
-  <p class="status" id="saveInfo"></p>
+  <button class="primary full" id="saveTrip" type="button">Сохранить эту поездку</button>
+  <button class="full" id="copyReport" type="button" style="margin-top:10px">Скопировать доклад</button>
+  <button class="full" id="resetAll" type="button" style="margin-top:10px">Сбросить</button>
+  <p class="status" id="status" aria-live="polite"></p>
 </section>
 
-<!-- Блок истории поездок -->
-<section class="card" id="historyCard">
-  <h2>История поездок</h2>
-  <div id="historyList">
-    <p class="muted" style="text-align:center; padding: 10px 0;">Сохраненных поездок пока нет</p>
-  </div>
-  <div class="actions" style="margin-top: 14px;" id="historyActions">
-    <button id="clearHistory" class="full" style="font-size: 14px; height: 44px;">Очистить историю</button>
-  </div>
+<section class="card">
+  <h2>Карточка учёта работы машины</h2>
+  <div id="historyList"></div>
 </section>
 
-<p class="footer">Данные хранятся только на этом устройстве</p>
+<footer class="footer">
+  <div class="footer-note">Сайт в режиме тестирования и возможны неполадки.</div>
+  2 автомобильная рота 2 автомобильного батальона<br>
+  Версия 2.9.1 · 27.10.2026
+</footer>
 </main>
 <script>
 (() => {
+  'use strict';
   const $ = id => document.getElementById(id);
-  const STORAGE_KEY = 'mil_v5';
+  const STORAGE_KEY = 'mile_v14';
+  const REFUEL_COUNT = 12;
+  function buildRefuelGrid() {
+    const grid = $('refuelGrid');
+    if (!grid || grid.children.length) return;
+    for (let i = 0; i < REFUEL_COUNT; i++) {
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.inputMode = 'decimal';
+      inp.placeholder = '0';
+      inp.id = 'refuel' + i;
+      inp.autocomplete = 'off';
+      inp.addEventListener('input', () => { syncRefuelTotal(); calculate(); });
+      grid.appendChild(inp);
+    }
+  }
+  function syncRefuelTotal() {
+    let sum = 0;
+    for (let i = 0; i < REFUEL_COUNT; i++) {
+      const el = $('refuel' + i);
+      if (!el) continue;
+      const raw = String(el.value ?? '').trim().replace(',', '.');
+      const n = Number(raw);
+      if (Number.isFinite(n) && n > 0) sum += n;
+    }
+    sum = Math.round((sum + Number.EPSILON) * 10) / 10;
+    $('tankAdded').value = String(sum).replace('.', ',');
+    const view = $('tankAddedView');
+    if (view) view.textContent = fmt(sum) + ' л';
+  }
+  function getRefuelValues() {
+    const vals = [];
+    for (let i = 0; i < REFUEL_COUNT; i++) {
+      const el = $('refuel' + i);
+      vals.push(el ? el.value : '');
+    }
+    return vals;
+  }
+  function setRefuelValues(vals) {
+    for (let i = 0; i < REFUEL_COUNT; i++) {
+      const el = $('refuel' + i);
+      if (el) el.value = (vals && vals[i]) ? vals[i] : '';
+    }
+    syncRefuelTotal();
+  }
+  const ICON_MOON = '<path d="M21 14.3A9 9 0 1 1 9.7 3a7 7 0 1 0 11.3 11.3z"/>';
+  const ICON_SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>';
   const cars = [
     ['Москвич 3', 50, 'АИ-92', 0.098],
     ['SENAT 900', 62, 'АИ-95', null],
@@ -405,426 +618,453 @@ button#theme {
     ['Sollers Atlant', 80, 'ДТ', 0.121],
     ['Ford Transit', 80, 'ДТ', 0.145]
   ];
-  let locked = false, saveTimer = null, syncing = false;
   let historyData = [];
+  let syncing = false;
 
-  const valNum = id => {
-    const raw = String($(id).value).trim().replace(',', '.');
-    if (raw === '' || raw === '-') return 0;
+  const number = id => {
+    const raw = String($(id).value ?? '').trim().replace(',', '.');
+    if (!raw || raw === '-') return 0;
     const n = Number(raw);
     return Number.isFinite(n) ? Math.max(0, n) : 0;
   };
-  
-  const fmt = (x, d = 1) => x.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
-  const norm = () => cars[+$('car').value][3] ?? valNum('manualNorm');
-  const allowance = () => $('allowance').value === 'custom' ? valNum('custom') : Number($('allowance').value);
-  const fills = () => $('fillList').value.split(/\n|;/)
-    .map(s => Number(s.trim().replace(',', '.')))
-    .filter(x => Number.isFinite(x) && x > 0)
-    .reduce((a, b) => a + b, 0);
+  const fmt = (n, digits = 1) => Number(n || 0).toLocaleString('ru-RU', {
+    minimumFractionDigits: digits, maximumFractionDigits: digits
+  });
+  const round1 = n => Math.round((n + Number.EPSILON) * 10) / 10;
 
-  const roundFuel = val => Math.round(val * 10) / 10;
-
-  function setLocked(state) {
-    locked = state;
-    $('car').disabled = state;
-    $('grz').disabled = state;
-    $('lockBadge').classList.toggle('hidden', !state);
-    $('carNote').textContent = state
-      ? 'Машина и ГРЗ зафиксированы. Чтобы изменить — нажмите «Сбросить».'
-      : 'При первом заходе выберите машину и введите ГРЗ. После сохранения изменить можно только через «Сбросить».';
-  }
-
-  function renderHistory() {
-    const container = $('historyList');
-    if (!historyData || historyData.length === 0) {
-      container.innerHTML = '<p class="muted" style="text-align:center; padding: 10px 0;">Сохраненных поездок пока нет</p>';
-      $('historyActions').style.display = 'none';
-      return;
+  const isCustom = () => $('car').value === 'custom';
+  const selectedCar = () => {
+    if (isCustom()) {
+      const name = ($('customCarName').value || '').trim() || 'Другая марка';
+      const capacity = number('customCapacity') || 80;
+      const fuel = $('customFuel').value || 'АИ-92';
+      const rate = number('manualNorm') || 0;
+      return [name, capacity, fuel, rate > 0 ? rate : null];
     }
-    $('historyActions').style.display = 'block';
-    container.innerHTML = historyData.map((item, index) => `
-      <div class="history-item">
-        <div class="history-header">
-          <span>📅 ${item.date}</span>
-          <span>${item.car} (${item.grz})</span>
-        </div>
-        <div><strong>Расход:</strong> ${item.consumption} л · <strong>Пробег:</strong> ${item.totalKm}</div>
-        <div class="muted" style="margin-top: 4px; font-size: 12px; white-space: pre-line;">${item.formula}</div>
-      </div>
-    `).join('');
-  }
+    return cars[Number($('car').value)] || cars[0];
+  };
+  const norm = () => {
+    const car = selectedCar();
+    if (isCustom() || car[3] === null) return number('manualNorm');
+    return car[3];
+  };
+  const allowance = () => $('allowance').value === 'custom' ? number('custom') : Number($('allowance').value);
+  const km = () => ({ total: number('kmTotal'), mkad: number('kmMkad'), other: number('kmOther') });
 
-  function addHistoryRecord() {
-    const car = cars[+$('car').value];
-    const grz = $('grz').value.trim().toUpperCase() || '—';
-    const now = new Date();
-    const dateStr = now.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    
-    const record = {
-      date: dateStr,
-      car: car[0],
-      grz: grz,
-      consumption: $('consumption').textContent,
-      totalKm: $('totalKm').textContent,
-      formula: $('formulaBlock').innerText
-    };
-    
-    historyData.unshift(record);
-    if (historyData.length > 20) historyData.pop();
-    renderHistory();
-  }
-
-  function collectState() {
-    return {
-      car: $('car').value, grz: $('grz').value.trim().toUpperCase(), locked,
-      fuelNow: $('fuelNow').value, odoStart: $('odoStart').value,
-      kmTotal: $('kmTotal').value, odoEnd: $('odoEnd').value,
-      kmMkad: $('kmMkad').value, kmOther: $('kmOther').value,
-      tankAdded: $('tankAdded').value, fillList: $('fillList').value,
-      allowance: $('allowance').value, custom: $('custom').value,
-      manualNorm: $('manualNorm').value,
-      history: historyData,
-      dark: document.body.classList.contains('dark'),
-      savedAt: new Date().toISOString()
-    };
-  }
-
-  function saveState(showMsg) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
-      if (showMsg) {
-        const d = new Date();
-        $('saveInfo').textContent = 'Сохранено ' + d.toLocaleString('ru-RU', {
-          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-        });
-      }
-    } catch (e) {
-      if (showMsg) $('saveInfo').textContent = 'Ошибка сохранения';
+  let vehicleLocked = false;
+  function lockVehicle(on) {
+    vehicleLocked = !!on;
+    $('car').disabled = vehicleLocked;
+    $('grz').disabled = vehicleLocked;
+    if (vehicleLocked) {
+      $('customCarName') && ($('customCarName').disabled = true);
+      $('customFuel') && ($('customFuel').disabled = true);
+      $('customCapacity') && ($('customCapacity').disabled = true);
+      $('manualNorm') && ($('manualNorm').disabled = true);
+    } else {
+      $('customCarName') && ($('customCarName').disabled = false);
+      $('customFuel') && ($('customFuel').disabled = false);
+      $('customCapacity') && ($('customCapacity').disabled = false);
+      $('manualNorm') && ($('manualNorm').disabled = false);
     }
   }
 
-  function scheduleSave() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => saveState(false), 400);
+  function setThemeIcon(dark) {
+    $('themeIcon').innerHTML = dark ? ICON_SUN : ICON_MOON;
   }
 
-  function loadState() {
+  function persist() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return false;
-      const s = JSON.parse(raw);
-      if (s.car !== undefined) $('car').value = s.car;
-      if (s.grz !== undefined) $('grz').value = s.grz || '';
-      if (s.fuelNow !== undefined) $('fuelNow').value = s.fuelNow;
-      if (s.odoStart !== undefined) $('odoStart').value = s.odoStart;
-      if (s.kmTotal !== undefined) $('kmTotal').value = s.kmTotal;
-      if (s.odoEnd !== undefined) $('odoEnd').value = s.odoEnd;
-      if (s.kmMkad !== undefined) $('kmMkad').value = s.kmMkad;
-      if (s.kmOther !== undefined) $('kmOther').value = s.kmOther;
-      if (s.tankAdded !== undefined) $('tankAdded').value = s.tankAdded;
-      if (s.fillList !== undefined) $('fillList').value = s.fillList;
-      if (s.allowance !== undefined) $('allowance').value = s.allowance;
-      if (s.custom !== undefined) $('custom').value = s.custom;
-      if (s.manualNorm !== undefined) $('manualNorm').value = s.manualNorm;
-      if (Array.isArray(s.history)) { historyData = s.history; renderHistory(); }
-      if (s.locked) setLocked(true);
-      if (s.dark) { document.body.classList.add('dark'); $('theme').textContent = '☀'; }
-      if (s.savedAt) {
-        const d = new Date(s.savedAt);
-        $('saveInfo').textContent = 'Последнее сохранение: ' + d.toLocaleString('ru-RU', {
-          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-        });
-      }
-      return true;
-    } catch (e) { return false; }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        car: $('car').value,
+        grz: $('grz').value,
+        odoStart: $('odoStart').value,
+        fuelNow: $('fuelNow').value,
+        kmTotal: $('kmTotal').value,
+        odoEnd: $('odoEnd').value,
+        kmMkad: $('kmMkad').value,
+        kmOther: $('kmOther').value,
+        allowance: $('allowance').value,
+        custom: $('custom').value,
+        tankAdded: $('tankAdded').value,
+        refuels: getRefuelValues(),
+        manualNorm: $('manualNorm').value,
+        customCarName: $('customCarName').value,
+        customFuel: $('customFuel').value,
+        customCapacity: $('customCapacity').value,
+        history: historyData,
+        dark: document.body.classList.contains('dark'),
+        vehicleLocked: vehicleLocked
+      }));
+    } catch (_) {}
   }
 
-  function syncFromKmTotal() {
+  function syncFromTotal() {
     if (syncing) return;
     syncing = true;
-    const total = valNum('kmTotal'), start = valNum('odoStart');
-    $('odoEnd').value = total > 0 ? Math.round(start + total) : '';
-    if (valNum('kmMkad') > total) $('kmMkad').value = total;
-    const rem = total - valNum('kmMkad');
-    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+    const total = number('kmTotal');
+    const start = number('odoStart');
+    $('odoEnd').value = $('kmTotal').value.trim() ? String(round1(start + total)) : '';
+    if (number('kmMkad') > total) $('kmMkad').value = String(total);
+    $('kmOther').value = total - number('kmMkad') > 0 ? String(round1(total - number('kmMkad'))) : '';
     syncing = false;
   }
-
-  function syncFromOdoEnd() {
+  function syncFromEnd() {
     if (syncing) return;
     syncing = true;
-    const start = valNum('odoStart'), endRaw = $('odoEnd').value.trim();
-    if (endRaw !== '') {
+    const endRaw = $('odoEnd').value.trim(), start = number('odoStart');
+    if (endRaw) {
       const end = Math.max(0, Number(endRaw.replace(',', '.')) || 0);
-      const total = Math.max(0, Math.round((end - start) * 10) / 10);
-      $('kmTotal').value = total > 0 ? total : '';
-      if (valNum('kmMkad') > total) $('kmMkad').value = total;
-      const rem = total - valNum('kmMkad');
-      $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+      const total = Math.max(0, round1(end - start));
+      $('kmTotal').value = total ? String(total) : '';
+      if (number('kmMkad') > total) $('kmMkad').value = String(total);
+      $('kmOther').value = total - number('kmMkad') > 0 ? String(round1(total - number('kmMkad'))) : '';
     } else {
       $('kmTotal').value = '';
       $('kmOther').value = '';
     }
     syncing = false;
   }
-
   function syncFromMkad() {
     if (syncing) return;
     syncing = true;
-    const total = valNum('kmTotal');
-    let mkad = valNum('kmMkad');
-    if (mkad > total) { mkad = total; $('kmMkad').value = mkad; }
-    const rem = total - mkad;
-    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+    const total = number('kmTotal');
+    if (number('kmMkad') > total) $('kmMkad').value = String(total);
+    $('kmOther').value = total - number('kmMkad') > 0 ? String(round1(total - number('kmMkad'))) : '';
     syncing = false;
   }
-
   function syncFromOther() {
     if (syncing) return;
     syncing = true;
-    const total = valNum('kmTotal');
-    let other = valNum('kmOther');
-    if (other > total) { other = total; $('kmOther').value = other; }
-    const rem = total - other;
-    $('kmMkad').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+    const total = number('kmTotal');
+    if (number('kmOther') > total) $('kmOther').value = String(total);
+    $('kmMkad').value = total - number('kmOther') > 0 ? String(round1(total - number('kmOther'))) : '';
     syncing = false;
   }
 
-  function update() {
-    const car = cars[+$('car').value], rate = norm(), p = allowance();
+  function allowanceText(p) {
+    if (p === 21) return '15% город + 6% климат';
+    if (p === 15) return '15% город';
+    if (p === 6) return '6% климат';
+    if (p > 0) return fmt(p, 0) + '%';
+    return '';
+  }
+
+  function buildFormula(kms, rate, p, fuelM, fuelO, consumed) {
+    const hasM = kms.mkad > 0;
+    const hasO = kms.other > 0;
+    const lines = [];
+    if (hasM && !hasO) {
+      lines.push(fmt(kms.mkad) + ' * ' + fmt(rate, 3) + ' = ' + fmt(fuelM) + ' л');
+    } else if (!hasM && hasO) {
+      let expr = fmt(kms.other) + ' * ' + fmt(rate, 3);
+      const at = allowanceText(p);
+      if (at) expr += ' + (' + at + ')';
+      lines.push(expr + ' = ' + fmt(fuelO) + ' л');
+    } else if (hasM && hasO) {
+      lines.push(fmt(kms.mkad) + ' * ' + fmt(rate, 3) + ' = ' + fmt(fuelM) + ' л');
+      let expr = fmt(kms.other) + ' * ' + fmt(rate, 3);
+      const at = allowanceText(p);
+      if (at) expr += ' + (' + at + ')';
+      lines.push(expr + ' = ' + fmt(fuelO) + ' л');
+      lines.push('Итого: ' + fmt(consumed) + ' л');
+    } else {
+      lines.push('0 * ' + fmt(rate, 3) + ' = 0,0 л');
+    }
+    return lines.join('\n');
+  }
+
+  function calculate() {
+    const car = selectedCar();
+    const rate = norm();
+    const p = allowance();
+    const kms = km();
+    const capacity = car[1];
+
     $('fuel').textContent = car[2];
-    $('capacity').textContent = car[1] + ' л';
-    $('normView').textContent = rate ? fmt(rate, 3) + ' л/км' : 'не задана';
-    $('manualBox').classList.toggle('hidden', car[3] !== null);
+    $('capacity').textContent = fmt(capacity, 0) + ' л';
+    $('normView').textContent = rate ? fmt(rate, 3) + ' л/км' : 'Не задана';
+
+    const isCustomMode = isCustom();
+    $('customCarBox').classList.toggle('hidden', !isCustomMode);
+
+    const carIdx = Number($('car').value);
+    const needsManual = isCustomMode || (cars[carIdx] && cars[carIdx][3] === null);
+    $('manualNormBox').classList.toggle('hidden', !needsManual);
     $('customBox').classList.toggle('hidden', $('allowance').value !== 'custom');
 
-    const fuelNow = valNum('fuelNow'), odoNow = valNum('odoStart');
-    $('sumOdo').textContent = fmt(odoNow, 0) + ' км';
-    $('sumFuel').textContent = fmt(fuelNow) + ' л';
-
-    const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
-    const sumParts = Math.round((kmM + kmO) * 10) / 10;
+    const sumParts = round1(kms.mkad + kms.other);
     const check = $('kmCheck');
-    if (kmTrip === 0 && sumParts === 0) {
+    if (kms.total === 0 && sumParts === 0) {
       check.textContent = 'МКАД + без МКАДа = 0 км';
       check.className = 'check-line';
-    } else if (Math.abs(sumParts - kmTrip) < 0.05) {
+    } else if (Math.abs(sumParts - kms.total) < 0.05) {
       check.textContent = 'МКАД + без МКАДа = ' + fmt(sumParts) + ' км ✓';
       check.className = 'check-line ok-text';
     } else {
-      check.textContent = 'МКАД + без МКАДа = ' + fmt(sumParts) + ' км ≠ ' + fmt(kmTrip) + ' км';
+      check.textContent = 'МКАД + без МКАДа = ' + fmt(sumParts) + ' км ≠ ' + fmt(kms.total) + ' км';
       check.className = 'check-line bad-text';
     }
 
-    // ИЗМЕНЕНО: теперь стандартное математическое округление через roundFuel вместо Math.ceil
-    const fuelM = roundFuel(kmM * rate);
-    const fuelO = roundFuel(kmO * rate * (1 + p / 100));
-    const fuel = roundFuel(fuelM + fuelO);
+    const fuelM = round1(kms.mkad * rate);
+    const fuelO = round1(kms.other * rate * (1 + p / 100));
+    const consumed = round1(fuelM + fuelO);
+    const startFuel = number('fuelNow');
+    const received = number('tankAdded');
+    const rawEnd = startFuel + received - consumed;
+    const end = Math.min(capacity, Math.max(0, round1(rawEnd)));
+    const excess = rawEnd - capacity;
+    const shortage = rawEnd < 0 ? Math.abs(rawEnd) : 0;
+    const startOdo = number('odoStart');
+    const endOdo = $('odoEnd').value.trim()
+      ? Math.max(0, Number($('odoEnd').value.replace(',', '.')) || 0)
+      : startOdo + kms.total;
 
-    const added = valNum('tankAdded') + fills();
-    const start = fuelNow;
-    let end = start + added - fuel;
-    const capacity = car[1], excess = end - capacity, newOdo = odoNow + kmTrip;
+    $('consumption').textContent = fmt(consumed);
+    $('startOdoOut').textContent = fmt(startOdo, 0) + ' км';
+    $('newOdo').textContent = fmt(endOdo, 0) + ' км';
+    $('startOut').textContent = fmt(startFuel) + ' л';
+    $('addedOut').textContent = fmt(received) + ' л';
+    $('endOut').textContent = fmt(end) + ' л';
+    $('usedOut').textContent = fmt(consumed) + ' л';
+    $('normOut').textContent = fmt(consumed) + ' л';
 
-    $('consumption').textContent = fmt(fuel);
-    $('totalKm').textContent = fmt(kmTrip) + ' км';
-    $('newOdo').textContent = fmt(newOdo, 0) + ' км';
-    $('startOut').textContent = fmt(start) + ' л';
-    $('addedOut').textContent = fmt(added) + ' л';
-    $('endOut').textContent = excess > 0.05 ? fmt(capacity) + ' л (полный)' : fmt(Math.max(0, roundFuel(end))) + ' л';
-
-    let pText = '';
-    if (p === 21) pText = '6% климат + 15% город';
-    else if (p === 15) pText = '15% город';
-    else if (p === 6) pText = '6% климат';
-    else if (p > 0) pText = p + '%';
-
-    const rateStr = fmt(rate, 3), lines = [];
-    if (kmM > 0) lines.push('МКАД: ' + fmt(kmM) + ' × ' + rateStr + ' = ' + fmt(fuelM) + ' л');
-    if (kmO > 0) {
-      lines.push(p > 0
-        ? 'без МКАД: ' + fmt(kmO) + ' × ' + rateStr + ' × (' + pText + ') = ' + fmt(fuelO) + ' л'
-        : 'без МКАД: ' + fmt(kmO) + ' × ' + rateStr + ' = ' + fmt(fuelO) + ' л');
-    }
-    if (!lines.length) lines.push('0 л');
-    lines.push('итого: ' + fmt(fuel) + ' л');
-    $('formulaBlock').innerHTML = lines.join('<br>');
+    const formula = buildFormula(kms, rate, p, fuelM, fuelO, consumed);
+    $('formulaBlock').textContent = formula;
 
     const warning = $('tankWarning');
-    if (excess > 0.05) {
-      warning.innerHTML = '<div class="warn">Сверхбак: ' + fmt(excess) + ' л<br>Доложите путевщику</div>';
-    } else if (end < -0.05) {
-      warning.innerHTML = '<div class="warn">Не хватает топлива: ' + fmt(Math.abs(end)) + ' л</div>';
+    const hasExcess = excess > 0.05;
+    const toFull = Math.max(0, round1(capacity - end));
+    if (hasExcess) {
+      warning.innerHTML = '<div class="warn">Сверхбак: ' + fmt(excess) + ' л. Рекомендуется скопировать доклад и отправить путевщику. По умолчанию при постановке на стоянку будет полный бак.</div>';
+    } else if (shortage > 0.05) {
+      warning.innerHTML = '<div class="warn">Недолив: ' + fmt(shortage) + ' л. Возможна дозаправка.</div>';
+    } else if (toFull > 0.05 && (consumed > 0 || startFuel > 0 || received > 0)) {
+      warning.innerHTML = '<div class="ok">До полного бака не хватает ' + fmt(toFull) + ' л. Возможна дозаправка.</div>';
     } else {
-      warning.innerHTML = '<div class="ok">Остаток в норме</div>';
+      warning.innerHTML = '<div class="ok">Расчёт выполнен</div>';
     }
-    scheduleSave();
+
+    $('copyReport').disabled = false;
+
+    const lightCars = new Set(['Москвич 3', 'SENAT 900', 'Haval Jolion', 'Hyundai Sonata']);
+    const isLight = lightCars.has(car[0]) || (isCustom() && capacity <= 65);
+    const showPlus = isLight && !hasExcess && toFull > 0.05 && shortage <= 0.05;
+    const plusEl = $('plusHint');
+    if (plusEl) plusEl.classList.toggle('hidden', !showPlus);
+
+    persist();
+    return { car, rate, p, kms, startOdo, endOdo, startFuel, received, endFuel: end, consumed, excess, shortage, capacity, formula, hasExcess };
   }
 
-  function applyTrip() {
-    if (!locked) {
-      if (!$('grz').value.trim()) {
-        $('status').textContent = 'Введите ГРЗ перед применением поездки';
-        setTimeout(() => $('status').textContent = '', 3000);
-        return;
-      }
-      setLocked(true);
-    }
-    const car = cars[+$('car').value], rate = norm(), p = allowance();
-    const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
-    
-    // ИЗМЕНЕНО: стандартное округление
-    const fuelM = roundFuel(kmM * rate);
-    const fuelO = roundFuel(kmO * rate * (1 + p / 100));
-    const fuel = roundFuel(fuelM + fuelO);
-
-    const added = valNum('tankAdded') + fills();
-    let end = valNum('fuelNow') + added - fuel;
-    const capacity = car[1], excess = end - capacity;
-    if (excess > 0.05) end = capacity;
-    end = Math.max(0, roundFuel(end));
-
-    addHistoryRecord();
-
-    $('fuelNow').value = end;
-    $('odoStart').value = Math.round(valNum('odoStart') + kmTrip);
-    $('kmTotal').value = ''; $('odoEnd').value = '';
-    $('kmMkad').value = ''; $('kmOther').value = '';
-    $('tankAdded').value = ''; $('fillList').value = '';
-
-    update();
-    saveState(true);
-    $('status').textContent = excess > 0.05
-      ? 'Поездка применена. Сверхбак ' + fmt(excess) + ' л — доложите путевщику.'
-      : 'Поездка применена. Состояние обновлено и сохранено.';
-    setTimeout(() => $('status').textContent = '', 4000);
+  function safeText(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
   }
 
-  function resetAll() {
-    if (!confirm('Сбросить все данные?\nМашина и ГРЗ снова станут доступны для изменения.')) return;
+  function renderHistory() {
+    const el = $('historyList');
+    if (!historyData.length) {
+      el.innerHTML = '';
+      return;
+    }
+    el.innerHTML = historyData.map(item => `
+      <article class="history-item">
+        <div class="history-top">
+          <div class="history-car">${safeText(item.car)}</div>
+          <div class="history-meta">${safeText(item.date)}</div>
+        </div>
+        <div class="history-grz">${safeText(item.grz || '—')}</div>
+        <div class="history-row"><span>Пробег</span><strong>${safeText(item.startOdo)} → ${safeText(item.endOdo)} км</strong></div>
+        <div class="history-row"><span>Перед / получено / остаток</span><strong>${safeText(item.startFuel)} / ${safeText(item.received)} / ${safeText(item.endFuel)} л</strong></div>
+        <div class="history-row"><span>Израсходовано</span><strong>${safeText(item.consumed)} л</strong></div>
+      </article>`).join('');
+  }
 
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-
-    setLocked(false);
-    historyData = [];
-    renderHistory();
-
-    $('car').value = '0';
-    $('grz').value = '';
-    $('fuelNow').value = '0';
-    $('odoStart').value = '0';
+  function saveTrip() {
+    const r = calculate();
+    if (!$('grz').value.trim()) {
+      showStatus('Введите ГРЗ перед сохранением.');
+      $('grz').focus();
+      return;
+    }
+    if (!r.rate || r.rate <= 0) {
+      showStatus('Укажите корректную норму расхода.');
+      return;
+    }
+    if (isCustom() && !$('customCarName').value.trim()) {
+      showStatus('Укажите название автомобиля.');
+      $('customCarName').focus();
+      return;
+    }
+    if (Math.abs((r.kms.mkad + r.kms.other) - r.kms.total) >= 0.05) {
+      showStatus('Пробег по МКАДу и без МКАДа должен совпадать с общим пробегом.');
+      return;
+    }
+    const record = {
+      date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      car: r.car[0],
+      grz: $('grz').value.trim().toUpperCase(),
+      startOdo: fmt(r.startOdo, 0),
+      endOdo: fmt(r.endOdo, 0),
+      startFuel: fmt(r.startFuel),
+      received: fmt(r.received),
+      endFuel: fmt(r.endFuel),
+      consumed: fmt(r.consumed),
+      normFuel: fmt(r.consumed),
+      totalKm: fmt(r.kms.total)
+    };
+    historyData.unshift(record);
+    if (historyData.length > 100) historyData = historyData.slice(0, 100);
+    $('odoStart').value = String(Math.round(r.endOdo));
+    $('fuelNow').value = String(r.endFuel).replace('.', ',');
     $('kmTotal').value = '';
     $('odoEnd').value = '';
     $('kmMkad').value = '';
     $('kmOther').value = '';
-    $('tankAdded').value = '';
-    $('fillList').value = '';
-    $('allowance').value = '21';
-    $('custom').value = '';
-    $('manualNorm').value = '0,098';
-
-    document.body.classList.remove('dark');
-    $('theme').textContent = '☾';
-    $('saveInfo').textContent = '';
-    $('status').textContent = 'Все данные сброшены';
-
-    update();
-
-    setTimeout(() => {
-      $('car').disabled = false;
-      $('grz').disabled = false;
-      $('car').blur();
-      $('status').textContent = '';
-    }, 100);
+    setRefuelValues([]);
+    lockVehicle(true);
+    renderHistory();
+    calculate();
+    persist();
+    showStatus('Поездка сохранена. Марка и ГРЗ зафиксированы до сброса.');
   }
 
-  $('kmTotal').addEventListener('input', () => { syncFromKmTotal(); update(); });
-  $('odoEnd').addEventListener('input', () => { syncFromOdoEnd(); update(); });
-  $('kmMkad').addEventListener('input', () => { syncFromMkad(); update(); });
-  $('kmOther').addEventListener('input', () => { syncFromOther(); update(); });
-  $('odoStart').addEventListener('input', () => { syncFromKmTotal(); update(); });
-  $('car').addEventListener('change', () => {
-    const c = cars[+$('car').value];
-    if (c[3] !== null) $('manualNorm').value = String(c[3]).replace('.', ',');
-    update();
-  });
-  
-  document.querySelectorAll('input, select, textarea').forEach(el => {
-    if (['kmTotal', 'odoEnd', 'kmMkad', 'kmOther', 'odoStart'].includes(el.id)) return;
-    el.addEventListener('input', update);
-    el.addEventListener('change', update);
-  });
-
-  $('theme').onclick = () => {
-    document.body.classList.toggle('dark');
-    $('theme').textContent = document.body.classList.contains('dark') ? '☀' : '☾';
-    saveState(false);
-  };
-  
-  $('applyTrip').onclick = applyTrip;
-  
-  $('saveBtn').onclick = () => {
-    if (!$('grz').value.trim()) {
-      $('status').textContent = 'Введите ГРЗ';
-      setTimeout(() => $('status').textContent = '', 2500);
-      return;
-    }
-    if (!locked) setLocked(true);
-    saveState(true);
-    $('status').textContent = 'Сохранено в браузере';
-    setTimeout(() => $('status').textContent = '', 2000);
-  };
-
-  $('clearHistory').onclick = () => {
-    if (!confirm('Очистить историю поездок?')) return;
-    historyData = [];
-    renderHistory();
-    saveState(false);
-  };
-
-  $('copy').onclick = async () => {
-    const car = cars[+$('car').value];
+  function reportText() {
+    const r = calculate();
     const grz = $('grz').value.trim().toUpperCase() || '—';
-    const now = new Date();
-    const dateTimeStr = now.toLocaleString('ru-RU', {
-      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-    });
+    const endFuel = Math.min(r.capacity, Math.max(0, r.startFuel + r.received - r.consumed));
+    return [
+      r.car[0] + ' (' + grz + ')',
+      'Начальный пробег: ' + fmt(r.startOdo, 0) + ' км',
+      'Конечный пробег: ' + fmt(r.endOdo, 0) + ' км',
+      'Перед выездом: ' + fmt(r.startFuel) + ' л',
+      'Получено: ' + fmt(r.received) + ' л',
+      'При постановке: ' + fmt(endFuel) + ' л',
+      'Израсходовано: ' + fmt(r.consumed) + ' л',
+      'Положено по норме: ' + fmt(r.consumed) + ' л',
+      'Формула:',
+      r.formula,
+      r.hasExcess ? 'Сверхбак: ' + fmt(r.excess) + ' л' : ''
+    ].filter(Boolean).join('\n');
+  }
 
-    const text = [
-      'МИЛЬ — ' + car[0] + ' (' + grz + ')',
-      'Дата и время: ' + dateTimeStr,
-      'Топливо: ' + car[2],
-      'Норма: ' + String(norm()).replace('.', ',') + ' л/км', '',
-      'Расход: ' + $('consumption').textContent + ' л',
-      'Пробег поездки: ' + $('totalKm').textContent,
-      '  из них МКАД: ' + fmt(valNum('kmMkad')) + ' км',
-      '  без МКАД: ' + fmt(valNum('kmOther')) + ' км',
-      'Конечный пробег: ' + $('newOdo').textContent,
-      'Было: ' + $('startOut').textContent,
-      'Заправлено: ' + $('addedOut').textContent,
-      'Станет: ' + $('endOut').textContent, '',
-      $('formulaBlock').innerText, '',
-      $('tankWarning').innerText
-    ].join('\n');
+  async function copyReport() {
+    const text = reportText();
     try {
-      await navigator.clipboard.writeText(text);
-      $('status').textContent = 'Скопировано с датой и временем';
-    } catch { $('status').textContent = 'Не удалось скопировать'; }
-    setTimeout(() => $('status').textContent = '', 2000);
-  };
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove();
+        if (!ok) throw new Error('copy failed');
+      }
+      showStatus('Доклад скопирован.');
+    } catch (_) {
+      showStatus('Не удалось скопировать. Проверьте разрешение браузера.');
+    }
+  }
 
-  $('resetAll').onclick = resetAll;
+  function showStatus(message) {
+    $('status').textContent = message;
+  }
 
-  window.addEventListener('beforeunload', () => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState())); } catch (e) {}
+  function resetAll() {
+    if (!confirm('Сбросить данные автомобиля, введённые значения и карточку учёта? Это действие нельзя отменить.')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+    historyData = [];
+    $('car').value = '0';
+    $('grz').value = '';
+    $('odoStart').value = '';
+    $('fuelNow').value = '';
+    $('kmTotal').value = '';
+    $('odoEnd').value = '';
+    $('kmMkad').value = '';
+    $('kmOther').value = '';
+    $('allowance').value = '21';
+    $('custom').value = '';
+    setRefuelValues([]);
+    $('manualNorm').value = '0,100';
+    $('customCarName').value = '';
+    $('customFuel').value = 'АИ-92';
+    $('customCapacity').value = '80';
+    document.body.classList.remove('dark');
+    setThemeIcon(false);
+    lockVehicle(false);
+    renderHistory();
+    calculate();
+    showStatus('Данные сброшены.');
+  }
+
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (!s) return;
+      ['car', 'grz', 'odoStart', 'fuelNow', 'kmTotal', 'odoEnd', 'kmMkad', 'kmOther',
+        'allowance', 'custom', 'tankAdded', 'manualNorm', 'customCarName', 'customFuel', 'customCapacity']
+        .forEach(id => { if (s[id] !== undefined) $(id).value = s[id]; });
+      if (Array.isArray(s.refuels)) setRefuelValues(s.refuels);
+      else syncRefuelTotal();
+      if (Array.isArray(s.history)) historyData = s.history;
+      if (s.dark) {
+        document.body.classList.add('dark');
+        setThemeIcon(true);
+      }
+      if (s.vehicleLocked || (Array.isArray(s.history) && s.history.length > 0)) {
+        lockVehicle(true);
+      }
+    } catch (_) {}
+    renderHistory();
+  }
+
+  $('kmTotal').addEventListener('input', () => { syncFromTotal(); calculate(); });
+  $('odoEnd').addEventListener('input', () => { syncFromEnd(); calculate(); });
+  $('kmMkad').addEventListener('input', () => { syncFromMkad(); calculate(); });
+  $('kmOther').addEventListener('input', () => { syncFromOther(); calculate(); });
+  $('odoStart').addEventListener('input', () => { syncFromTotal(); calculate(); });
+
+  ['car', 'grz', 'fuelNow', 'allowance', 'custom', 'tankAdded', 'manualNorm',
+    'customCarName', 'customFuel', 'customCapacity'].forEach(id => {
+    $(id).addEventListener('input', calculate);
+    $(id).addEventListener('change', calculate);
   });
 
-  loadState();
-  update();
+  $('car').addEventListener('change', () => {
+    const val = $('car').value;
+    if (val !== 'custom') {
+      const c = cars[Number(val)];
+      if (c && c[3] !== null) {
+        $('manualNorm').value = String(c[3]).replace('.', ',');
+      } else if (c && c[3] === null) {
+        if (!$('manualNorm').value) $('manualNorm').value = '0,100';
+      }
+    }
+    calculate();
+  });
+
+  $('theme').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const dark = document.body.classList.contains('dark');
+    setThemeIcon(dark);
+    persist();
+  });
+
+  $('saveTrip').addEventListener('click', saveTrip);
+  $('copyReport').addEventListener('click', copyReport);
+  $('resetAll').addEventListener('click', resetAll);
+
+  buildRefuelGrid();
+  load();
+  syncRefuelTotal();
+  calculate();
 })();
 </script>
-
-      
 </body>
 </html>
