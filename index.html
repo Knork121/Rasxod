@@ -657,7 +657,7 @@ body.dark button.primary.flash {
 </section>
 
 <div class="guide-card hidden" id="plusHint">
-  <p>Если по расчёту бак неполный, а по факту полный — бьёт плюс. Уточните у путевщика, можно ли писать такой остаток.</p>
+  <p>Если по расчёту бак неполный, а по факту полный — бьёт плюс. Уточните у ответственного, можно ли писать такой остаток.</p>
 </div>
 
 
@@ -678,9 +678,9 @@ body.dark button.primary.flash {
   </div>
 </section>
 <footer class="footer">
-  <div class="footer-note">Путевой калькулятор баков и пробега.</div>
-  2/2<br>
-  Версия 3.3.0 · 27.10.2026
+  <div class="footer-note">Простой калькулятор расхода топлива и пробега.</div>
+  2.2<br>
+  Версия 3.4.0 · 27.10.2026
 </footer>
 </main>
 <script>
@@ -987,7 +987,7 @@ body.dark button.primary.flash {
     const hasExcess = excess > 0.05;
     const toFull = Math.max(0, round1(capacity - end));
     if (hasExcess) {
-      warning.innerHTML = '<div class="warn">Сверхбак: ' + fmt(excess) + ' л. Рекомендуется скопировать доклад и отправить путевщику. По умолчанию при постановке на стоянку будет полный бак.</div>';
+      warning.innerHTML = '<div class="warn">Сверхбак: ' + fmt(excess) + ' л. Рекомендуется скопировать доклад и отправить ответственному. По умолчанию при постановке на стоянку будет полный бак.</div>';
     } else if (shortage > 0.05) {
       warning.innerHTML = '<div class="warn">Недолив: ' + fmt(shortage) + ' л. Возможна дозаправка.</div>';
     } else if (toFull > 0.05 && (consumed > 0 || startFuel > 0 || received > 0)) {
