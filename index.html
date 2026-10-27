@@ -463,6 +463,12 @@ body.dark .result {
 <body>
 <main>
 
+<div class="beta-banner">
+  <strong>Внимание.</strong> Простой калькулятор расхода. Не хранит и не отображает настоящие ГРЗ, маршруты и персональные данные — только расчёт бака и пробега.
+</div>
+
+
+
 <header>
   <div><h1>MILE</h1></div>
   <button id="theme" type="button" aria-label="Сменить тему">
@@ -630,7 +636,7 @@ body.dark .result {
 <footer class="footer">
   <div class="footer-note">Сайт в режиме тестирования и возможны неполадки.</div>
   2 автомобильная рота 2 автомобильного батальона<br>
-  Версия 3.1.0 · 27.10.2026
+  Версия 3.2.0 · 27.10.2026
 </footer>
 </main>
 <script>
@@ -1030,7 +1036,7 @@ body.dark .result {
     renderHistory();
     calculate();
     persist();
-    showStatus('Поездка сохранена. Марка и ГРЗ зафиксированы до сброса.');
+    showStatus('Поездка сохранена. Марка и идентификатор зафиксированы до сброса.');
   }
 
   function reportText() {
