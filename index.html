@@ -69,7 +69,9 @@ main { max-width: 460px; margin: 0 auto; }
   line-height: 1.5;
   box-shadow: var(--shadow-sm);
 }
-.beta-banner strong { font-weight: 700; }
+.beta-banner strong {
+  font-weight: 700;
+}
 header {
   display: flex;
   justify-content: space-between;
@@ -361,6 +363,15 @@ body.dark .result {
   font-size: 14px;
   border-radius: 10px;
 }
+@media (max-width: 360px) {
+  body { padding: 14px 12px 32px; }
+  .card { padding: 16px; }
+  .grid2, .custom-fields { gap: 10px; }
+  .result { padding: 18px; }
+  .big { font-size: 36px; }
+  h1 { font-size: 28px; letter-spacing: 5px; }
+}
+
 .guide-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -374,6 +385,70 @@ body.dark .result {
 }
 .guide-card p { margin: 0 0 8px; }
 .guide-card p:last-child { margin-bottom: 0; }
+
+.locked-vehicle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.locked-vehicle .lock-ico {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+.locked-vehicle .lock-ico svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.locked-vehicle .lv-text { min-width: 0; flex: 1; }
+.locked-vehicle .lv-car {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.locked-vehicle .lv-grz {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+.locked-hint {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin: -6px 0 14px;
+}
+.section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.section-toggle h2 { margin-bottom: 0; }
+.section-toggle button {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
 .footer-note {
   margin-bottom: 10px;
   font-size: 11.5px;
@@ -382,14 +457,6 @@ body.dark .result {
   max-width: 360px;
   margin-left: auto;
   margin-right: auto;
-}
-@media (max-width: 360px) {
-  body { padding: 14px 12px 32px; }
-  .card { padding: 16px; }
-  .grid2, .custom-fields { gap: 10px; }
-  .result { padding: 18px; }
-  .big { font-size: 36px; }
-  h1 { font-size: 28px; letter-spacing: 5px; }
 }
 </style>
 </head>
@@ -405,7 +472,18 @@ body.dark .result {
   </button>
 </header>
 
-<section class="card">
+<div id="lockedVehicleBar" class="locked-vehicle hidden">
+  <div class="lock-ico" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9h-2zm-8 0V7a3 3 0 0 1 6 0v2H9z"/></svg>
+  </div>
+  <div class="lv-text">
+    <div class="lv-car" id="lockedCarName">—</div>
+    <div class="lv-grz" id="lockedGrz">—</div>
+  </div>
+</div>
+<p class="locked-hint hidden" id="lockedHint">Для смены машины нажмите «Сбросить»</p>
+
+<section class="card" id="carSelectCard">
   <h2>Марка и модель</h2>
   <label for="car">Выбор автомобиля</label>
   <select id="car">
@@ -531,6 +609,7 @@ body.dark .result {
   <p>Если по расчёту бак неполный, а по факту полный — бьёт плюс. Уточните у путевщика, можно ли писать такой остаток.</p>
 </div>
 
+
 <section class="card">
   <button class="primary full" id="saveTrip" type="button">Сохранить эту поездку</button>
   <button class="full" id="copyReport" type="button" style="margin-top:10px">Скопировать доклад</button>
@@ -538,22 +617,26 @@ body.dark .result {
   <p class="status" id="status" aria-live="polite"></p>
 </section>
 
-<section class="card">
-  <h2>Карточка учёта работы машины</h2>
-  <div id="historyList"></div>
+<section class="card" id="historyCard">
+  <div class="section-toggle">
+    <h2>Карточка учёта работы машины</h2>
+    <button type="button" id="toggleHistory" aria-expanded="true">Скрыть</button>
+  </div>
+  <div id="historyBody">
+    <div id="historyList"></div>
+  </div>
 </section>
-
 <footer class="footer">
   <div class="footer-note">Сайт в режиме тестирования и возможны неполадки.</div>
   2 автомобильная рота 2 автомобильного батальона<br>
-  Версия 2.9.1 · 27.10.2026
+  Версия 3.0.0 · 27.10.2026
 </footer>
 </main>
 <script>
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const STORAGE_KEY = 'mile_v14';
+  const STORAGE_KEY = 'mile_v15';
   const REFUEL_COUNT = 12;
   function buildRefuelGrid() {
     const grid = $('refuelGrid');
@@ -598,6 +681,7 @@ body.dark .result {
     }
     syncRefuelTotal();
   }
+
   const ICON_MOON = '<path d="M21 14.3A9 9 0 1 1 9.7 3a7 7 0 1 0 11.3 11.3z"/>';
   const ICON_SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>';
   const cars = [
@@ -651,6 +735,7 @@ body.dark .result {
   const allowance = () => $('allowance').value === 'custom' ? number('custom') : Number($('allowance').value);
   const km = () => ({ total: number('kmTotal'), mkad: number('kmMkad'), other: number('kmOther') });
 
+  
   let vehicleLocked = false;
   function lockVehicle(on) {
     vehicleLocked = !!on;
@@ -666,6 +751,19 @@ body.dark .result {
       $('customFuel') && ($('customFuel').disabled = false);
       $('customCapacity') && ($('customCapacity').disabled = false);
       $('manualNorm') && ($('manualNorm').disabled = false);
+    }
+    const bar = $('lockedVehicleBar');
+    const hint = $('lockedHint');
+    const card = $('carSelectCard');
+    if (bar && card) {
+      bar.classList.toggle('hidden', !vehicleLocked);
+      card.classList.toggle('hidden', vehicleLocked);
+      if (hint) hint.classList.toggle('hidden', !vehicleLocked);
+      if (vehicleLocked) {
+        const car = selectedCar();
+        $('lockedCarName').textContent = car[0];
+        $('lockedGrz').textContent = ($('grz').value || '').trim().toUpperCase() || '—';
+      }
     }
   }
 
@@ -754,6 +852,7 @@ body.dark .result {
     const hasM = kms.mkad > 0;
     const hasO = kms.other > 0;
     const lines = [];
+
     if (hasM && !hasO) {
       lines.push(fmt(kms.mkad) + ' * ' + fmt(rate, 3) + ' = ' + fmt(fuelM) + ' л');
     } else if (!hasM && hasO) {
@@ -791,6 +890,7 @@ body.dark .result {
     const carIdx = Number($('car').value);
     const needsManual = isCustomMode || (cars[carIdx] && cars[carIdx][3] === null);
     $('manualNormBox').classList.toggle('hidden', !needsManual);
+
     $('customBox').classList.toggle('hidden', $('allowance').value !== 'custom');
 
     const sumParts = round1(kms.mkad + kms.other);
@@ -902,6 +1002,7 @@ body.dark .result {
       showStatus('Пробег по МКАДу и без МКАДа должен совпадать с общим пробегом.');
       return;
     }
+    // сверхбак и недолив — сохранять можно
     const record = {
       date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
       car: r.car[0],
@@ -935,6 +1036,7 @@ body.dark .result {
     const r = calculate();
     const grz = $('grz').value.trim().toUpperCase() || '—';
     const endFuel = Math.min(r.capacity, Math.max(0, r.startFuel + r.received - r.consumed));
+
     return [
       r.car[0] + ' (' + grz + ')',
       'Начальный пробег: ' + fmt(r.startOdo, 0) + ' км',
@@ -1059,6 +1161,31 @@ body.dark .result {
   $('saveTrip').addEventListener('click', saveTrip);
   $('copyReport').addEventListener('click', copyReport);
   $('resetAll').addEventListener('click', resetAll);
+
+  let historyVisible = true;
+  $('toggleHistory').addEventListener('click', () => {
+    historyVisible = !historyVisible;
+    const body = $('historyBody');
+    const btn = $('toggleHistory');
+    if (body) body.classList.toggle('hidden', !historyVisible);
+    if (btn) {
+      btn.textContent = historyVisible ? 'Скрыть' : 'Показать';
+      btn.setAttribute('aria-expanded', historyVisible ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY + '_hist', historyVisible ? '1' : '0'); } catch (_) {}
+  });
+  try {
+    if (localStorage.getItem(STORAGE_KEY + '_hist') === '0') {
+      historyVisible = false;
+      const body = $('historyBody');
+      const btn = $('toggleHistory');
+      if (body) body.classList.add('hidden');
+      if (btn) {
+        btn.textContent = 'Показать';
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+  } catch (_) {}
 
   buildRefuelGrid();
   load();
