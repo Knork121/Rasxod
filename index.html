@@ -2,392 +2,737 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="robots" content="noindex, nofollow">
 <title>МИЛЬ</title>
 <style>
 :root {
   color-scheme: light;
-  --bg: #eef0f4;
+  --bg: #f2f3f7;
   --card: #ffffff;
-  --fg: #0f0f12;
-  --muted: #6b6f7a;
-  --line: #e2e4ea;
-  --accent: #111118;
-  --ok: #0d7a3a;
-  --ok-bg: #e6f6ec;
+  --fg: #0e0e12;
+  --muted: #6a6e7a;
+  --line: #e3e5ec;
+  --accent: #1a1a24;
+  --accent2: #3b5bdb;
+  --ok: #0c8a42;
+  --ok-bg: #e5f7ec;
+  --warn: #b45309;
+  --warn-bg: #fef3c7;
   --err: #c41e3a;
   --err-bg: #fdecee;
-  --shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 6px 20px rgba(0,0,0,.06);
   --radius: 18px;
-  --radius-sm: 14px;
+  --radius-sm: 13px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif;
 }
 body.dark {
   color-scheme: dark;
-  --bg: #0c0c0e;
-  --card: #18181b;
-  --fg: #f4f4f5;
-  --muted: #8b8b93;
-  --line: #2a2a2e;
-  --accent: #f4f4f5;
+  --bg: #09090b;
+  --card: #141417;
+  --fg: #f4f4f6;
+  --muted: #8b8b96;
+  --line: #27272c;
+  --accent: #f4f4f6;
+  --accent2: #6b8aff;
   --ok: #3dd68c;
-  --ok-bg: #0f2a1c;
+  --ok-bg: #0d2418;
+  --warn: #fbbf24;
+  --warn-bg: #2a2110;
   --err: #ff6b6b;
   --err-bg: #2a1215;
-  --shadow: 0 1px 3px rgba(0,0,0,.2), 0 4px 20px rgba(0,0,0,.25);
+  --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  padding: 20px 16px 48px;
-  line-height: 1.45;
+  font-family: var(--font);
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
 }
-main { max-width: 440px; margin: 0 auto; }
-header {
+main {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 10px 12px calc(22px + var(--safe-b));
+  min-height: 100%;
+}
+
+/* Top */
+.topbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 22px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
   padding: 2px 0;
 }
-h1 { font-size: 30px; letter-spacing: 5px; font-weight: 800; line-height: 1; }
-.muted { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.brand h1 {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 3.5px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--fg) 0%, var(--muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+body.dark .brand h1 {
+  background: linear-gradient(135deg, #fff 0%, #a0a0a8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.brand .sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+.top-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--fg);
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .12s, background .15s, box-shadow .15s;
+  box-shadow: var(--shadow);
+}
+.icon-btn:active { transform: scale(0.92); }
+
+/* Cards */
 .card {
   background: var(--card);
   border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 14px;
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
+  margin-bottom: 9px;
+  overflow: hidden;
+  transition: box-shadow .2s;
 }
-h2 {
-  font-size: 12px;
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 13px 0;
+  cursor: pointer;
+  user-select: none;
+}
+.card-head h2 {
+  font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--muted);
-  margin-bottom: 16px;
   font-weight: 700;
 }
+.card-head .chev {
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform .22s cubic-bezier(.2,.8,.2,1);
+}
+.card.collapsed .chev { transform: rotate(-90deg); }
+.card.collapsed .card-body { display: none; }
+.card-body { padding: 9px 13px 13px; }
+
+/* Form */
 label {
   display: block;
-  font-size: 13px;
+  font-size: 11.5px;
   color: var(--muted);
-  margin-bottom: 7px;
-  font-weight: 500;
+  margin-bottom: 4px;
+  font-weight: 550;
 }
 input, select, textarea {
   width: 100%;
-  height: 52px;
+  height: 44px;
   border: 1.5px solid var(--line);
   border-radius: var(--radius-sm);
   background: var(--bg);
   color: var(--fg);
-  padding: 0 16px;
-  font-size: 17px;
-  margin-bottom: 14px;
-  transition: border-color .15s, box-shadow .15s;
+  padding: 0 11px;
+  font-size: 16px;
+  margin-bottom: 9px;
   outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236a6e7a' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  padding-right: 30px;
 }
 input:focus, select:focus, textarea:focus {
-  border-color: var(--fg);
-  box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(59,91,219,.15);
 }
 body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
-  box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+  box-shadow: 0 0 0 3px rgba(107,138,255,.2);
 }
-textarea { height: auto; min-height: 80px; padding: 14px 16px; resize: vertical; }
-select {
-  -webkit-appearance: menulist;
-  appearance: menulist;
-  background-image: none;
-  padding-right: 16px;
+textarea {
+  height: auto;
+  min-height: 58px;
+  padding: 9px 11px;
+  resize: vertical;
 }
-input:disabled, select:disabled { opacity: 0.65; cursor: not-allowed; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.row > div { min-width: 0; }
+
+/* Status chips */
+.status-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.chip {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 11px 10px;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: border-color .15s;
+}
+.chip .lbl { font-size: 10.5px; color: var(--muted); margin-bottom: 2px; font-weight: 550; }
+.chip .val { font-size: 19px; font-weight: 780; letter-spacing: -0.4px; }
+
+/* Result */
+.result {
+  background: linear-gradient(145deg, var(--accent) 0%, #2a2a35 100%);
+  color: #f8f8fa;
+  border-radius: var(--radius);
+  padding: 15px 15px 13px;
+  margin-bottom: 9px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+body.dark .result {
+  background: linear-gradient(145deg, #1c1c22 0%, #121216 100%);
+  border: 1px solid var(--line);
+}
+.result::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(255,255,255,.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.result .label {
+  font-size: 10.5px;
+  opacity: 0.6;
+  letter-spacing: 0.9px;
+  font-weight: 650;
+  margin-bottom: 3px;
+}
+.result .big {
+  font-size: 34px;
+  font-weight: 820;
+  letter-spacing: -1.1px;
+  line-height: 1;
+  margin-bottom: 11px;
+}
+.r-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6.5px 0;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: 13.5px;
+}
+.r-line strong { font-weight: 650; }
+.formula {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.88;
+  word-break: break-word;
+}
+.warn-box, .ok-box, .warn-soft {
+  border-radius: var(--radius-sm);
+  padding: 9px 11px;
+  margin-top: 9px;
+  font-size: 12.5px;
+  font-weight: 620;
+  line-height: 1.4;
+}
+.warn-box { background: var(--err-bg); color: var(--err); }
+.ok-box { background: var(--ok-bg); color: var(--ok); }
+.warn-soft { background: var(--warn-bg); color: var(--warn); }
+
+/* Buttons */
 button {
-  height: 54px;
+  height: 46px;
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 16px;
+  font-size: 14.5px;
   font-weight: 650;
   cursor: pointer;
   background: var(--card);
   color: var(--fg);
   border: 1.5px solid var(--line);
-  transition: transform .12s, opacity .12s, background .15s;
+  transition: transform .12s, opacity .12s, box-shadow .15s;
   -webkit-tap-highlight-color: transparent;
 }
 button:active { transform: scale(0.97); }
 button.primary {
-  background: var(--accent);
-  color: var(--bg);
+  background: linear-gradient(145deg, #1a1a24 0%, #2d2d3a 100%);
+  color: #f8f8fa;
   border: none;
-  height: 58px;
-  font-size: 17px;
-  font-weight: 700;
+  height: 50px;
+  font-size: 15.5px;
+  font-weight: 720;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
   letter-spacing: 0.2px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.15);
 }
-body.dark button.primary { box-shadow: 0 4px 18px rgba(0,0,0,.4); }
+body.dark button.primary {
+  background: linear-gradient(145deg, #f0f0f4 0%, #d8d8e0 100%);
+  color: #0e0e12;
+  box-shadow: 0 4px 18px rgba(0,0,0,.35);
+}
 button.full { width: 100%; }
-button#theme {
-  width: 52px; height: 52px; border-radius: 50%;
-  font-size: 20px; padding: 0; flex-shrink: 0;
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+  height: 38px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
-.info {
-  background: var(--bg);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-.info div { margin: 4px 0; }
-.fueltype { font-weight: 700; font-size: 16px; }
-.summary {
+.actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 4px;
+  gap: 7px;
+  margin-top: 7px;
 }
-.summary-item {
-  background: var(--bg);
+.actions button { height: 44px; }
+
+/* Check */
+.check {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin: -3px 0 6px;
+  font-weight: 520;
+}
+.check.ok { color: var(--ok); }
+.check.bad { color: var(--err); }
+
+/* History table */
+.hist-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -4px;
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
 }
-.summary-item .lbl { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.summary-item .val { font-size: 22px; font-weight: 750; letter-spacing: -0.3px; }
-.result {
+table.hist {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 320px;
+}
+table.hist th {
+  text-align: left;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+table.hist td {
+  padding: 8px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  white-space: nowrap;
+}
+table.hist tr:last-child td { border-bottom: none; }
+table.hist .num { font-variant-numeric: tabular-nums; font-weight: 620; }
+table.hist .muted { color: var(--muted); font-size: 11px; }
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.view-toggle button {
+  height: 30px;
+  padding: 0 10px;
+  font-size: 11.5px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.view-toggle button.active {
   background: var(--accent);
   color: var(--bg);
-  border-radius: var(--radius);
-  padding: 24px 22px;
+  border-color: var(--accent);
+}
+
+/* Modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal {
+  background: var(--card);
+  width: 100%;
+  max-width: 440px;
+  border-radius: 22px 22px 0 0;
+  padding: 18px 14px calc(18px + var(--safe-b));
+  max-height: 92vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform .32s cubic-bezier(.2,.85,.2,1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,.25);
+}
+.overlay.show .modal { transform: translateY(0); }
+.modal h3 {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+.modal .desc {
+  font-size: 12.5px;
+  color: var(--muted);
   margin-bottom: 14px;
+  line-height: 1.4;
+}
+.modal .note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+.sec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--ok);
+  background: var(--ok-bg);
+  padding: 4px 9px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+/* Car switch */
+.car-switch {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.car-switch::-webkit-scrollbar { display: none; }
+.car-pill {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 11px;
+  border-radius: 20px;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  font-size: 12.5px;
+  font-weight: 620;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
   box-shadow: var(--shadow);
 }
-.result .label {
-  font-size: 12px; opacity: 0.65; margin-bottom: 6px;
-  letter-spacing: 0.8px; font-weight: 600;
+.car-pill.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
 }
-.result .big {
-  font-size: 42px; font-weight: 800; margin-bottom: 18px;
-  letter-spacing: -1px; line-height: 1;
-}
-.line {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 0; border-top: 1px solid rgba(128,128,128,0.22); font-size: 15px;
-}
-.line strong { font-weight: 650; }
-.formula {
-  margin-top: 14px; padding-top: 14px;
-  border-top: 1px solid rgba(128,128,128,0.22);
-  font-size: 13.5px; line-height: 1.65; opacity: 0.92; word-break: break-word;
-}
-.warn {
-  background: var(--err-bg); color: var(--err);
-  border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px;
-  font-weight: 650; font-size: 14px; line-height: 1.5;
-}
-.ok {
-  background: var(--ok-bg); color: var(--ok);
-  border-radius: var(--radius-sm); padding: 13px 16px; margin-top: 14px;
-  font-size: 14px; font-weight: 600;
-}
-.note { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
-.hidden { display: none !important; }
-.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.actions button { height: 52px; }
-.status { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; min-height: 20px; }
-.footer { text-align: center; margin-top: 28px; font-size: 12px; color: var(--muted); }
-.lock-badge {
-  display: inline-block; font-size: 11px; background: var(--bg); color: var(--muted);
-  padding: 3px 9px; border-radius: 8px; margin-left: 6px; vertical-align: middle;
-  font-weight: 600; letter-spacing: 0.3px;
-}
-.check-line {
-  font-size: 13px; color: var(--muted); margin-top: -4px; margin-bottom: 4px; font-weight: 500;
-}
-.check-line.ok-text { color: var(--ok); }
-.check-line.bad-text { color: var(--err); }
-/* История поездок */
-.history-item {
-  background: var(--bg);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  font-size: 13.5px;
-  border: 1px solid var(--line);
-}
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
+.car-pill .grz-mini { font-weight: 500; opacity: 0.85; font-size: 11.5px; }
+
+.add-car-wrap { text-align: center; margin: 2px 0 6px; }
+.add-car-btn {
   font-size: 12px;
-  margin-bottom: 4px;
-  font-weight: 600;
+  color: var(--muted);
+  background: none;
+  border: none;
+  height: auto;
+  padding: 5px 10px;
+  font-weight: 520;
+  opacity: 0.65;
+}
+.add-car-btn:active { opacity: 1; }
+
+.toast {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+  min-height: 17px;
+  margin-top: 7px;
+}
+.footer {
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 16px;
+  opacity: 0.75;
+  line-height: 1.45;
+}
+.hidden { display: none !important; }
+.fade-in { animation: fadeIn .22s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+/* PIN lock screen */
+#lockScreen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#lockScreen.hidden { display: none; }
+#lockScreen h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; letter-spacing: 2px; }
+#lockScreen p { font-size: 13px; color: var(--muted); margin-bottom: 20px; text-align: center; }
+#lockScreen input {
+  max-width: 200px;
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 8px;
+  margin-bottom: 12px;
 }
 </style>
 </head>
 <body>
-<main>
-<header>
-  <div>
-    <h1>МИЛЬ</h1>
-    <div class="muted">Расход топлива</div>
-  </div>
-  <button id="theme" title="Тема">☾</button>
-</header>
+<!-- PIN lock (optional) -->
+<div id="lockScreen" class="hidden">
+  <div class="sec-badge">🔒 Только на этом устройстве</div>
+  <h2>МИЛЬ</h2>
+  <p>Введите PIN для доступа<br>Данные никуда не передаются</p>
+  <input id="pinInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••" autocomplete="off">
+  <button class="primary" id="pinUnlock" style="max-width:200px;width:100%">Войти</button>
+  <p class="toast" id="pinError" style="margin-top:12px"></p>
+</div>
 
-<section class="card" id="carSection">
-  <h2>Машина <span id="lockBadge" class="lock-badge hidden">зафиксировано</span></h2>
-  <label>Марка / модель</label>
-  <select id="car">
-    <option value="0">Москвич 3</option>
-    <option value="1">SENAT 900</option>
-    <option value="2">Haval Jolion</option>
-    <option value="3">Hyundai Sonata</option>
-    <option value="4">Луидор-225033</option>
-    <option value="5">Аврора - 311302</option>
-    <option value="6">ПАЗ - 32053 - 50</option>
-    <option value="7">ПАЗ - 320530 - 02</option>
-    <option value="8">КАВЗ 4238 - 62</option>
-    <option value="9">КАВЗ 4238 - D1</option>
-    <option value="10">ПАЗ - 4234 - 04</option>
-    <option value="11">Volkswagen M</option>
-    <option value="12">ГАЗ A65 R32</option>
-    <option value="13">ACM - 535251</option>
-    <option value="14">Sollers Atlant</option>
-    <option value="15">Ford Transit</option>
-  </select>
-  <label>ГРЗ</label>
-  <input id="grz" type="text" placeholder="А123ВС777" maxlength="12" autocomplete="off" style="text-transform:uppercase">
-  <div class="info">
-    <div>Топливо: <span id="fuel" class="fueltype">АИ-92</span></div>
-    <div>Бак: <strong id="capacity">50 л</strong> · Норма: <strong id="normView">0,098 л/км</strong></div>
+<main id="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>МИЛЬ</h1>
+      <div class="sub" id="headerSub">Расход топлива · оффлайн</div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="theme" title="Тема" type="button">☾</button>
+      <button class="icon-btn" id="menuBtn" title="Меню" type="button">⋯</button>
+    </div>
   </div>
-  <div id="manualBox" class="hidden">
-    <label>Норма расхода (л/км)</label>
-    <input id="manualNorm" type="text" inputmode="decimal" value="0,098">
-  </div>
-  <p class="note" id="carNote">При первом заходе выберите машину и введите ГРЗ. После сохранения изменить можно только через «Сбросить».</p>
-</section>
 
-<section class="card">
-  <h2>Сейчас в машине</h2>
-  <div class="row">
-    <div>
-      <label>Остаток топлива, л</label>
-      <input id="fuelNow" type="text" inputmode="decimal" placeholder="0">
-    </div>
-    <div>
-      <label>Пробег (одометр)</label>
-      <input id="odoStart" type="text" inputmode="numeric" placeholder="0">
-    </div>
-  </div>
-  <div class="summary">
-    <div class="summary-item">
-      <div class="lbl">Пробег</div>
-      <div class="val" id="sumOdo">0 км</div>
-    </div>
-    <div class="summary-item">
-      <div class="lbl">В баке</div>
-      <div class="val" id="sumFuel">0 л</div>
-    </div>
-  </div>
-  <p class="note">Значения сохраняются в браузере</p>
-</section>
+  <div class="car-switch hidden" id="carSwitch"></div>
 
-<section class="card">
-  <h2>Пробег поездки</h2>
-  <div class="row">
-    <div>
-      <label>Сколько проехал, км</label>
-      <input id="kmTotal" type="text" inputmode="decimal" value="" placeholder="">
+  <!-- Status -->
+  <section class="card" id="statusCard">
+    <div class="card-body" style="padding-top:13px">
+      <div class="status-row">
+        <div class="chip">
+          <div class="lbl">Пробег</div>
+          <div class="val" id="sumOdo">—</div>
+        </div>
+        <div class="chip">
+          <div class="lbl">В баке</div>
+          <div class="val" id="sumFuel">—</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:7px;text-align:center" id="carMeta">—</div>
     </div>
-    <div>
-      <label>Конечный пробег</label>
-      <input id="odoEnd" type="text" inputmode="numeric" value="" placeholder="—">
-    </div>
-  </div>
-  <p class="note" style="margin-top:-4px;margin-bottom:14px">Меняешь км — обновляется конечный пробег, и наоборот.</p>
-  <div class="row">
-    <div>
-      <label>По МКАДу, км</label>
-      <input id="kmMkad" type="text" inputmode="decimal" value="" placeholder="">
-    </div>
-    <div>
-      <label>Без МКАДа, км</label>
-      <input id="kmOther" type="text" inputmode="decimal" value="" placeholder="">
-    </div>
-  </div>
-  <p class="check-line" id="kmCheck">МКАД + без МКАДа = 0 км</p>
-</section>
+  </section>
 
-<section class="card">
-  <h2>Поездка</h2>
-  <label>Коэффициент расхода</label>
-  <select id="allowance">
-    <option value="0">0% — без надбавок</option>
-    <option value="15">15% — город</option>
-    <option value="6">6% — климат</option>
-    <option value="21" selected>6% + 15% (климат + город)</option>
-    <option value="custom">Свой %</option>
-  </select>
-  <div id="customBox" class="hidden">
-    <label>Своя надбавка, %</label>
-    <input id="custom" type="text" inputmode="decimal" value="" placeholder="">
-  </div>
-  <label>Заправил, л</label>
-  <input id="tankAdded" type="text" inputmode="decimal" value="" placeholder="">
-  <label>Или несколько заправок (по одной в строке)</label>
-  <textarea id="fillList" rows="2" placeholder="20&#10;15,5"></textarea>
-</section>
+  <!-- Trip -->
+  <section class="card" id="tripCard">
+    <div class="card-head" data-toggle="tripCard">
+      <h2>Поездка</h2>
+      <span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div>
+          <label>Проехал, км</label>
+          <input id="kmTotal" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+        </div>
+        <div>
+          <label>Конечный пробег</label>
+          <input id="odoEnd" type="text" inputmode="numeric" placeholder="—" autocomplete="off">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>По МКАДу, км</label>
+          <input id="kmMkad" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+        </div>
+        <div>
+          <label>Без МКАДа, км</label>
+          <input id="kmOther" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+        </div>
+      </div>
+      <p class="check" id="kmCheck">МКАД + без = 0 км</p>
 
-<section class="result">
-  <div class="label">РАСХОД ЗА ПОЕЗДКУ</div>
-  <div class="big"><span id="consumption">0</span> л</div>
-  <div class="line"><span>Пробег поездки</span><strong id="totalKm">0 км</strong></div>
-  <div class="line"><span>Конечный пробег</span><strong id="newOdo">0 км</strong></div>
-  <div class="line"><span>Было топлива</span><strong id="startOut">0 л</strong></div>
-  <div class="line"><span>Заправлено</span><strong id="addedOut">0 л</strong></div>
-  <div class="line"><span>Станет топлива</span><strong id="endOut">0 л</strong></div>
-  <div class="formula" id="formulaBlock">—</div>
-  <div id="tankWarning"></div>
-</section>
+      <label>Коэффициент</label>
+      <select id="allowance">
+        <option value="0">0% — без надбавок</option>
+        <option value="15">15% — город</option>
+        <option value="6">6% — климат</option>
+        <option value="21" selected>6% + 15% (климат + город)</option>
+        <option value="custom">Свой %</option>
+      </select>
+      <div id="customBox" class="hidden">
+        <label>Своя надбавка, %</label>
+        <input id="custom" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+      </div>
 
-<section class="card">
-  <button class="primary full" id="applyTrip">Применить поездку</button>
+      <label>Заправил, л</label>
+      <input id="tankAdded" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+      <label style="margin-top:-2px">Несколько заправок (по строке)</label>
+      <textarea id="fillList" rows="2" placeholder="20&#10;15,5"></textarea>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section class="result fade-in" id="resultBlock">
+    <div class="label">РАСХОД ЗА ПОЕЗДКУ</div>
+    <div class="big"><span id="consumption">0</span> л</div>
+    <div class="r-line"><span>Пробег</span><strong id="totalKm">0 км</strong></div>
+    <div class="r-line"><span>Конечный пробег</span><strong id="newOdo">0 км</strong></div>
+    <div class="r-line"><span>Было</span><strong id="startOut">0 л</strong></div>
+    <div class="r-line"><span>Заправлено</span><strong id="addedOut">0 л</strong></div>
+    <div class="r-line"><span>Станет</span><strong id="endOut">0 л</strong></div>
+    <div class="formula" id="formulaBlock">—</div>
+    <div id="tankWarning"></div>
+  </section>
+
+  <button class="primary full" id="applyTrip" type="button">Применить поездку</button>
   <div class="actions">
-    <button id="saveBtn">Сохранить</button>
-    <button id="resetAll">Сбросить</button>
+    <button id="copyBtn" type="button">Копировать</button>
+    <button id="saveBtn" type="button">Сохранить</button>
   </div>
-  <div class="actions" style="margin-top:10px">
-    <button id="copy" class="full" style="grid-column:1/-1">Копировать итог</button>
-  </div>
-  <p class="status" id="status"></p>
-  <p class="status" id="saveInfo"></p>
-</section>
+  <p class="toast" id="status"></p>
 
-<!-- Блок истории поездок -->
-<section class="card" id="historyCard">
-  <h2>История поездок</h2>
-  <div id="historyList">
-    <p class="muted" style="text-align:center; padding: 10px 0;">Сохраненных поездок пока нет</p>
-  </div>
-  <div class="actions" style="margin-top: 14px;" id="historyActions">
-    <button id="clearHistory" class="full" style="font-size: 14px; height: 44px;">Очистить историю</button>
-  </div>
-</section>
+  <!-- History -->
+  <section class="card" id="historyCard">
+    <div class="card-head" data-toggle="historyCard">
+      <h2>История</h2>
+      <span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="view-toggle">
+        <button type="button" class="active" data-view="table">Таблица</button>
+        <button type="button" data-view="cards">Карточки</button>
+      </div>
+      <div id="historyList"></div>
+      <button class="ghost full" id="clearHistory" type="button">Очистить историю</button>
+    </div>
+  </section>
 
-<p class="footer">Данные хранятся только на этом устройстве</p>
+  <div class="add-car-wrap">
+    <button class="add-car-btn" id="addCarBtn" type="button">+ добавить машину</button>
+  </div>
+
+  <p class="footer">
+    🔒 Данные хранятся только на этом устройстве<br>
+    Нет серверов · Нет передачи · Оффлайн
+  </p>
 </main>
+
+<!-- Onboarding / add car -->
+<div class="overlay" id="onboardOverlay">
+  <div class="modal" id="onboardModal">
+    <div class="sec-badge">🔒 Только локально</div>
+    <h3 id="modalTitle">Добро пожаловать</h3>
+    <p class="desc" id="modalDesc">Выберите машину и введите данные перед выездом. Один раз.</p>
+
+    <label>Марка / модель</label>
+    <select id="mCar"></select>
+
+    <label>ГРЗ</label>
+    <input id="mGrz" type="text" placeholder="А123ВС777" maxlength="12" autocomplete="off" style="text-transform:uppercase">
+
+    <label>ФИО водителя <span style="opacity:.55">(необязательно)</span></label>
+    <input id="mFio" type="text" placeholder="Иванов И.И." maxlength="60" autocomplete="name">
+
+    <div class="row">
+      <div>
+        <label>Начальный пробег</label>
+        <input id="mOdo" type="text" inputmode="numeric" placeholder="0" autocomplete="off">
+      </div>
+      <div>
+        <label>Бак перед выездом, л</label>
+        <input id="mFuel" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+      </div>
+    </div>
+
+    <div id="mManualBox" class="hidden">
+      <label>Норма расхода (л/км)</label>
+      <input id="mManualNorm" type="text" inputmode="decimal" value="0,098" autocomplete="off">
+    </div>
+
+    <p class="note" id="modalNote">После сохранения машина зафиксируется. Данные остаются только в браузере этого телефона.</p>
+    <button class="primary full" id="modalSave" type="button" style="margin-top:11px">Сохранить и начать</button>
+    <button class="ghost full" id="modalCancel" type="button" style="display:none">Отмена</button>
+  </div>
+</div>
+
+<!-- Menu -->
+<div class="overlay" id="menuOverlay">
+  <div class="modal" style="padding-bottom: calc(12px + var(--safe-b))">
+    <h3 style="margin-bottom:12px">Меню</h3>
+    <button class="full" id="menuEdit" type="button" style="margin-bottom:7px">Изменить текущую машину</button>
+    <button class="full" id="menuPin" type="button" style="margin-bottom:7px">Установить / сменить PIN</button>
+    <button class="full" id="menuReset" type="button" style="margin-bottom:7px;color:var(--err)">Сбросить всё</button>
+    <button class="ghost full" id="menuClose" type="button">Закрыть</button>
+  </div>
+</div>
+
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  const STORAGE_KEY = 'mil_v5';
-  const cars = [
+  const STORAGE = 'mil_v7';
+  const PIN_KEY = 'mil_pin_hash';
+
+  const CARS = [
     ['Москвич 3', 50, 'АИ-92', 0.098],
     ['SENAT 900', 62, 'АИ-95', null],
     ['Haval Jolion', 55, 'АИ-92', 0.092],
@@ -405,242 +750,261 @@ button#theme {
     ['Sollers Atlant', 80, 'ДТ', 0.121],
     ['Ford Transit', 80, 'ДТ', 0.145]
   ];
-  let locked = false, saveTimer = null, syncing = false;
-  let historyData = [];
 
-  const valNum = id => {
-    const raw = String($(id).value).trim().replace(',', '.');
+  let vehicles = [];
+  let activeId = null;
+  let syncing = false;
+  let saveTimer = null;
+  let histView = 'table';
+  let window_editMode = false;
+
+  // ——— helpers ———
+  const num = (v) => {
+    const raw = String(v ?? '').trim().replace(',', '.');
     if (raw === '' || raw === '-') return 0;
     const n = Number(raw);
     return Number.isFinite(n) ? Math.max(0, n) : 0;
   };
-  
-  const fmt = (x, d = 1) => x.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
-  const norm = () => cars[+$('car').value][3] ?? valNum('manualNorm');
-  const allowance = () => $('allowance').value === 'custom' ? valNum('custom') : Number($('allowance').value);
-  const fills = () => $('fillList').value.split(/\n|;/)
-    .map(s => Number(s.trim().replace(',', '.')))
-    .filter(x => Number.isFinite(x) && x > 0)
-    .reduce((a, b) => a + b, 0);
+  const fmt = (x, d = 1) => (Number(x) || 0).toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const roundF = v => Math.round(v * 10) / 10;
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
-  const roundFuel = val => Math.round(val * 10) / 10;
-
-  function setLocked(state) {
-    locked = state;
-    $('car').disabled = state;
-    $('grz').disabled = state;
-    $('lockBadge').classList.toggle('hidden', !state);
-    $('carNote').textContent = state
-      ? 'Машина и ГРЗ зафиксированы. Чтобы изменить — нажмите «Сбросить».'
-      : 'При первом заходе выберите машину и введите ГРЗ. После сохранения изменить можно только через «Сбросить».';
+  function active() { return vehicles.find(v => v.id === activeId) || null; }
+  function carData(v) {
+    const c = CARS[v.carIdx] || CARS[0];
+    const rate = c[3] != null ? c[3] : num(v.manualNorm);
+    return { name: c[0], capacity: c[1], fuelType: c[2], rate };
   }
 
-  function renderHistory() {
-    const container = $('historyList');
-    if (!historyData || historyData.length === 0) {
-      container.innerHTML = '<p class="muted" style="text-align:center; padding: 10px 0;">Сохраненных поездок пока нет</p>';
-      $('historyActions').style.display = 'none';
-      return;
-    }
-    $('historyActions').style.display = 'block';
-    container.innerHTML = historyData.map((item, index) => `
-      <div class="history-item">
-        <div class="history-header">
-          <span>📅 ${item.date}</span>
-          <span>${item.car} (${item.grz})</span>
-        </div>
-        <div><strong>Расход:</strong> ${item.consumption} л · <strong>Пробег:</strong> ${item.totalKm}</div>
-        <div class="muted" style="margin-top: 4px; font-size: 12px; white-space: pre-line;">${item.formula}</div>
-      </div>
-    `).join('');
+  // ——— PIN (simple local hash) ———
+  async function hashPin(pin) {
+    const data = new TextEncoder().encode('mil_salt_v1:' + pin);
+    const buf = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  function addHistoryRecord() {
-    const car = cars[+$('car').value];
-    const grz = $('grz').value.trim().toUpperCase() || '—';
-    const now = new Date();
-    const dateStr = now.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    
-    const record = {
-      date: dateStr,
-      car: car[0],
-      grz: grz,
-      consumption: $('consumption').textContent,
-      totalKm: $('totalKm').textContent,
-      formula: $('formulaBlock').innerText
-    };
-    
-    historyData.unshift(record);
-    if (historyData.length > 20) historyData.pop();
-    renderHistory();
+  async function checkPin() {
+    const stored = localStorage.getItem(PIN_KEY);
+    if (!stored) return true;
+    $('lockScreen').classList.remove('hidden');
+    $('app').style.visibility = 'hidden';
+    return new Promise(resolve => {
+      const tryUnlock = async () => {
+        const pin = $('pinInput').value.trim();
+        if (!pin) return;
+        const h = await hashPin(pin);
+        if (h === stored) {
+          $('lockScreen').classList.add('hidden');
+          $('app').style.visibility = '';
+          $('pinInput').value = '';
+          resolve(true);
+        } else {
+          $('pinError').textContent = 'Неверный PIN';
+          setTimeout(() => $('pinError').textContent = '', 2000);
+        }
+      };
+      $('pinUnlock').onclick = tryUnlock;
+      $('pinInput').onkeydown = e => { if (e.key === 'Enter') tryUnlock(); };
+    });
   }
 
-  function collectState() {
+  // ——— storage ———
+  function collect() {
     return {
-      car: $('car').value, grz: $('grz').value.trim().toUpperCase(), locked,
-      fuelNow: $('fuelNow').value, odoStart: $('odoStart').value,
-      kmTotal: $('kmTotal').value, odoEnd: $('odoEnd').value,
-      kmMkad: $('kmMkad').value, kmOther: $('kmOther').value,
-      tankAdded: $('tankAdded').value, fillList: $('fillList').value,
-      allowance: $('allowance').value, custom: $('custom').value,
-      manualNorm: $('manualNorm').value,
-      history: historyData,
+      vehicles,
+      activeId,
       dark: document.body.classList.contains('dark'),
+      collapsed: {
+        trip: $('tripCard').classList.contains('collapsed'),
+        history: $('historyCard').classList.contains('collapsed')
+      },
+      histView,
       savedAt: new Date().toISOString()
     };
   }
-
-  function saveState(showMsg) {
+  function save(show) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
-      if (showMsg) {
-        const d = new Date();
-        $('saveInfo').textContent = 'Сохранено ' + d.toLocaleString('ru-RU', {
-          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-        });
-      }
-    } catch (e) {
-      if (showMsg) $('saveInfo').textContent = 'Ошибка сохранения';
-    }
+      localStorage.setItem(STORAGE, JSON.stringify(collect()));
+      if (show) toast('Сохранено локально');
+    } catch (e) { if (show) toast('Ошибка сохранения'); }
   }
-
   function scheduleSave() {
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => saveState(false), 400);
+    saveTimer = setTimeout(() => save(false), 350);
   }
-
-  function loadState() {
+  function load() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE);
       if (!raw) return false;
       const s = JSON.parse(raw);
-      if (s.car !== undefined) $('car').value = s.car;
-      if (s.grz !== undefined) $('grz').value = s.grz || '';
-      if (s.fuelNow !== undefined) $('fuelNow').value = s.fuelNow;
-      if (s.odoStart !== undefined) $('odoStart').value = s.odoStart;
-      if (s.kmTotal !== undefined) $('kmTotal').value = s.kmTotal;
-      if (s.odoEnd !== undefined) $('odoEnd').value = s.odoEnd;
-      if (s.kmMkad !== undefined) $('kmMkad').value = s.kmMkad;
-      if (s.kmOther !== undefined) $('kmOther').value = s.kmOther;
-      if (s.tankAdded !== undefined) $('tankAdded').value = s.tankAdded;
-      if (s.fillList !== undefined) $('fillList').value = s.fillList;
-      if (s.allowance !== undefined) $('allowance').value = s.allowance;
-      if (s.custom !== undefined) $('custom').value = s.custom;
-      if (s.manualNorm !== undefined) $('manualNorm').value = s.manualNorm;
-      if (Array.isArray(s.history)) { historyData = s.history; renderHistory(); }
-      if (s.locked) setLocked(true);
-      if (s.dark) { document.body.classList.add('dark'); $('theme').textContent = '☀'; }
-      if (s.savedAt) {
-        const d = new Date(s.savedAt);
-        $('saveInfo').textContent = 'Последнее сохранение: ' + d.toLocaleString('ru-RU', {
-          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-        });
+      if (Array.isArray(s.vehicles) && s.vehicles.length) {
+        vehicles = s.vehicles;
+        activeId = s.activeId || vehicles[0].id;
+        if (s.dark) { document.body.classList.add('dark'); $('theme').textContent = '☀'; }
+        if (s.collapsed) {
+          if (s.collapsed.trip) $('tripCard').classList.add('collapsed');
+          if (s.collapsed.history) $('historyCard').classList.add('collapsed');
+        }
+        if (s.histView) histView = s.histView;
+        return true;
       }
-      return true;
-    } catch (e) { return false; }
+      // migrate old
+      if (s.car !== undefined) {
+        const v = {
+          id: uid(),
+          carIdx: +s.car || 0,
+          grz: (s.grz || '').toUpperCase(),
+          fio: '',
+          odo: num(s.odoStart),
+          fuel: num(s.fuelNow),
+          manualNorm: s.manualNorm || '0,098',
+          history: Array.isArray(s.history) ? s.history.map(h => ({
+            date: h.date || '—',
+            consumption: h.consumption || '—',
+            totalKm: h.totalKm || '—',
+            odoStart: '—', odoEnd: '—',
+            fuelStart: '—', fuelEnd: '—',
+            added: '—', formula: h.formula || ''
+          })) : []
+        };
+        vehicles = [v];
+        activeId = v.id;
+        if (s.dark) { document.body.classList.add('dark'); $('theme').textContent = '☀'; }
+        return true;
+      }
+    } catch (e) {}
+    return false;
   }
 
-  function syncFromKmTotal() {
-    if (syncing) return;
-    syncing = true;
-    const total = valNum('kmTotal'), start = valNum('odoStart');
-    $('odoEnd').value = total > 0 ? Math.round(start + total) : '';
-    if (valNum('kmMkad') > total) $('kmMkad').value = total;
-    const rem = total - valNum('kmMkad');
-    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
-    syncing = false;
+  // ——— UI ———
+  function fillCarSelect(sel) {
+    sel.innerHTML = CARS.map((c, i) => `<option value="${i}">${c[0]}</option>`).join('');
   }
 
-  function syncFromOdoEnd() {
-    if (syncing) return;
-    syncing = true;
-    const start = valNum('odoStart'), endRaw = $('odoEnd').value.trim();
-    if (endRaw !== '') {
-      const end = Math.max(0, Number(endRaw.replace(',', '.')) || 0);
-      const total = Math.max(0, Math.round((end - start) * 10) / 10);
-      $('kmTotal').value = total > 0 ? total : '';
-      if (valNum('kmMkad') > total) $('kmMkad').value = total;
-      const rem = total - valNum('kmMkad');
-      $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
-    } else {
-      $('kmTotal').value = '';
-      $('kmOther').value = '';
+  function renderCarSwitch() {
+    const wrap = $('carSwitch');
+    if (vehicles.length <= 1) { wrap.classList.add('hidden'); return; }
+    wrap.classList.remove('hidden');
+    wrap.innerHTML = vehicles.map(v => {
+      const c = carData(v);
+      return `<div class="car-pill${v.id === activeId ? ' active' : ''}" data-id="${v.id}">${c.name}<span class="grz-mini">${v.grz || '—'}</span></div>`;
+    }).join('');
+  }
+
+  function renderHeader() {
+    const v = active();
+    if (!v) {
+      $('headerSub').textContent = 'Расход топлива · оффлайн';
+      $('sumOdo').textContent = '—';
+      $('sumFuel').textContent = '—';
+      $('carMeta').textContent = '—';
+      return;
     }
-    syncing = false;
+    const c = carData(v);
+    $('headerSub').textContent = v.grz ? `${c.name} · ${v.grz}` : c.name;
+    $('sumOdo').textContent = fmt(v.odo, 0) + ' км';
+    $('sumFuel').textContent = fmt(v.fuel) + ' л';
+    $('carMeta').textContent = `${c.fuelType} · бак ${c.capacity} л · норма ${fmt(c.rate, 3)} л/км` + (v.fio ? ` · ${v.fio}` : '');
   }
 
-  function syncFromMkad() {
-    if (syncing) return;
-    syncing = true;
-    const total = valNum('kmTotal');
-    let mkad = valNum('kmMkad');
-    if (mkad > total) { mkad = total; $('kmMkad').value = mkad; }
-    const rem = total - mkad;
-    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
-    syncing = false;
+  function renderHistory() {
+    const v = active();
+    const list = $('historyList');
+    document.querySelectorAll('.view-toggle button').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === histView);
+    });
+
+    if (!v || !v.history || !v.history.length) {
+      list.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:12.5px;padding:10px 0">Пока пусто</p>';
+      return;
+    }
+
+    if (histView === 'table') {
+      list.innerHTML = `<div class="hist-table-wrap"><table class="hist">
+        <thead><tr>
+          <th>Дата</th><th>Пробег</th><th>Расход</th><th>Бак</th><th>Запр.</th>
+        </tr></thead>
+        <tbody>
+          ${v.history.map(h => `<tr>
+            <td><div class="num">${h.date}</div></td>
+            <td><div class="num">${h.totalKm}</div>
+                <div class="muted">${h.odoStart}→${h.odoEnd}</div></td>
+            <td class="num">${h.consumption}</td>
+            <td><div class="num">${h.fuelStart}→${h.fuelEnd}</div></td>
+            <td class="num">${h.added || '—'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+    } else {
+      list.innerHTML = v.history.map(h => `
+        <div style="background:var(--bg);border-radius:var(--radius-sm);padding:9px 11px;margin-bottom:7px;font-size:12.5px;border:1px solid var(--line)">
+          <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:600;margin-bottom:3px">
+            <span>${h.date}</span><span>${h.consumption}</span>
+          </div>
+          <div style="font-weight:650;margin-bottom:2px">${h.totalKm} · ${h.odoStart} → ${h.odoEnd}</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.4">Бак: ${h.fuelStart} → ${h.fuelEnd}${h.added && h.added !== '0 л' ? ' · +' + h.added : ''}</div>
+        </div>`).join('');
+    }
   }
 
-  function syncFromOther() {
-    if (syncing) return;
-    syncing = true;
-    const total = valNum('kmTotal');
-    let other = valNum('kmOther');
-    if (other > total) { other = total; $('kmOther').value = other; }
-    const rem = total - other;
-    $('kmMkad').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
-    syncing = false;
+  // ——— calc ———
+  function allowance() {
+    return $('allowance').value === 'custom' ? num($('custom').value) : Number($('allowance').value);
+  }
+  function fills() {
+    return $('fillList').value.split(/\n|;/)
+      .map(s => Number(s.trim().replace(',', '.')))
+      .filter(x => Number.isFinite(x) && x > 0)
+      .reduce((a, b) => a + b, 0);
   }
 
   function update() {
-    const car = cars[+$('car').value], rate = norm(), p = allowance();
-    $('fuel').textContent = car[2];
-    $('capacity').textContent = car[1] + ' л';
-    $('normView').textContent = rate ? fmt(rate, 3) + ' л/км' : 'не задана';
-    $('manualBox').classList.toggle('hidden', car[3] !== null);
+    const v = active();
+    if (!v) return;
+    const c = carData(v);
+    const rate = c.rate;
+    const p = allowance();
     $('customBox').classList.toggle('hidden', $('allowance').value !== 'custom');
 
-    const fuelNow = valNum('fuelNow'), odoNow = valNum('odoStart');
-    $('sumOdo').textContent = fmt(odoNow, 0) + ' км';
-    $('sumFuel').textContent = fmt(fuelNow) + ' л';
-
-    const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
+    const kmTrip = num($('kmTotal').value);
+    const kmM = num($('kmMkad').value);
+    const kmO = num($('kmOther').value);
     const sumParts = Math.round((kmM + kmO) * 10) / 10;
     const check = $('kmCheck');
     if (kmTrip === 0 && sumParts === 0) {
-      check.textContent = 'МКАД + без МКАДа = 0 км';
-      check.className = 'check-line';
+      check.textContent = 'МКАД + без = 0 км';
+      check.className = 'check';
     } else if (Math.abs(sumParts - kmTrip) < 0.05) {
-      check.textContent = 'МКАД + без МКАДа = ' + fmt(sumParts) + ' км ✓';
-      check.className = 'check-line ok-text';
+      check.textContent = 'МКАД + без = ' + fmt(sumParts) + ' км ✓';
+      check.className = 'check ok';
     } else {
-      check.textContent = 'МКАД + без МКАДа = ' + fmt(sumParts) + ' км ≠ ' + fmt(kmTrip) + ' км';
-      check.className = 'check-line bad-text';
+      check.textContent = 'МКАД + без = ' + fmt(sumParts) + ' ≠ ' + fmt(kmTrip) + ' км';
+      check.className = 'check bad';
     }
 
-    // ИЗМЕНЕНО: теперь стандартное математическое округление через roundFuel вместо Math.ceil
-    const fuelM = roundFuel(kmM * rate);
-    const fuelO = roundFuel(kmO * rate * (1 + p / 100));
-    const fuel = roundFuel(fuelM + fuelO);
-
-    const added = valNum('tankAdded') + fills();
-    const start = fuelNow;
+    const fuelM = roundF(kmM * rate);
+    const fuelO = roundF(kmO * rate * (1 + p / 100));
+    const fuel = roundF(fuelM + fuelO);
+    const added = num($('tankAdded').value) + fills();
+    const start = v.fuel;
     let end = start + added - fuel;
-    const capacity = car[1], excess = end - capacity, newOdo = odoNow + kmTrip;
+    const excess = end - c.capacity;
+    const newOdo = v.odo + kmTrip;
 
     $('consumption').textContent = fmt(fuel);
     $('totalKm').textContent = fmt(kmTrip) + ' км';
     $('newOdo').textContent = fmt(newOdo, 0) + ' км';
     $('startOut').textContent = fmt(start) + ' л';
     $('addedOut').textContent = fmt(added) + ' л';
-    $('endOut').textContent = excess > 0.05 ? fmt(capacity) + ' л (полный)' : fmt(Math.max(0, roundFuel(end))) + ' л';
+    $('endOut').textContent = excess > 0.05 ? fmt(c.capacity) + ' л (полный)' : fmt(Math.max(0, roundF(end))) + ' л';
 
     let pText = '';
     if (p === 21) pText = '6% климат + 15% город';
     else if (p === 15) pText = '15% город';
     else if (p === 6) pText = '6% климат';
     else if (p > 0) pText = p + '%';
-
-    const rateStr = fmt(rate, 3), lines = [];
+    const rateStr = fmt(rate, 3);
+    const lines = [];
     if (kmM > 0) lines.push('МКАД: ' + fmt(kmM) + ' × ' + rateStr + ' = ' + fmt(fuelM) + ' л');
     if (kmO > 0) {
       lines.push(p > 0
@@ -651,180 +1015,387 @@ button#theme {
     lines.push('итого: ' + fmt(fuel) + ' л');
     $('formulaBlock').innerHTML = lines.join('<br>');
 
-    const warning = $('tankWarning');
+    const w = $('tankWarning');
     if (excess > 0.05) {
-      warning.innerHTML = '<div class="warn">Сверхбак: ' + fmt(excess) + ' л<br>Доложите путевщику</div>';
+      w.innerHTML = `<div class="warn-box">Сверхбак: ${fmt(excess)} л<br>Доложите путевщику</div>`;
     } else if (end < -0.05) {
-      warning.innerHTML = '<div class="warn">Не хватает топлива: ' + fmt(Math.abs(end)) + ' л</div>';
+      w.innerHTML = `<div class="warn-box">Недолив / не хватает: ${fmt(Math.abs(end))} л</div>`;
     } else {
-      warning.innerHTML = '<div class="ok">Остаток в норме</div>';
+      w.innerHTML = `<div class="ok-box">Остаток в норме</div>`;
     }
     scheduleSave();
   }
 
+  // ——— sync ———
+  function syncFromKmTotal() {
+    if (syncing) return; syncing = true;
+    const total = num($('kmTotal').value);
+    const start = active()?.odo || 0;
+    $('odoEnd').value = total > 0 ? Math.round(start + total) : '';
+    if (num($('kmMkad').value) > total) $('kmMkad').value = total || '';
+    const rem = total - num($('kmMkad').value);
+    $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+    syncing = false;
+  }
+  function syncFromOdoEnd() {
+    if (syncing) return; syncing = true;
+    const start = active()?.odo || 0;
+    const endRaw = $('odoEnd').value.trim();
+    if (endRaw !== '') {
+      const end = Math.max(0, Number(endRaw.replace(',', '.')) || 0);
+      const total = Math.max(0, Math.round((end - start) * 10) / 10);
+      $('kmTotal').value = total > 0 ? total : '';
+      if (num($('kmMkad').value) > total) $('kmMkad').value = total || '';
+      const rem = total - num($('kmMkad').value);
+      $('kmOther').value = rem > 0 ? Math.round(rem * 10) / 10 : '';
+    } else { $('kmTotal').value = ''; $('kmOther').value = ''; }
+    syncing = false;
+  }
+  function syncFromMkad() {
+    if (syncing) return; syncing = true;
+    const total = num($('kmTotal').value);
+    let mkad = num($('kmMkad').value);
+    if (mkad > total) { mkad = total; $('kmMkad').value = mkad || ''; }
+    $('kmOther').value = (total - mkad) > 0 ? Math.round((total - mkad) * 10) / 10 : '';
+    syncing = false;
+  }
+  function syncFromOther() {
+    if (syncing) return; syncing = true;
+    const total = num($('kmTotal').value);
+    let other = num($('kmOther').value);
+    if (other > total) { other = total; $('kmOther').value = other || ''; }
+    $('kmMkad').value = (total - other) > 0 ? Math.round((total - other) * 10) / 10 : '';
+    syncing = false;
+  }
+
+  // ——— apply ———
   function applyTrip() {
-    if (!locked) {
-      if (!$('grz').value.trim()) {
-        $('status').textContent = 'Введите ГРЗ перед применением поездки';
-        setTimeout(() => $('status').textContent = '', 3000);
-        return;
-      }
-      setLocked(true);
-    }
-    const car = cars[+$('car').value], rate = norm(), p = allowance();
-    const kmTrip = valNum('kmTotal'), kmM = valNum('kmMkad'), kmO = valNum('kmOther');
-    
-    // ИЗМЕНЕНО: стандартное округление
-    const fuelM = roundFuel(kmM * rate);
-    const fuelO = roundFuel(kmO * rate * (1 + p / 100));
-    const fuel = roundFuel(fuelM + fuelO);
+    const v = active();
+    if (!v) return;
+    const c = carData(v);
+    const rate = c.rate;
+    const p = allowance();
+    const kmTrip = num($('kmTotal').value);
+    if (kmTrip <= 0) { toast('Укажите пробег поездки'); return; }
+    const kmM = num($('kmMkad').value);
+    const kmO = num($('kmOther').value);
+    const fuelM = roundF(kmM * rate);
+    const fuelO = roundF(kmO * rate * (1 + p / 100));
+    const fuel = roundF(fuelM + fuelO);
+    const added = num($('tankAdded').value) + fills();
+    let end = v.fuel + added - fuel;
+    const excess = end - c.capacity;
+    if (excess > 0.05) end = c.capacity;
+    end = Math.max(0, roundF(end));
 
-    const added = valNum('tankAdded') + fills();
-    let end = valNum('fuelNow') + added - fuel;
-    const capacity = car[1], excess = end - capacity;
-    if (excess > 0.05) end = capacity;
-    end = Math.max(0, roundFuel(end));
+    const odoStart = v.odo;
+    const odoEnd = Math.round(odoStart + kmTrip);
+    const now = new Date();
+    const dateStr = now.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-    addHistoryRecord();
+    v.history = v.history || [];
+    v.history.unshift({
+      date: dateStr,
+      consumption: fmt(fuel) + ' л',
+      totalKm: fmt(kmTrip) + ' км',
+      odoStart: fmt(odoStart, 0),
+      odoEnd: fmt(odoEnd, 0),
+      fuelStart: fmt(v.fuel) + ' л',
+      fuelEnd: fmt(end) + ' л',
+      added: fmt(added) + ' л',
+      formula: $('formulaBlock').innerText
+    });
+    if (v.history.length > 40) v.history.pop();
 
-    $('fuelNow').value = end;
-    $('odoStart').value = Math.round(valNum('odoStart') + kmTrip);
+    v.fuel = end;
+    v.odo = odoEnd;
+
     $('kmTotal').value = ''; $('odoEnd').value = '';
     $('kmMkad').value = ''; $('kmOther').value = '';
     $('tankAdded').value = ''; $('fillList').value = '';
 
-    update();
-    saveState(true);
-    $('status').textContent = excess > 0.05
-      ? 'Поездка применена. Сверхбак ' + fmt(excess) + ' л — доложите путевщику.'
-      : 'Поездка применена. Состояние обновлено и сохранено.';
-    setTimeout(() => $('status').textContent = '', 4000);
-  }
-
-  function resetAll() {
-    if (!confirm('Сбросить все данные?\nМашина и ГРЗ снова станут доступны для изменения.')) return;
-
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-
-    setLocked(false);
-    historyData = [];
+    renderHeader();
     renderHistory();
-
-    $('car').value = '0';
-    $('grz').value = '';
-    $('fuelNow').value = '0';
-    $('odoStart').value = '0';
-    $('kmTotal').value = '';
-    $('odoEnd').value = '';
-    $('kmMkad').value = '';
-    $('kmOther').value = '';
-    $('tankAdded').value = '';
-    $('fillList').value = '';
-    $('allowance').value = '21';
-    $('custom').value = '';
-    $('manualNorm').value = '0,098';
-
-    document.body.classList.remove('dark');
-    $('theme').textContent = '☾';
-    $('saveInfo').textContent = '';
-    $('status').textContent = 'Все данные сброшены';
-
     update();
-
-    setTimeout(() => {
-      $('car').disabled = false;
-      $('grz').disabled = false;
-      $('car').blur();
-      $('status').textContent = '';
-    }, 100);
+    save(true);
+    toast(excess > 0.05
+      ? `Поездка применена. Сверхбак ${fmt(excess)} л — доложите путевщику`
+      : 'Поездка применена');
   }
 
-  $('kmTotal').addEventListener('input', () => { syncFromKmTotal(); update(); });
-  $('odoEnd').addEventListener('input', () => { syncFromOdoEnd(); update(); });
-  $('kmMkad').addEventListener('input', () => { syncFromMkad(); update(); });
-  $('kmOther').addEventListener('input', () => { syncFromOther(); update(); });
-  $('odoStart').addEventListener('input', () => { syncFromKmTotal(); update(); });
-  $('car').addEventListener('change', () => {
-    const c = cars[+$('car').value];
-    if (c[3] !== null) $('manualNorm').value = String(c[3]).replace('.', ',');
-    update();
-  });
-  
-  document.querySelectorAll('input, select, textarea').forEach(el => {
-    if (['kmTotal', 'odoEnd', 'kmMkad', 'kmOther', 'odoStart'].includes(el.id)) return;
-    el.addEventListener('input', update);
-    el.addEventListener('change', update);
-  });
+  // ——— modal ———
+  function openModal(addMode = false, editMode = false) {
+    fillCarSelect($('mCar'));
+    const title = $('modalTitle');
+    const desc = $('modalDesc');
+    const cancel = $('modalCancel');
+    window_editMode = editMode;
 
-  $('theme').onclick = () => {
-    document.body.classList.toggle('dark');
-    $('theme').textContent = document.body.classList.contains('dark') ? '☀' : '☾';
-    saveState(false);
-  };
-  
-  $('applyTrip').onclick = applyTrip;
-  
-  $('saveBtn').onclick = () => {
-    if (!$('grz').value.trim()) {
-      $('status').textContent = 'Введите ГРЗ';
-      setTimeout(() => $('status').textContent = '', 2500);
-      return;
+    if (editMode && active()) {
+      const v = active();
+      title.textContent = 'Изменить машину';
+      desc.textContent = 'Можно поменять марку, ГРЗ, ФИО и текущие показания.';
+      $('mCar').value = v.carIdx;
+      $('mGrz').value = v.grz || '';
+      $('mFio').value = v.fio || '';
+      $('mOdo').value = v.odo || '';
+      $('mFuel').value = v.fuel || '';
+      $('mManualNorm').value = v.manualNorm || '0,098';
+      cancel.style.display = 'block';
+    } else if (addMode) {
+      title.textContent = 'Добавить машину';
+      desc.textContent = 'Новая машина. Данные вводятся один раз.';
+      $('mCar').value = '0';
+      $('mGrz').value = '';
+      $('mFio').value = '';
+      $('mOdo').value = '';
+      $('mFuel').value = '';
+      $('mManualNorm').value = '0,098';
+      cancel.style.display = 'block';
+    } else {
+      title.textContent = 'Добро пожаловать';
+      desc.textContent = 'Выберите машину и введите данные перед выездом. Один раз.';
+      $('mCar').value = '0';
+      $('mGrz').value = '';
+      $('mFio').value = '';
+      $('mOdo').value = '';
+      $('mFuel').value = '';
+      $('mManualNorm').value = '0,098';
+      cancel.style.display = 'none';
     }
-    if (!locked) setLocked(true);
-    saveState(true);
-    $('status').textContent = 'Сохранено в браузере';
-    setTimeout(() => $('status').textContent = '', 2000);
-  };
+    onCarChangeModal();
+    $('onboardOverlay').classList.add('show');
+    setTimeout(() => $('mGrz').focus(), 300);
+  }
+  function closeModal() { $('onboardOverlay').classList.remove('show'); }
+  function onCarChangeModal() {
+    const idx = +$('mCar').value;
+    const c = CARS[idx];
+    $('mManualBox').classList.toggle('hidden', c[3] !== null);
+    if (c[3] != null) $('mManualNorm').value = String(c[3]).replace('.', ',');
+  }
+  function saveModal() {
+    const grz = $('mGrz').value.trim().toUpperCase().replace(/\s+/g, '');
+    if (!grz) { toast('Введите ГРЗ'); $('mGrz').focus(); return; }
+    if (!/[A-ZА-Я]/.test(grz) || !/\d/.test(grz)) { toast('ГРЗ должен содержать буквы и цифры'); return; }
+    const odo = num($('mOdo').value);
+    const fuel = num($('mFuel').value);
+    const carIdx = +$('mCar').value;
+    const c = CARS[carIdx];
+    if (fuel > c[1] + 0.5) { toast(`Бак максимум ${c[1]} л`); return; }
 
-  $('clearHistory').onclick = () => {
-    if (!confirm('Очистить историю поездок?')) return;
-    historyData = [];
+    if (window_editMode && active()) {
+      const v = active();
+      v.carIdx = carIdx; v.grz = grz; v.fio = $('mFio').value.trim();
+      v.odo = odo; v.fuel = fuel; v.manualNorm = $('mManualNorm').value;
+    } else {
+      const v = {
+        id: uid(), carIdx, grz,
+        fio: $('mFio').value.trim(),
+        odo, fuel,
+        manualNorm: $('mManualNorm').value,
+        history: []
+      };
+      vehicles.push(v);
+      activeId = v.id;
+    }
+    closeModal();
+    renderCarSwitch();
+    renderHeader();
     renderHistory();
-    saveState(false);
-  };
+    update();
+    save(true);
+    toast(window_editMode ? 'Обновлено' : 'Машина добавлена');
+  }
 
-  $('copy').onclick = async () => {
-    const car = cars[+$('car').value];
-    const grz = $('grz').value.trim().toUpperCase() || '—';
-    const now = new Date();
-    const dateTimeStr = now.toLocaleString('ru-RU', {
-      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  // ——— input guards ———
+  function onlyDecimal(el) {
+    el.addEventListener('input', () => {
+      let v = el.value.replace(/[^\d,.\-]/g, '');
+      const parts = v.replace(',', '.').split('.');
+      if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+      el.value = v;
+    });
+  }
+  function onlyInt(el) {
+    el.addEventListener('input', () => { el.value = el.value.replace(/\D/g, ''); });
+  }
+  function grzFilter(el) {
+    el.addEventListener('input', () => {
+      el.value = el.value.toUpperCase().replace(/[^A-ZА-Я0-9]/gi, '');
+    });
+  }
+
+  let toastT;
+  function toast(msg) {
+    const el = $('status');
+    el.textContent = msg;
+    clearTimeout(toastT);
+    toastT = setTimeout(() => { el.textContent = ''; }, 3200);
+  }
+
+  // ——— bind ———
+  function bind() {
+    document.querySelectorAll('[data-toggle]').forEach(head => {
+      head.addEventListener('click', () => {
+        $(head.dataset.toggle).classList.toggle('collapsed');
+        scheduleSave();
+      });
     });
 
-    const text = [
-      'МИЛЬ — ' + car[0] + ' (' + grz + ')',
-      'Дата и время: ' + dateTimeStr,
-      'Топливо: ' + car[2],
-      'Норма: ' + String(norm()).replace('.', ',') + ' л/км', '',
-      'Расход: ' + $('consumption').textContent + ' л',
-      'Пробег поездки: ' + $('totalKm').textContent,
-      '  из них МКАД: ' + fmt(valNum('kmMkad')) + ' км',
-      '  без МКАД: ' + fmt(valNum('kmOther')) + ' км',
-      'Конечный пробег: ' + $('newOdo').textContent,
-      'Было: ' + $('startOut').textContent,
-      'Заправлено: ' + $('addedOut').textContent,
-      'Станет: ' + $('endOut').textContent, '',
-      $('formulaBlock').innerText, '',
-      $('tankWarning').innerText
-    ].join('\n');
-    try {
-      await navigator.clipboard.writeText(text);
-      $('status').textContent = 'Скопировано с датой и временем';
-    } catch { $('status').textContent = 'Не удалось скопировать'; }
-    setTimeout(() => $('status').textContent = '', 2000);
-  };
+    $('kmTotal').addEventListener('input', () => { syncFromKmTotal(); update(); });
+    $('odoEnd').addEventListener('input', () => { syncFromOdoEnd(); update(); });
+    $('kmMkad').addEventListener('input', () => { syncFromMkad(); update(); });
+    $('kmOther').addEventListener('input', () => { syncFromOther(); update(); });
+    ['tankAdded', 'fillList', 'allowance', 'custom'].forEach(id => {
+      $(id).addEventListener('input', update);
+      $(id).addEventListener('change', update);
+    });
 
-  $('resetAll').onclick = resetAll;
+    onlyDecimal($('kmTotal')); onlyDecimal($('kmMkad')); onlyDecimal($('kmOther'));
+    onlyDecimal($('tankAdded')); onlyDecimal($('custom'));
+    onlyDecimal($('mFuel')); onlyDecimal($('mManualNorm'));
+    onlyInt($('odoEnd')); onlyInt($('mOdo'));
+    grzFilter($('mGrz'));
 
-  window.addEventListener('beforeunload', () => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState())); } catch (e) {}
-  });
+    $('applyTrip').onclick = applyTrip;
+    $('saveBtn').onclick = () => save(true);
+    $('copyBtn').onclick = async () => {
+      const v = active();
+      if (!v) return;
+      const c = carData(v);
+      const now = new Date().toLocaleString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const text = [
+        `МИЛЬ — ${c.name} (${v.grz || '—'})`,
+        v.fio ? `Водитель: ${v.fio}` : null,
+        `Дата: ${now}`,
+        `Топливо: ${c.fuelType} · Норма: ${fmt(c.rate, 3)} л/км`,
+        '',
+        `Расход: ${$('consumption').textContent} л`,
+        `Пробег: ${$('totalKm').textContent}`,
+        `  МКАД: ${fmt(num($('kmMkad').value))} км`,
+        `  без МКАД: ${fmt(num($('kmOther').value))} км`,
+        `Конечный пробег: ${$('newOdo').textContent}`,
+        `Было: ${$('startOut').textContent}`,
+        `Заправлено: ${$('addedOut').textContent}`,
+        `Станет: ${$('endOut').textContent}`,
+        '',
+        $('formulaBlock').innerText,
+        '',
+        $('tankWarning').innerText
+      ].filter(Boolean).join('\n');
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('Скопировано');
+      } catch { toast('Не удалось скопировать'); }
+    };
 
-  loadState();
-  update();
+    $('clearHistory').onclick = () => {
+      const v = active();
+      if (!v || !v.history?.length) return;
+      if (!confirm('Очистить историю этой машины?')) return;
+      v.history = [];
+      renderHistory();
+      save(false);
+      toast('История очищена');
+    };
+
+    document.querySelectorAll('.view-toggle button').forEach(btn => {
+      btn.onclick = () => {
+        histView = btn.dataset.view;
+        renderHistory();
+        scheduleSave();
+      };
+    });
+
+    $('theme').onclick = () => {
+      document.body.classList.toggle('dark');
+      $('theme').textContent = document.body.classList.contains('dark') ? '☀' : '☾';
+      save(false);
+    };
+
+    $('addCarBtn').onclick = () => openModal(true);
+    $('menuBtn').onclick = () => $('menuOverlay').classList.add('show');
+    $('menuClose').onclick = () => $('menuOverlay').classList.remove('show');
+    $('menuEdit').onclick = () => {
+      $('menuOverlay').classList.remove('show');
+      openModal(false, true);
+    };
+    $('menuPin').onclick = async () => {
+      $('menuOverlay').classList.remove('show');
+      const pin = prompt('Введите новый PIN (4–8 цифр)\nОставьте пустым, чтобы убрать PIN');
+      if (pin === null) return;
+      if (pin === '') {
+        localStorage.removeItem(PIN_KEY);
+        toast('PIN убран');
+        return;
+      }
+      if (!/^\d{4,8}$/.test(pin)) { toast('PIN — только 4–8 цифр'); return; }
+      const h = await hashPin(pin);
+      localStorage.setItem(PIN_KEY, h);
+      toast('PIN установлен');
+    };
+    $('menuReset').onclick = () => {
+      if (!confirm('Сбросить ВСЕ данные и машины?')) return;
+      localStorage.removeItem(STORAGE);
+      localStorage.removeItem(PIN_KEY);
+      vehicles = [];
+      activeId = null;
+      $('menuOverlay').classList.remove('show');
+      openModal(false);
+      renderCarSwitch();
+      renderHeader();
+      renderHistory();
+      update();
+      toast('Всё сброшено');
+    };
+
+    $('carSwitch').addEventListener('click', e => {
+      const pill = e.target.closest('.car-pill');
+      if (!pill) return;
+      activeId = pill.dataset.id;
+      renderCarSwitch();
+      renderHeader();
+      renderHistory();
+      $('kmTotal').value = ''; $('odoEnd').value = '';
+      $('kmMkad').value = ''; $('kmOther').value = '';
+      $('tankAdded').value = ''; $('fillList').value = '';
+      update();
+      save(false);
+    });
+
+    $('mCar').addEventListener('change', onCarChangeModal);
+    $('modalSave').onclick = saveModal;
+    $('modalCancel').onclick = closeModal;
+
+    $('onboardOverlay').addEventListener('click', e => {
+      if (e.target === $('onboardOverlay') && vehicles.length) closeModal();
+    });
+    $('menuOverlay').addEventListener('click', e => {
+      if (e.target === $('menuOverlay')) $('menuOverlay').classList.remove('show');
+    });
+
+    window.addEventListener('beforeunload', () => {
+      try { localStorage.setItem(STORAGE, JSON.stringify(collect())); } catch (e) {}
+    });
+  }
+
+  // ——— init ———
+  (async () => {
+    fillCarSelect($('mCar'));
+    bind();
+    await checkPin();
+    const hasData = load();
+    if (!hasData || !vehicles.length) {
+      openModal(false);
+    } else {
+      renderCarSwitch();
+      renderHeader();
+      renderHistory();
+      update();
+    }
+  })();
 })();
 </script>
-
-      
 </body>
 </html>
